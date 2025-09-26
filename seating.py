@@ -1,6 +1,17 @@
+import os
 import json
-import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.pyplot as plt
+from datetime import datetime
+from supabase import create_client, Client
+from dotenv import load_dotenv
+
+load_dotenv()
+
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 # Load detection results
 try:
@@ -770,3 +781,15 @@ with open("seat_mapping.json", "w") as f:
 
 # Extra visualizations removed - keeping only the main seat pairing visualization
 
+# Upload row-based layout to Supabase
+rows_to_insert = []
+for row_name, seats in row_json_data.items():
+    for col, seat in seats.items():
+        rows_to_insert.append({
+            "seat_number": f"{row_name}_{col}",
+            "status": seat["class_id"] == 1,  # True if occupied, False if empty
+            "updated_at": datetime.utcnow().isoformat()
+        })
+
+response = supabase.table("bus_seating").insert(rows_to_insert).execute()
+print("Inserted rows:", response)
