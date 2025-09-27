@@ -2,6 +2,7 @@ from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 import logging
+import os
 from datetime import datetime
 from typing import Any
 
@@ -14,6 +15,42 @@ from database import supabase_client
 # Set up logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+# Webhook notification function
+async def notify_frontend_of_new_data(record_id, data):
+    """
+    Send webhook notification to frontend deployment about new detection data
+    """
+    import httpx
+    
+    # Configure your frontend webhook URL
+    FRONTEND_WEBHOOK_URL = os.getenv("FRONTEND_WEBHOOK_URL", "https://your-frontend-deployment.vercel.app/api/webhook/new-data")
+    WEBHOOK_SECRET = os.getenv("WEBHOOK_SECRET", "your-webhook-secret")
+    
+    try:
+        webhook_payload = {
+            "event": "new_detection_data",
+            "record_id": record_id,
+            "data": data,
+            "timestamp": datetime.utcnow().isoformat(),
+            "secret": WEBHOOK_SECRET
+        }
+        
+        async with httpx.AsyncClient() as client:
+            response = await client.post(
+                FRONTEND_WEBHOOK_URL,
+                json=webhook_payload,
+                timeout=10.0
+            )
+            
+        if response.status_code == 200:
+            logger.info(f"Webhook sent successfully to frontend for record {record_id}")
+        else:
+            logger.warning(f"Webhook failed with status {response.status_code}: {response.text}")
+            
+    except Exception as e:
+        logger.error(f"Error sending webhook to frontend: {e}")
+        raise
 
 # Create FastAPI application
 app = FastAPI(
@@ -88,6 +125,15 @@ async def push_data(
         try:
             result = await supabase_client.insert_data("push_requests", json_data)
             logger.info(f"Data stored successfully: {result}")
+            
+            # Notify frontend if detection_results are present
+            if "detection_results" in payload.data:
+                try:
+                    await notify_frontend_of_new_data(result.data[0]["id"], payload.data)
+                    logger.info("Frontend notification sent successfully")
+                except Exception as webhook_error:
+                    logger.error(f"Frontend notification error: {webhook_error}")
+                    
         except Exception as db_error:
             logger.error(f"Database error: {db_error}")
             # Continue processing even if DB fails (optional behavior)

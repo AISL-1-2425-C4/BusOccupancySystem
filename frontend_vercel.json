@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "frontend_api.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "frontend_api.py"
+    }
+  ],
+  "env": {
+    "ENVIRONMENT": "production",
+    "WEBHOOK_SECRET": "@webhook_secret"
+  }
+}
