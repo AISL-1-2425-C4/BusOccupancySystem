@@ -272,52 +272,53 @@ class SeatingAutoRefresh {
 function hideJsonOutput() {
     console.log('🧹 Hiding JSON output elements');
     
-    // Common selectors for JSON output elements
-    const jsonSelectors = [
-        '#output',
-        '#json-output', 
-        '#raw-data',
-        '#seat-data',
-        '#debug-output',
-        'pre',
-        '.json-display',
-        '.raw-json',
-        '.debug-info'
-    ];
-    
-    // Hide all matching elements
-    jsonSelectors.forEach(selector => {
-        try {
-            const elements = document.querySelectorAll(selector);
-            elements.forEach(element => {
-                const text = element.textContent || '';
-                // Check if element contains JSON-like content
-                if (text.includes('{') && (text.includes('"Row_') || text.includes('"class_id"') || text.includes('"coordinates"'))) {
-                    element.style.display = 'none';
-                    console.log('✅ Hidden JSON element:', element.tagName, element.id || element.className);
-                }
-            });
-        } catch (e) {
-            // Ignore invalid selectors
-        }
-    });
-    
-    // Also check for elements with JSON-like content
-    const allElements = document.querySelectorAll('*');
-    allElements.forEach(element => {
-        const text = element.textContent || '';
-        // Check if it's a JSON structure showing seating data
-        if ((text.includes('"Row_') && text.includes('"column_')) || 
-            (text.includes('"class_id"') && text.includes('"coordinates"')) ||
-            (text.includes('{') && text.includes('"x":') && text.includes('"y":'))) {
+    // More aggressive approach - hide any element with JSON-like content
+    setTimeout(() => {
+        const allElements = document.querySelectorAll('*');
+        allElements.forEach(element => {
+            const text = element.textContent || '';
             
-            // Don't hide if it's part of a script tag or small inline content
-            if (element.tagName !== 'SCRIPT' && text.length > 50) {
-                element.style.display = 'none';
-                console.log('✅ Hidden JSON-like content in:', element.tagName);
+            // Check if it contains JSON-like seating data
+            if (text.length > 20 && 
+                (text.includes('"Row_') || 
+                 text.includes('"column_') || 
+                 text.includes('"class_id"') ||
+                 text.includes('"coordinates"') ||
+                 (text.includes('{') && text.includes('"x":') && text.includes('1103.795')) ||
+                 (text.includes('Row_1') && text.includes('column_one')))) {
+                
+                // Don't hide script tags or very small elements
+                if (element.tagName !== 'SCRIPT' && 
+                    element.tagName !== 'STYLE' && 
+                    !element.querySelector('img') && 
+                    !element.querySelector('button')) {
+                    
+                    element.style.display = 'none';
+                    console.log('✅ Hidden JSON content in:', element.tagName, element.id || element.className);
+                }
             }
-        }
-    });
+        });
+        
+        // Specifically target common JSON display elements
+        const jsonElements = document.querySelectorAll('#output, pre, .json-display, .raw-data');
+        jsonElements.forEach(element => {
+            element.style.display = 'none';
+            console.log('✅ Hidden specific JSON element:', element.tagName, element.id);
+        });
+        
+    }, 500); // Wait 500ms for page to fully load
+    
+    // Also run again after 2 seconds to catch any dynamically added content
+    setTimeout(() => {
+        const jsonElements = document.querySelectorAll('*');
+        jsonElements.forEach(element => {
+            const text = element.textContent || '';
+            if (text.includes('1103.795') || text.includes('2050.154999999997')) {
+                element.style.display = 'none';
+                console.log('✅ Hidden remaining JSON element');
+            }
+        });
+    }, 2000);
 }
 
 // Initialize auto-refresh when page loads

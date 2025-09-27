@@ -73,8 +73,8 @@ async def webhook_new_data(payload: WebhookPayload):
             detection_results = payload.data["detection_results"]
             logger.info(f"Processing {len(detection_results)} detection results")
             
-            # Process the seating layout
-            seating_layout = process_detection_results(detection_results)
+            # Process the seating layout using proper logic
+            seating_layout = process_detection_results_full(detection_results)
             
             if seating_layout:
                 # Store in memory (works in Vercel)
@@ -278,89 +278,159 @@ async def serve_seat_mapping():
         return FileResponse("seat_mapping.json", media_type="application/json")
     raise HTTPException(status_code=404, detail="Seat mapping not found")
 
-def process_detection_results(detection_results):
+def process_detection_results_full(detection_results):
     """
-    Process detection results into seating layout (simplified version)
+    Process detection results into full 42-seat bus layout (complete version)
     """
     try:
         if not detection_results:
             return None
             
-        # Extract midpoints from detections
-        midpoints = []
+        logger.info(f"Processing {len(detection_results)} detection results into full seating layout")
+        
+        # Create the standard 42-seat bus layout structure
+        seating_layout = {}
+        
+        # Define the standard bus seating arrangement (10 rows, varying columns)
+        # This matches your existing seating layout structure
+        bus_layout = {
+            "row_1": ["column_one", "column_two", "column_three", "column_four"],
+            "row_2": ["column_one", "column_two", "column_three", "column_four"], 
+            "row_3": ["column_one", "column_two", "column_three", "column_four"],
+            "row_4": ["column_one", "column_two", "column_three", "column_four"],
+            "row_5": ["column_one", "column_two", "column_three", "column_four"],
+            "row_6": ["column_one", "column_two", "column_three", "column_four"],
+            "row_7": ["column_one", "column_two", "column_three", "column_four"],
+            "row_8": ["column_one", "column_two", "column_three", "column_four"],
+            "row_9": ["column_one", "column_two", "column_three", "column_four"],
+            "row_10": ["column_one", "column_two", "column_three", "column_four", "column_five", "column_six"]
+        }
+        
+        # Initialize all seats as unoccupied by default
+        for row_name, columns in bus_layout.items():
+            seating_layout[row_name] = {}
+            for i, col_name in enumerate(columns):
+                # Calculate standard positions for the bus layout
+                row_num = int(row_name.split('_')[1])
+                col_num = i + 1
+                
+                # Standard positioning (matches your existing layout)
+                x_pos = 30 + (row_num - 1) * 55  # Rows go from left to right
+                if col_num <= 2:  # Left side seats
+                    y_pos = 25 + (col_num - 1) * 55
+                else:  # Right side seats (after aisle)
+                    y_pos = 245 + (col_num - 3) * 55
+                
+                seating_layout[row_name][col_name] = {
+                    "class_id": 1,  # Default: unoccupied
+                    "class_name": "unoccupied",
+                    "confidence": 0.5,
+                    "position": {"x": float(x_pos), "y": float(y_pos)}
+                }
+        
+        # Now map detection results to seats based on proximity
         for detection in detection_results:
-            x_min, y_min = detection["x_min"], detection["y_min"]
+            x_min, y_min = detection["x_min"], detection["y_min"] 
             x_max, y_max = detection["x_max"], detection["y_max"]
             x_center = (x_min + x_max) / 2
             y_center = (y_min + y_max) / 2
-            midpoints.append((x_center, y_center))
-
-        # Sort midpoints by y (top to bottom)
-        midpoints.sort(key=lambda pt: pt[1])
-
-        # Group midpoints into rows by y proximity
-        row_threshold = 60
-        rows = []
-        for pt in midpoints:
-            placed = False
-            for row in rows:
-                if abs(row[0][1] - pt[1]) < row_threshold:
-                    row.append(pt)
-                    placed = True
-                    break
-            if not placed:
-                rows.append([pt])
-
-        # Sort each row by x (left to right)
-        for row in rows:
-            row.sort(key=lambda pt: pt[0])
-
-        # Create seating layout
-        canvas_width = 4608
-        col_edges = [0, canvas_width/4, canvas_width/2, 3*canvas_width/4, canvas_width]
-        
-        def assign_to_column(x):
-            for i in range(4):
-                if col_edges[i] <= x < col_edges[i+1]:
-                    return i
-            return 3
-
-        def find_matching_detection(x, y, detections, tolerance=50):
-            for detection in detections:
-                det_x_center = (detection["x_min"] + detection["x_max"]) / 2
-                det_y_center = (detection["y_min"] + detection["y_max"]) / 2
-                if abs(det_x_center - x) < tolerance and abs(det_y_center - y) < tolerance:
-                    return detection
-            return None
-
-        # Create row-based seating data
-        row_data = {}
-        for row_idx, row in enumerate(rows):
-            row_name = f"Row{row_idx + 1}"
-            row_seats = {}
             
-            for seat_idx, (x, y) in enumerate(row):
-                col = assign_to_column(x)
-                col_name = ["A", "B", "C", "D"][col] if col < 4 else f"Col{col}"
+            # Find the closest seat to this detection
+            min_distance = float('inf')
+            closest_seat = None
+            
+            for row_name, row_data in seating_layout.items():
+                for col_name, seat_data in row_data.items():
+                    seat_x = seat_data["position"]["x"]
+                    seat_y = seat_data["position"]["y"]
+                    
+                    # Calculate distance (scaled to account for coordinate differences)
+                    # Scale detection coordinates to match seat layout coordinates
+                    scaled_x = (x_center / 4608) * 660  # Scale from detection canvas to seat canvas
+                    scaled_y = (y_center / 2592) * 405  # Scale from detection canvas to seat canvas
+                    
+                    distance = ((scaled_x - seat_x) ** 2 + (scaled_y - seat_y) ** 2) ** 0.5
+                    
+                    if distance < min_distance:
+                        min_distance = distance
+                        closest_seat = (row_name, col_name)
+            
+            # Update the closest seat with detection data
+            if closest_seat and min_distance < 100:  # Only if reasonably close
+                row_name, col_name = closest_seat
                 
-                detection = find_matching_detection(x, y, detection_results)
-                if detection:
-                    row_seats[col_name] = {
-                        "class_id": detection["class_id"],
-                        "class_name": detection.get("class_name", "Unknown"),
-                        "confidence": detection["confidence"],
-                        "position": {"x": x, "y": y}
-                    }
-            
-            if row_seats:
-                row_data[row_name] = row_seats
-
-        logger.info(f"Processed {len(row_data)} rows from {len(detection_results)} detections")
-        return row_data
+                # Determine occupancy status
+                class_id = detection.get("class_id", 0)
+                class_name = detection.get("class_name", "occupied").lower()
+                
+                # Normalize class_id: 0 = occupied, 1 = unoccupied
+                if class_id == 0 or "occupied" in class_name:
+                    final_class_id = 0
+                    final_class_name = "occupied"
+                else:
+                    final_class_id = 1
+                    final_class_name = "unoccupied"
+                
+                seating_layout[row_name][col_name].update({
+                    "class_id": final_class_id,
+                    "class_name": final_class_name,
+                    "confidence": detection.get("confidence", 0.5)
+                })
+                
+                logger.info(f"Mapped detection to {row_name}_{col_name}: {final_class_name} ({detection.get('confidence', 0.5):.3f})")
+        
+        logger.info(f"Generated seating layout with {len(seating_layout)} rows")
+        return seating_layout
         
     except Exception as e:
-        logger.error(f"Error processing detection results: {e}")
+        logger.error(f"Error in process_detection_results_full: {e}")
         return None
+
+
+def process_detection_results(detection_results):
+    """
+    Process detection results into seating layout (simplified version - DEPRECATED)
+    """
+    # Use the full version instead
+    return process_detection_results_full(detection_results)
+    #         return 3
+
+    #     def find_matching_detection(x, y, detections, tolerance=50):
+    #         for detection in detections:
+    #             det_x_center = (detection["x_min"] + detection["x_max"]) / 2
+    #             det_y_center = (detection["y_min"] + detection["y_max"]) / 2
+    #             if abs(det_x_center - x) < tolerance and abs(det_y_center - y) < tolerance:
+    #                 return detection
+    #         return None
+
+    #     # Create row-based seating data
+    #     row_data = {}
+    #     for row_idx, row in enumerate(rows):
+    #         row_name = f"Row{row_idx + 1}"
+    #         row_seats = {}
+            
+    #         for seat_idx, (x, y) in enumerate(row):
+    #             col = assign_to_column(x)
+    #             col_name = ["A", "B", "C", "D"][col] if col < 4 else f"Col{col}"
+                
+    #             detection = find_matching_detection(x, y, detection_results)
+    #             if detection:
+    #                 row_seats[col_name] = {
+    #                     "class_id": detection["class_id"],
+    #                     "class_name": detection.get("class_name", "Unknown"),
+    #                     "confidence": detection["confidence"],
+    #                     "position": {"x": x, "y": y}
+    #                 }
+            
+    #         if row_seats:
+    #             row_data[row_name] = row_seats
+
+    #     logger.info(f"Processed {len(row_data)} rows from {len(detection_results)} detections")
+    #     return row_data
+        
+    # except Exception as e:
+    #     logger.error(f"Error processing detection results: {e}")
+    #     return None
 
 def save_seating_layout_to_file(layout_data, filename="row_seating_layout.json"):
     """
