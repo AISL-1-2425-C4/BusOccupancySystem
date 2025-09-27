@@ -73,21 +73,21 @@ async def webhook_new_data(payload: WebhookPayload):
             detection_results = payload.data["detection_results"]
             logger.info(f"Processing {len(detection_results)} detection results")
             
-            # For now, use the existing row_seating_layout.json as the base
-            # This ensures we get the exact format and class_id mapping you want
+            # Process the new detection data using the full seating.py algorithm
             try:
-                if os.path.exists("row_seating_layout.json"):
-                    with open("row_seating_layout.json", "r") as f:
-                        seating_layout = json.load(f)
-                    logger.info(f"Loaded existing seating layout with {len(seating_layout)} rows")
+                from seating_processor import process_seating_layout
+                seating_layout = process_seating_layout(detection_results)
+                
+                if seating_layout:
+                    logger.info(f"Successfully processed {len(detection_results)} detections using full seating.py algorithm")
                 else:
-                    # Fallback to seating_lib processing
-                    from seating_lib import process_detections_to_layout
-                    seating_layout = process_detections_to_layout(detection_results)
-                    logger.info(f"Generated new seating layout using seating_lib.py")
+                    logger.warning("seating_processor returned no layout")
                     
+            except ImportError as e:
+                logger.error(f"Could not import seating_processor: {e}")
+                seating_layout = None
             except Exception as e:
-                logger.error(f"Error loading seating layout: {e}")
+                logger.error(f"Error in seating_processor: {e}")
                 seating_layout = None
             
             if seating_layout:
