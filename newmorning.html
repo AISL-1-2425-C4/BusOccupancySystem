@@ -333,7 +333,7 @@
           currentRowColumns.forEach((columnKey, columnIndex) => {
             const seatData = rowData[columnKey];
 
-            if (seatData.coordinates && seatData.class_id !== undefined) {
+            if ((seatData.coordinates || seatData.position) && seatData.class_id !== undefined) {
               seatCounter++;
 
               // Create seat element
