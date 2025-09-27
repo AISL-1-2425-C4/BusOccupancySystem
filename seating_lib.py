@@ -3,7 +3,7 @@ Seating processing library - extracted from seating.py
 Contains the core detection processing logic as reusable functions
 """
 
-import numpy as np
+# import numpy as np  # Removed for Vercel compatibility
 import json
 from typing import List, Dict, Any, Tuple, Optional
 
@@ -63,9 +63,12 @@ def process_detections_to_layout(detections: List[Dict[str, Any]]) -> Optional[D
         best_balance = float('inf')
         best_aisle_pos = x_min_coord + (x_max_coord - x_min_coord) / 2
         
-        # Test aisle positions across the width
-        test_positions = np.linspace(x_min_coord + (x_max_coord - x_min_coord) * 0.1, 
-                                    x_min_coord + (x_max_coord - x_min_coord) * 0.9, 200)
+        # Test aisle positions across the width (pure Python implementation)
+        width_range = x_max_coord - x_min_coord
+        start_pos = x_min_coord + width_range * 0.1
+        end_pos = x_min_coord + width_range * 0.9
+        step = (end_pos - start_pos) / 199  # 200 points = 199 intervals
+        test_positions = [start_pos + i * step for i in range(200)]
         
         for test_pos in test_positions:
             left_count = sum(1 for x in x_coords if x < test_pos)
