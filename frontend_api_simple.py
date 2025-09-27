@@ -280,19 +280,50 @@ async def serve_seat_mapping():
 
 def process_detection_results_full(detection_results):
     """
-    Process detection results into full 42-seat bus layout (complete version)
+    Process detection results using the actual seating.py algorithm
     """
     try:
         if not detection_results:
             return None
             
-        logger.info(f"Processing {len(detection_results)} detection results into full seating layout")
+        logger.info(f"Processing {len(detection_results)} detection results using seating.py algorithm")
+        
+        # Import seating processing functions
+        from seating_lib import process_detections_to_layout
+        
+        # Use the actual seating.py logic
+        seating_layout = process_detections_to_layout(detection_results)
+        
+        if seating_layout:
+            logger.info(f"Generated seating layout with {len(seating_layout)} rows using seating.py algorithm")
+        else:
+            logger.warning("seating.py algorithm returned no layout")
+            
+        return seating_layout
+        
+    except ImportError as e:
+        logger.error(f"Could not import seating_lib: {e}")
+        # Fallback to simplified processing
+        return process_detection_results_simple(detection_results)
+    except Exception as e:
+        logger.error(f"Error in process_detection_results_full: {e}")
+        return None
+
+
+def process_detection_results_simple(detection_results):
+    """
+    Simplified fallback processing (original logic)
+    """
+    try:
+        if not detection_results:
+            return None
+            
+        logger.info(f"Using fallback simple processing for {len(detection_results)} detections")
         
         # Create the standard 42-seat bus layout structure
         seating_layout = {}
         
         # Define the standard bus seating arrangement (10 rows, varying columns)
-        # This matches your existing seating layout structure
         bus_layout = {
             "row_1": ["column_one", "column_two", "column_three", "column_four"],
             "row_2": ["column_one", "column_two", "column_three", "column_four"], 
@@ -328,7 +359,7 @@ def process_detection_results_full(detection_results):
                     "position": {"x": float(x_pos), "y": float(y_pos)}
                 }
         
-        # Now map detection results to seats based on proximity
+        # Map detections to seats (simplified proximity matching)
         for detection in detection_results:
             x_min, y_min = detection["x_min"], detection["y_min"] 
             x_max, y_max = detection["x_max"], detection["y_max"]
@@ -344,10 +375,9 @@ def process_detection_results_full(detection_results):
                     seat_x = seat_data["position"]["x"]
                     seat_y = seat_data["position"]["y"]
                     
-                    # Calculate distance (scaled to account for coordinate differences)
                     # Scale detection coordinates to match seat layout coordinates
-                    scaled_x = (x_center / 4608) * 660  # Scale from detection canvas to seat canvas
-                    scaled_y = (y_center / 2592) * 405  # Scale from detection canvas to seat canvas
+                    scaled_x = (x_center / 4608) * 660
+                    scaled_y = (y_center / 2592) * 405
                     
                     distance = ((scaled_x - seat_x) ** 2 + (scaled_y - seat_y) ** 2) ** 0.5
                     
@@ -356,14 +386,13 @@ def process_detection_results_full(detection_results):
                         closest_seat = (row_name, col_name)
             
             # Update the closest seat with detection data
-            if closest_seat and min_distance < 100:  # Only if reasonably close
+            if closest_seat and min_distance < 100:
                 row_name, col_name = closest_seat
                 
                 # Determine occupancy status
                 class_id = detection.get("class_id", 0)
                 class_name = detection.get("class_name", "occupied").lower()
                 
-                # Normalize class_id: 0 = occupied, 1 = unoccupied
                 if class_id == 0 or "occupied" in class_name:
                     final_class_id = 0
                     final_class_name = "occupied"
@@ -376,14 +405,12 @@ def process_detection_results_full(detection_results):
                     "class_name": final_class_name,
                     "confidence": detection.get("confidence", 0.5)
                 })
-                
-                logger.info(f"Mapped detection to {row_name}_{col_name}: {final_class_name} ({detection.get('confidence', 0.5):.3f})")
         
-        logger.info(f"Generated seating layout with {len(seating_layout)} rows")
+        logger.info(f"Generated seating layout with {len(seating_layout)} rows using simple processing")
         return seating_layout
         
     except Exception as e:
-        logger.error(f"Error in process_detection_results_full: {e}")
+        logger.error(f"Error in process_detection_results_simple: {e}")
         return None
 
 
