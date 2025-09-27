@@ -251,6 +251,11 @@
         const container = document.getElementById("busContainer");
         const busImage = document.getElementById("busImage");
 
+        // CLEAR EXISTING SEATS FIRST - This is the fix!
+        const existingSeats = container.querySelectorAll(".dynamic-seat");
+        existingSeats.forEach(seat => seat.remove());
+        console.log(`🧹 Cleared ${existingSeats.length} existing seats`);
+
         // Get row and column counts
         const rowKeys = Object.keys(layoutData).sort((a, b) => {
           // Sort rows numerically (row_1, row_2, etc.)
