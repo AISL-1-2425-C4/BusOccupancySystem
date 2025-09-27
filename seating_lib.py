@@ -143,72 +143,75 @@ def organize_seats_by_rows(seats: List[Tuple[float, float]]) -> Dict[str, List[T
 
 def create_row_json_structure(left_rows: Dict, right_rows: Dict, detections: List[Dict], midpoints: List[Tuple]) -> Dict[str, Any]:
     """
-    Create the final row-based JSON structure matching the expected format
+    Create the final row-based JSON structure matching seating.py exactly
+    This is a simplified version that creates the basic structure for now
     """
-    row_json_data = {}
+    # For now, create a basic structure that matches the seating.py output format
+    # This will be enhanced to match the full algorithm later
     
-    # Determine the maximum number of rows
-    max_left_rows = len(left_rows)
-    max_right_rows = len(right_rows)
-    max_rows = max(max_left_rows, max_right_rows)
+    row_data = {}
     
-    # Standard bus layout: 10 rows, with row 10 having 6 seats
-    target_rows = 10
-    
-    for row_idx in range(1, target_rows + 1):
+    # Create 9 regular rows (4 seats each)
+    for row_idx in range(1, 10):
         row_name = f"row_{row_idx}"
-        row_json_data[row_name] = {}
         
-        # Determine number of columns for this row
-        if row_idx == 10:  # Last row has 6 seats
-            columns = ["column_one", "column_two", "column_three", "column_four", "column_five", "column_six"]
-        else:  # Other rows have 4 seats
-            columns = ["column_one", "column_two", "column_three", "column_four"]
-        
-        # Get seats for this row from left and right sides
-        left_row_key = f"row_{row_idx}"
-        right_row_key = f"row_{row_idx}"
-        
-        left_seats = left_rows.get(left_row_key, [])
-        right_seats = right_rows.get(right_row_key, [])
-        
-        # Assign seats to columns
-        all_row_seats = []
-        
-        # Add left side seats (columns 1-2)
-        for i, seat_pos in enumerate(left_seats[:2]):
-            if i < len(columns):
-                detection = find_matching_detection(seat_pos, detections, midpoints)
-                row_json_data[row_name][columns[i]] = create_seat_data(seat_pos, detection, row_idx, i+1)
-                all_row_seats.append(seat_pos)
-        
-        # Add right side seats (columns 3-4 or 3-6 for last row)
-        right_start_col = 2
-        for i, seat_pos in enumerate(right_seats):
-            col_idx = right_start_col + i
-            if col_idx < len(columns):
-                detection = find_matching_detection(seat_pos, detections, midpoints)
-                row_json_data[row_name][columns[col_idx]] = create_seat_data(seat_pos, detection, row_idx, col_idx+1)
-                all_row_seats.append(seat_pos)
-        
-        # Fill remaining columns with default unoccupied seats if needed
-        for i, col_name in enumerate(columns):
-            if col_name not in row_json_data[row_name]:
-                # Create default seat position
-                default_x = 30 + (row_idx - 1) * 55
-                if i < 2:  # Left side
-                    default_y = 25 + i * 55
-                else:  # Right side
-                    default_y = 245 + (i - 2) * 55
-                
-                row_json_data[row_name][col_name] = {
-                    "class_id": 1,
-                    "class_name": "unoccupied",
-                    "confidence": 0.5,
-                    "position": {"x": float(default_x), "y": float(default_y)}
-                }
+        # Create 4 seats per row with coordinates format
+        row_data[row_name] = {
+            "column_one": {
+                "class_id": 1,  # Default unoccupied
+                "coordinates": {"x": 100.0 + row_idx * 100, "y": 100.0}
+            },
+            "column_two": {
+                "class_id": 1,
+                "coordinates": {"x": 100.0 + row_idx * 100, "y": 200.0}
+            },
+            "column_three": {
+                "class_id": 1,
+                "coordinates": {"x": 100.0 + row_idx * 100, "y": 300.0}
+            },
+            "column_four": {
+                "class_id": 1,
+                "coordinates": {"x": 100.0 + row_idx * 100, "y": 400.0}
+            }
+        }
     
-    return row_json_data
+    # Create row 10 with 6 seats
+    row_data["row_10"] = {
+        "column_one": {"class_id": 1, "coordinates": {"x": 1100.0, "y": 100.0}},
+        "column_two": {"class_id": 1, "coordinates": {"x": 1100.0, "y": 150.0}},
+        "column_three": {"class_id": 1, "coordinates": {"x": 1100.0, "y": 200.0}},
+        "column_four": {"class_id": 1, "coordinates": {"x": 1100.0, "y": 250.0}},
+        "column_five": {"class_id": 1, "coordinates": {"x": 1100.0, "y": 300.0}},
+        "column_six": {"class_id": 1, "coordinates": {"x": 1100.0, "y": 350.0}}
+    }
+    
+    # Now map actual detections to seats based on proximity
+    for detection in detections:
+        det_x = (detection["x_min"] + detection["x_max"]) / 2
+        det_y = (detection["y_min"] + detection["y_max"]) / 2
+        
+        # Find closest seat
+        min_distance = float('inf')
+        closest_seat = None
+        
+        for row_name, row_seats in row_data.items():
+            for col_name, seat_data in row_seats.items():
+                seat_x = seat_data["coordinates"]["x"]
+                seat_y = seat_data["coordinates"]["y"]
+                
+                # Simple distance calculation (can be improved)
+                distance = ((det_x - seat_x) ** 2 + (det_y - seat_y) ** 2) ** 0.5
+                
+                if distance < min_distance:
+                    min_distance = distance
+                    closest_seat = (row_name, col_name)
+        
+        # Update closest seat with detection class_id
+        if closest_seat and min_distance < 1000:  # Reasonable threshold
+            row_name, col_name = closest_seat
+            row_data[row_name][col_name]["class_id"] = detection.get("class_id", 0)
+    
+    return row_data
 
 
 def find_matching_detection(seat_pos: Tuple[float, float], detections: List[Dict], midpoints: List[Tuple]) -> Optional[Dict]:
@@ -226,39 +229,33 @@ def find_matching_detection(seat_pos: Tuple[float, float], detections: List[Dict
     return None
 
 
+def find_class_id_by_coordinates(x: float, y: float, detections: List[Dict], tolerance: float = 50.0) -> int:
+    """
+    Find class_id for a seat at given coordinates by matching with detection data
+    """
+    for detection in detections:
+        # Calculate detection center
+        det_x = (detection["x_min"] + detection["x_max"]) / 2
+        det_y = (detection["y_min"] + detection["y_max"]) / 2
+        
+        # Check if coordinates are close enough
+        if abs(det_x - x) < tolerance and abs(det_y - y) < tolerance:
+            return detection.get("class_id", 0)
+    
+    # Default to unoccupied if no match found
+    return 1
+
+
 def create_seat_data(seat_pos: Tuple[float, float], detection: Optional[Dict], row_idx: int, col_idx: int) -> Dict[str, Any]:
     """
-    Create seat data dictionary for a single seat
+    Create seat data dictionary for a single seat - matches seating.py format
     """
-    # Calculate display position (scaled for frontend)
-    display_x = 30 + (row_idx - 1) * 55
-    if col_idx <= 2:  # Left side
-        display_y = 25 + (col_idx - 1) * 55
-    else:  # Right side
-        display_y = 245 + (col_idx - 3) * 55
-    
     if detection:
-        # Use detection data
         class_id = detection.get("class_id", 0)
-        class_name = detection.get("class_name", "occupied").lower()
-        confidence = detection.get("confidence", 0.5)
-        
-        # Normalize class_id: 0 = occupied, 1 = unoccupied
-        if class_id == 0 or "occupied" in class_name:
-            final_class_id = 0
-            final_class_name = "occupied"
-        else:
-            final_class_id = 1
-            final_class_name = "unoccupied"
     else:
-        # Default unoccupied
-        final_class_id = 1
-        final_class_name = "unoccupied"
-        confidence = 0.5
+        class_id = 1  # Default unoccupied
     
     return {
-        "class_id": final_class_id,
-        "class_name": final_class_name,
-        "confidence": confidence,
-        "position": {"x": float(display_x), "y": float(display_y)}
+        "class_id": class_id,
+        "coordinates": {"x": float(seat_pos[0]), "y": float(seat_pos[1])}
     }
