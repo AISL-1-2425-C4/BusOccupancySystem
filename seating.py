@@ -1,95 +1,31 @@
-import os
 import json
-import sys
-import numpy as np
 import matplotlib.pyplot as plt
-from datetime import datetime
-from supabase import create_client, Client
-from dotenv import load_dotenv
+import numpy as np
+import os
+import sys
 
-load_dotenv()
+# Load detection results
+webhook_file = os.getenv('WEBHOOK_DETECTION_FILE')
+use_webhook = "--webhook" in sys.argv
 
-SUPABASE_URL = os.getenv("SUPABASE_URL")
-SUPABASE_KEY = os.getenv("SUPABASE_KEY")
-
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
-
-# Check command line arguments
-USE_LOCAL_FILE = "--local" in sys.argv
-FORCE_SUPABASE = "--supabase" in sys.argv
-
-if "--help" in sys.argv or "-h" in sys.argv:
-    print("""
-🚌 Bus Seating Layout Processor
-
-Usage:
-  python seating.py              # Auto-detect (Supabase first, then local file)
-  python seating.py --supabase   # Force use Supabase data only
-  python seating.py --local      # Force use local JSON file only
-  python seating.py --help       # Show this help
-
-Data Sources:
-  - Supabase: Fetches latest detection data from push_requests table
-  - Local: Uses JSON_Data/detection_results3.json file
-""")
-    exit()
-
-# Load detection results from Supabase or local file
-def get_detection_data():
-    """
-    Get detection data from Supabase push_requests table or fallback to local file
-    """
-    if not USE_LOCAL_FILE:
-        try:
-            print("🔍 Fetching detection data from Supabase...")
-            
-            # Get the most recent record with detection_results
-            response = supabase.table("push_requests").select("*").order("created_at", desc=True).limit(1).execute()
-            
-            if response.data:
-                record = response.data[0]
-                json_data = record.get('json_data', {})
-                
-                # Extract detection_results if they exist
-                if 'data' in json_data and 'detection_results' in json_data['data']:
-                    detections = json_data['data']['detection_results']
-                    print(f"✅ Found {len(detections)} detections from Supabase record ID: {record['id']}")
-                    print(f"📅 Created at: {record['created_at']}")
-                    return detections, record['id']
-                else:
-                    print("⚠️ No detection_results found in latest Supabase record")
-            else:
-                print("⚠️ No records found in push_requests table")
-                
-        except Exception as e:
-            print(f"❌ Error fetching from Supabase: {e}")
-        
-        if FORCE_SUPABASE:
-            print("❌ Forced Supabase mode but no data found. Exiting.")
-            return [], None
-    
-    # Fallback to local file (or if --local flag is used)
-    if not FORCE_SUPABASE:
-        try:
-            print("🔄 Using local JSON file..." if USE_LOCAL_FILE else "🔄 Falling back to local JSON file...")
-            with open("JSON_Data/detection_results3.json", "r") as file:
-                detections = json.load(file)
-            print(f"✅ Loaded {len(detections)} detections from local file")
-            return detections, None
-        except FileNotFoundError:
-            print("❌ Error: JSON_Data/detection_results3.json not found.")
-            return [], None
-    
-    return [], None
-
-# Get detection data
-detections, source_record_id = get_detection_data()
-
-if not detections:
-    print("❌ No detection data available. Exiting.")
-    exit()
-
-print(f"🚀 Processing {len(detections)} detections...")
+if use_webhook and webhook_file and os.path.exists(webhook_file):
+    print(f"Loading detection data from webhook file: {webhook_file}")
+    try:
+        with open(webhook_file, "r") as file:
+            detections = json.load(file)
+        print(f"Loaded {len(detections)} detections from webhook")
+    except Exception as e:
+        print(f"Error loading webhook file: {e}")
+        detections = []
+else:
+    # Default behavior - load from JSON_Data
+    try:
+        with open("JSON_Data/detection_results3.json", "r") as file:
+            detections = json.load(file)
+        print(f"Loaded {len(detections)} detections from JSON_Data/detection_results3.json")
+    except FileNotFoundError:
+        print("Error: JSON_Data/detection_results3.json not found.")
+        detections = []
 
 # Extract midpoints from detections
 midpoints = []
@@ -850,44 +786,3 @@ with open("seat_mapping.json", "w") as f:
     json.dump(seat_map, f, indent=2)
 
 # Extra visualizations removed - keeping only the main seat pairing visualization
-
-# Upload row-based layout to Supabase
-print("📤 Uploading seating data to Supabase...")
-rows_to_insert = []
-for row_name, seats in row_json_data.items():
-    for col, seat in seats.items():
-        rows_to_insert.append({
-            "seat_number": f"{row_name}_{col}",
-            "status": seat["class_id"] == 0,  # True if occupied (class_id 0), False if empty (class_id 1)
-            "confidence": seat.get("confidence", 0.0),
-            "source_record_id": source_record_id,
-            "updated_at": datetime.utcnow().isoformat()
-        })
-
-try:
-    # Clear existing data and insert new data
-    supabase.table("bus_seating").delete().neq("id", 0).execute()
-    
-    if rows_to_insert:
-        response = supabase.table("bus_seating").insert(rows_to_insert).execute()
-        print(f"✅ Successfully uploaded {len(rows_to_insert)} seat records to Supabase")
-        
-        # Print summary
-        occupied_seats = sum(1 for row in rows_to_insert if row["status"])
-        total_seats = len(rows_to_insert)
-        occupancy_percentage = (occupied_seats / total_seats * 100) if total_seats > 0 else 0
-        
-        print(f"""
-📊 SEATING SUMMARY:
-   Total Seats: {total_seats}
-   Occupied: {occupied_seats}
-   Empty: {total_seats - occupied_seats}
-   Occupancy: {occupancy_percentage:.1f}%
-   Data Source: {'Supabase Record ID ' + str(source_record_id) if source_record_id else 'Local JSON file'}
-""")
-    else:
-        print("⚠️ No seat data to upload")
-        
-except Exception as e:
-    print(f"❌ Error uploading to Supabase: {e}")
-    print("Inserted rows (fallback):", rows_to_insert[:3] if rows_to_insert else "None")
