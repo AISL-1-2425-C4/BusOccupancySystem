@@ -222,6 +222,14 @@ async def serve_css():
         return FileResponse("style.css", media_type="text/css")
     raise HTTPException(status_code=404, detail="CSS file not found")
 
+# Serve JavaScript files
+@app.get("/auto_refresh_seating.js")
+async def serve_auto_refresh_js():
+    """Serve auto-refresh JavaScript file"""
+    if os.path.exists("auto_refresh_seating.js"):
+        return FileResponse("auto_refresh_seating.js", media_type="application/javascript")
+    raise HTTPException(status_code=404, detail="JavaScript file not found")
+
 # Serve JSON files for backward compatibility
 @app.get("/row_seating_layout.json")
 async def serve_seating_json():
