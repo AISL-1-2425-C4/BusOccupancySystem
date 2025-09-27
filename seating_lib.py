@@ -170,22 +170,20 @@ def create_row_json_structure(left_rows: Dict, right_rows: Dict, detections: Lis
     
     print(f"Found {len(all_rows)} rows of seats from detections")
     
-    # Process each row
-    for row_idx, row_seats in enumerate(all_rows[:10], 1):  # Limit to 10 rows
+    # Process each row - ONLY create seats for actual detections
+    for row_idx, row_seats in enumerate(all_rows, 1):
         row_name = f"row_{row_idx}"
         row_data[row_name] = {}
-        
-        # Determine number of seats for this row
-        max_seats = 6 if row_idx == 10 else 4
-        num_seats = min(len(row_seats), max_seats)
         
         # Column names
         col_names = ["column_one", "column_two", "column_three", "column_four", "column_five", "column_six"]
         
-        # Process actual detected seats
-        for seat_idx in range(num_seats):
+        # Process ONLY the actual detected seats (no filling with dummy seats)
+        for seat_idx, (seat_x, seat_y) in enumerate(row_seats):
+            if seat_idx >= len(col_names):  # Safety check
+                break
+                
             col_name = col_names[seat_idx]
-            seat_x, seat_y = row_seats[seat_idx]
             
             # Find the class_id for this seat position
             class_id = find_class_id_by_coordinates(seat_x, seat_y, detections, tolerance=100)
@@ -193,37 +191,6 @@ def create_row_json_structure(left_rows: Dict, right_rows: Dict, detections: Lis
             row_data[row_name][col_name] = {
                 "class_id": class_id,
                 "coordinates": {"x": seat_x, "y": seat_y}
-            }
-        
-        # Fill remaining seats as unoccupied if needed
-        for seat_idx in range(num_seats, max_seats):
-            col_name = col_names[seat_idx]
-            # Generate position for missing seats (spread them out)
-            base_x = row_seats[0][0] if row_seats else 100 + row_idx * 50
-            base_y = row_seats[0][1] if row_seats else 100 + seat_idx * 60
-            
-            row_data[row_name][col_name] = {
-                "class_id": 1,  # unoccupied
-                "coordinates": {"x": base_x + seat_idx * 50, "y": base_y}
-            }
-    
-    # Fill remaining rows if we have fewer than 10 rows
-    for row_idx in range(len(all_rows) + 1, 11):
-        row_name = f"row_{row_idx}"
-        row_data[row_name] = {}
-        
-        max_seats = 6 if row_idx == 10 else 4
-        col_names = ["column_one", "column_two", "column_three", "column_four", "column_five", "column_six"]
-        
-        for seat_idx in range(max_seats):
-            col_name = col_names[seat_idx]
-            # Generate positions for empty rows
-            x = 100 + row_idx * 50
-            y = 100 + seat_idx * 60
-            
-            row_data[row_name][col_name] = {
-                "class_id": 1,  # unoccupied
-                "coordinates": {"x": x, "y": y}
             }
     
     return row_data
