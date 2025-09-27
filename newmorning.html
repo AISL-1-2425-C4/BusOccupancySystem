@@ -139,16 +139,7 @@
         max-width: 600px;
       }
 
-      #output {
-        font-family: "Poppins", monospace;
-        background-color: #f4f4f4;
-        padding: 15px;
-        border-radius: 5px;
-        margin: 20px auto;
-        max-width: 800px;
-        text-align: left;
-        white-space: pre-wrap;
-      }
+      /* JSON output styling removed for cleaner frontend */
 
       .legend {
         display: flex;
@@ -221,7 +212,6 @@
     </div>
 
     <h2>Morning Bus</h2>
-    <pre id="output"></pre>
 
     <script>
       let seatLayoutData = null;
@@ -245,12 +235,7 @@
           // Generate seats dynamically
           generateSeats(seatLayoutData);
 
-          // Display raw data
-          document.getElementById("output").textContent = JSON.stringify(
-            seatLayoutData,
-            null,
-            2
-          );
+          // JSON display removed for cleaner frontend
         } catch (error) {
           console.error("Error loading seat layout:", error);
           document.getElementById("loading").style.display = "none";
@@ -517,5 +502,8 @@ Original Coordinates: (${seatData.coordinates.x.toFixed(
       // Load seats when page loads
       document.addEventListener("DOMContentLoaded", loadDynamicSeats);
     </script>
+    
+    <!-- Auto-refresh script for real-time updates -->
+    <script src="/auto_refresh_seating.js"></script>
   </body>
 </html>
