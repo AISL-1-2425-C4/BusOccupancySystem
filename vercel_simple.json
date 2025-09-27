@@ -11,8 +11,5 @@
       "src": "/(.*)",
       "dest": "frontend_api_simple.py"
     }
-  ],
-  "env": {
-    "ENVIRONMENT": "production"
-  }
+  ]
 }
