@@ -332,6 +332,9 @@
           // Process each column in the row (becomes visual rows, top to bottom)
           currentRowColumns.forEach((columnKey, columnIndex) => {
             const seatData = rowData[columnKey];
+            
+            console.log(`Checking seat ${rowKey}_${columnKey}:`, seatData);
+            console.log(`Has coordinates: ${!!seatData.coordinates}, Has position: ${!!seatData.position}, Has class_id: ${seatData.class_id !== undefined}`);
 
             if ((seatData.coordinates || seatData.position) && seatData.class_id !== undefined) {
               seatCounter++;
