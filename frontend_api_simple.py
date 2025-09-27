@@ -110,61 +110,82 @@ async def get_seating_layout():
             detail=f"Error retrieving seating layout: {str(e)}"
         )
 
-# Serve HTML files
-@app.get("/morning")
-async def serve_morning():
-    """Serve morning HTML page"""
-    html_files = ["morning.html", "newmorning.html"]
-    for html_file in html_files:
-        if os.path.exists(html_file):
-            return FileResponse(html_file)
-    raise HTTPException(status_code=404, detail="Morning page not found")
-
-@app.get("/afternoon")
-async def serve_afternoon():
-    """Serve afternoon HTML page"""
-    html_files = ["afternoon.html", "newafternoon.html"]
-    for html_file in html_files:
-        if os.path.exists(html_file):
-            return FileResponse(html_file)
-    raise HTTPException(status_code=404, detail="Afternoon page not found")
-
-@app.get("/bus-layout")
-async def serve_bus_layout():
-    """Serve the main bus layout HTML"""
-    html_files = ["dynamic_seating.html", "index.html"]
-    for html_file in html_files:
-        if os.path.exists(html_file):
-            return FileResponse(html_file)
-    raise HTTPException(status_code=404, detail="Bus layout HTML not found")
-
-# Serve static files (images, CSS, JS)
+# Serve static files (images, CSS, JS) - MUST be before HTML routes
 if os.path.exists("images"):
     app.mount("/images", StaticFiles(directory="images"), name="images")
 if os.path.exists("static"):
     app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# Serve the main index page at root after API routes
+# Serve HTML files based on newhome.html navigation
+@app.get("/newhome.html")
 @app.get("/index")
 @app.get("/home")
-async def serve_index():
-    """Serve the main index page"""
-    if os.path.exists("index.html"):
+async def serve_home():
+    """Serve the main home page"""
+    if os.path.exists("newhome.html"):
+        return FileResponse("newhome.html")
+    elif os.path.exists("index.html"):
         return FileResponse("index.html")
-    # Return a simple HTML page if index.html doesn't exist
-    return """
-    <!DOCTYPE html>
-    <html>
-    <head><title>Bus Occupancy System</title></head>
-    <body>
-        <h1>Bus Occupancy System</h1>
-        <p><a href="/morning">Morning Schedule</a></p>
-        <p><a href="/afternoon">Afternoon Schedule</a></p>
-        <p><a href="/bus-layout">Bus Layout</a></p>
-        <p><a href="/api/seating-layout">API: Seating Layout</a></p>
-    </body>
-    </html>
-    """
+    raise HTTPException(status_code=404, detail="Home page not found")
+
+@app.get("/newmorning.html")
+@app.get("/morning")
+async def serve_morning():
+    """Serve morning HTML page"""
+    html_files = ["newmorning.html", "morning.html"]
+    for html_file in html_files:
+        if os.path.exists(html_file):
+            return FileResponse(html_file)
+    raise HTTPException(status_code=404, detail="Morning page not found")
+
+@app.get("/newafternoon.html")
+@app.get("/afternoon")
+async def serve_afternoon():
+    """Serve afternoon HTML page"""
+    html_files = ["newafternoon.html", "afternoon.html"]
+    for html_file in html_files:
+        if os.path.exists(html_file):
+            return FileResponse(html_file)
+    raise HTTPException(status_code=404, detail="Afternoon page not found")
+
+@app.get("/aboutus.html")
+async def serve_about():
+    """Serve about us page"""
+    if os.path.exists("aboutus.html"):
+        return FileResponse("aboutus.html")
+    raise HTTPException(status_code=404, detail="About page not found")
+
+@app.get("/routes.html")
+async def serve_routes():
+    """Serve routes and schedules page"""
+    if os.path.exists("routes.html"):
+        return FileResponse("routes.html")
+    raise HTTPException(status_code=404, detail="Routes page not found")
+
+@app.get("/prob.html")
+async def serve_contact():
+    """Serve contact us page"""
+    if os.path.exists("prob.html"):
+        return FileResponse("prob.html")
+    raise HTTPException(status_code=404, detail="Contact page not found")
+
+@app.get("/bus-layout")
+@app.get("/dynamic_seating.html")
+async def serve_bus_layout():
+    """Serve the main bus layout HTML"""
+    html_files = ["dynamic_seating.html", "seating.html"]
+    for html_file in html_files:
+        if os.path.exists(html_file):
+            return FileResponse(html_file)
+    raise HTTPException(status_code=404, detail="Bus layout HTML not found")
+
+# Serve CSS files
+@app.get("/style.css")
+async def serve_css():
+    """Serve main CSS file"""
+    if os.path.exists("style.css"):
+        return FileResponse("style.css", media_type="text/css")
+    raise HTTPException(status_code=404, detail="CSS file not found")
 
 if __name__ == "__main__":
     import uvicorn
