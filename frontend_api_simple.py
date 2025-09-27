@@ -40,6 +40,10 @@ class WebhookPayload(BaseModel):
     timestamp: str
     secret: str
 
+# Global variable to store latest seating layout (in-memory cache)
+latest_seating_layout = None
+last_updated = None
+
 @app.get("/")
 async def root():
     """Root endpoint"""
@@ -73,14 +77,20 @@ async def webhook_new_data(payload: WebhookPayload):
             seating_layout = process_detection_results(detection_results)
             
             if seating_layout:
-                # Save to JSON file so HTML can read it
+                # Store in memory (works in Vercel)
+                global latest_seating_layout, last_updated
+                latest_seating_layout = seating_layout
+                last_updated = datetime.utcnow().isoformat()
+                
+                # Try to save to file (may not persist in Vercel, but worth trying)
                 save_seating_layout_to_file(seating_layout)
                 
                 return {
                     "success": True,
-                    "message": "Detection data processed and JSON updated",
+                    "message": "Detection data processed and cached",
                     "record_id": payload.record_id,
-                    "rows_processed": len(seating_layout)
+                    "rows_processed": len(seating_layout),
+                    "updated_at": last_updated
                 }
             else:
                 logger.warning("Failed to process seating layout")
@@ -215,13 +225,22 @@ async def serve_css():
 # Serve JSON files for backward compatibility
 @app.get("/row_seating_layout.json")
 async def serve_seating_json():
-    """Serve seating layout JSON file or return API data as JSON"""
+    """Serve seating layout JSON - Vercel-compatible version"""
     try:
-        # First try to serve existing JSON file
+        global latest_seating_layout, last_updated
+        
+        # First try to return cached data from memory
+        if latest_seating_layout:
+            logger.info("Serving seating layout from memory cache")
+            return latest_seating_layout
+        
+        # Try to serve existing JSON file (if it exists)
         if os.path.exists("row_seating_layout.json"):
+            logger.info("Serving seating layout from file")
             return FileResponse("row_seating_layout.json", media_type="application/json")
         
-        # If no file exists, return dummy data from API
+        # Fallback: return dummy data
+        logger.info("Serving dummy seating layout")
         dummy_layout = {
             "Row1": {
                 "A": {"class_id": 0, "class_name": "occupied", "confidence": 0.95},
@@ -230,6 +249,10 @@ async def serve_seating_json():
             "Row2": {
                 "A": {"class_id": 1, "class_name": "unoccupied", "confidence": 0.88},
                 "B": {"class_id": 0, "class_name": "occupied", "confidence": 0.92}
+            },
+            "Row3": {
+                "A": {"class_id": 1, "class_name": "unoccupied", "confidence": 0.85},
+                "B": {"class_id": 1, "class_name": "unoccupied", "confidence": 0.88}
             }
         }
         
