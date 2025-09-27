@@ -57,20 +57,45 @@ async def webhook_new_data(payload: WebhookPayload):
     """
     try:
         # Verify webhook secret
-        expected_secret = os.getenv("WEBHOOK_SECRET", "bus-webhook-secret-2025")
+        expected_secret = os.getenv("WEBHOOK_SECRET", "your-secure-webhook-secret-123")
         if payload.secret != expected_secret:
             logger.warning("Invalid webhook secret received")
             raise HTTPException(status_code=401, detail="Invalid webhook secret")
         
         logger.info(f"Received webhook for record {payload.record_id}")
         
-        # For now, just return success without processing
-        return {
-            "success": True,
-            "message": "Webhook received successfully",
-            "record_id": payload.record_id,
-            "event": payload.event
-        }
+        # Check if this contains detection_results
+        if "detection_results" in payload.data:
+            detection_results = payload.data["detection_results"]
+            logger.info(f"Processing {len(detection_results)} detection results")
+            
+            # Process the seating layout
+            seating_layout = process_detection_results(detection_results)
+            
+            if seating_layout:
+                # Save to JSON file so HTML can read it
+                save_seating_layout_to_file(seating_layout)
+                
+                return {
+                    "success": True,
+                    "message": "Detection data processed and JSON updated",
+                    "record_id": payload.record_id,
+                    "rows_processed": len(seating_layout)
+                }
+            else:
+                logger.warning("Failed to process seating layout")
+                return {
+                    "success": False,
+                    "message": "Failed to process seating layout",
+                    "record_id": payload.record_id
+                }
+        else:
+            logger.info("No detection_results in webhook payload")
+            return {
+                "success": True,
+                "message": "No detection data to process",
+                "record_id": payload.record_id
+            }
             
     except Exception as e:
         logger.error(f"Error processing webhook: {e}")
@@ -186,6 +211,138 @@ async def serve_css():
     if os.path.exists("style.css"):
         return FileResponse("style.css", media_type="text/css")
     raise HTTPException(status_code=404, detail="CSS file not found")
+
+# Serve JSON files for backward compatibility
+@app.get("/row_seating_layout.json")
+async def serve_seating_json():
+    """Serve seating layout JSON file or return API data as JSON"""
+    try:
+        # First try to serve existing JSON file
+        if os.path.exists("row_seating_layout.json"):
+            return FileResponse("row_seating_layout.json", media_type="application/json")
+        
+        # If no file exists, return dummy data from API
+        dummy_layout = {
+            "Row1": {
+                "A": {"class_id": 0, "class_name": "occupied", "confidence": 0.95},
+                "B": {"class_id": 1, "class_name": "unoccupied", "confidence": 0.90}
+            },
+            "Row2": {
+                "A": {"class_id": 1, "class_name": "unoccupied", "confidence": 0.88},
+                "B": {"class_id": 0, "class_name": "occupied", "confidence": 0.92}
+            }
+        }
+        
+        return dummy_layout
+        
+    except Exception as e:
+        logger.error(f"Error serving seating JSON: {e}")
+        raise HTTPException(status_code=404, detail="Seating layout not found")
+
+# Serve other JSON files that might be needed
+@app.get("/seat_mapping.json")
+async def serve_seat_mapping():
+    """Serve seat mapping JSON file"""
+    if os.path.exists("seat_mapping.json"):
+        return FileResponse("seat_mapping.json", media_type="application/json")
+    raise HTTPException(status_code=404, detail="Seat mapping not found")
+
+def process_detection_results(detection_results):
+    """
+    Process detection results into seating layout (simplified version)
+    """
+    try:
+        if not detection_results:
+            return None
+            
+        # Extract midpoints from detections
+        midpoints = []
+        for detection in detection_results:
+            x_min, y_min = detection["x_min"], detection["y_min"]
+            x_max, y_max = detection["x_max"], detection["y_max"]
+            x_center = (x_min + x_max) / 2
+            y_center = (y_min + y_max) / 2
+            midpoints.append((x_center, y_center))
+
+        # Sort midpoints by y (top to bottom)
+        midpoints.sort(key=lambda pt: pt[1])
+
+        # Group midpoints into rows by y proximity
+        row_threshold = 60
+        rows = []
+        for pt in midpoints:
+            placed = False
+            for row in rows:
+                if abs(row[0][1] - pt[1]) < row_threshold:
+                    row.append(pt)
+                    placed = True
+                    break
+            if not placed:
+                rows.append([pt])
+
+        # Sort each row by x (left to right)
+        for row in rows:
+            row.sort(key=lambda pt: pt[0])
+
+        # Create seating layout
+        canvas_width = 4608
+        col_edges = [0, canvas_width/4, canvas_width/2, 3*canvas_width/4, canvas_width]
+        
+        def assign_to_column(x):
+            for i in range(4):
+                if col_edges[i] <= x < col_edges[i+1]:
+                    return i
+            return 3
+
+        def find_matching_detection(x, y, detections, tolerance=50):
+            for detection in detections:
+                det_x_center = (detection["x_min"] + detection["x_max"]) / 2
+                det_y_center = (detection["y_min"] + detection["y_max"]) / 2
+                if abs(det_x_center - x) < tolerance and abs(det_y_center - y) < tolerance:
+                    return detection
+            return None
+
+        # Create row-based seating data
+        row_data = {}
+        for row_idx, row in enumerate(rows):
+            row_name = f"Row{row_idx + 1}"
+            row_seats = {}
+            
+            for seat_idx, (x, y) in enumerate(row):
+                col = assign_to_column(x)
+                col_name = ["A", "B", "C", "D"][col] if col < 4 else f"Col{col}"
+                
+                detection = find_matching_detection(x, y, detection_results)
+                if detection:
+                    row_seats[col_name] = {
+                        "class_id": detection["class_id"],
+                        "class_name": detection.get("class_name", "Unknown"),
+                        "confidence": detection["confidence"],
+                        "position": {"x": x, "y": y}
+                    }
+            
+            if row_seats:
+                row_data[row_name] = row_seats
+
+        logger.info(f"Processed {len(row_data)} rows from {len(detection_results)} detections")
+        return row_data
+        
+    except Exception as e:
+        logger.error(f"Error processing detection results: {e}")
+        return None
+
+def save_seating_layout_to_file(layout_data, filename="row_seating_layout.json"):
+    """
+    Save seating layout to JSON file
+    """
+    try:
+        with open(filename, "w") as f:
+            json.dump(layout_data, f, indent=2)
+        logger.info(f"Saved seating layout to {filename}")
+        return True
+    except Exception as e:
+        logger.error(f"Error saving layout to file: {e}")
+        return False
 
 if __name__ == "__main__":
     import uvicorn
