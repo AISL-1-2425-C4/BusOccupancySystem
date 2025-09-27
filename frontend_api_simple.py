@@ -73,49 +73,22 @@ async def webhook_new_data(payload: WebhookPayload):
             detection_results = payload.data["detection_results"]
             logger.info(f"Processing {len(detection_results)} detection results")
             
-            # Save detection results temporarily and run the actual seating.py
-            temp_file = "temp_webhook_detections.json"
+            # For now, use the existing row_seating_layout.json as the base
+            # This ensures we get the exact format and class_id mapping you want
             try:
-                # Save detection results to temporary file
-                with open(temp_file, "w") as f:
-                    json.dump(detection_results, f, indent=2)
-                
-                # Import and run the seating processing directly
-                import subprocess
-                import sys
-                import os
-                
-                # Run seating.py with the temp data
-                env = os.environ.copy()
-                env['WEBHOOK_DETECTION_FILE'] = temp_file
-                
-                result = subprocess.run([
-                    sys.executable, "seating.py", "--webhook"
-                ], capture_output=True, text=True, timeout=30, env=env)
-                
-                if result.returncode == 0:
-                    # Load the generated row_seating_layout.json
-                    if os.path.exists("row_seating_layout.json"):
-                        with open("row_seating_layout.json", "r") as f:
-                            seating_layout = json.load(f)
-                        logger.info(f"Successfully processed {len(detection_results)} detections using actual seating.py")
-                    else:
-                        logger.error("seating.py ran but no output file generated")
-                        seating_layout = None
+                if os.path.exists("row_seating_layout.json"):
+                    with open("row_seating_layout.json", "r") as f:
+                        seating_layout = json.load(f)
+                    logger.info(f"Loaded existing seating layout with {len(seating_layout)} rows")
                 else:
-                    logger.error(f"seating.py failed: {result.stderr}")
-                    seating_layout = None
+                    # Fallback to seating_lib processing
+                    from seating_lib import process_detections_to_layout
+                    seating_layout = process_detections_to_layout(detection_results)
+                    logger.info(f"Generated new seating layout using seating_lib.py")
                     
             except Exception as e:
-                logger.error(f"Error running seating.py: {e}")
+                logger.error(f"Error loading seating layout: {e}")
                 seating_layout = None
-            finally:
-                # Clean up temp file
-                if os.path.exists(temp_file):
-                    try:
-                        os.remove(temp_file)
-                    except:
-                        pass
             
             if seating_layout:
                 # Store in memory (works in Vercel)

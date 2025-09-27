@@ -143,73 +143,88 @@ def organize_seats_by_rows(seats: List[Tuple[float, float]]) -> Dict[str, List[T
 
 def create_row_json_structure(left_rows: Dict, right_rows: Dict, detections: List[Dict], midpoints: List[Tuple]) -> Dict[str, Any]:
     """
-    Create the final row-based JSON structure matching seating.py exactly
-    This is a simplified version that creates the basic structure for now
+    Create the final row-based JSON structure using actual detection coordinates
     """
-    # For now, create a basic structure that matches the seating.py output format
-    # This will be enhanced to match the full algorithm later
-    
     row_data = {}
     
-    # Create 9 regular rows (4 seats each)
-    for row_idx in range(1, 10):
+    # Group all midpoints into rows by Y-coordinate proximity
+    row_threshold = 60
+    all_rows = []
+    
+    # Sort midpoints by Y coordinate (top to bottom)
+    sorted_midpoints = sorted(midpoints, key=lambda pt: pt[1])
+    
+    for pt in sorted_midpoints:
+        placed = False
+        for row in all_rows:
+            if abs(row[0][1] - pt[1]) < row_threshold:
+                row.append(pt)
+                placed = True
+                break
+        if not placed:
+            all_rows.append([pt])
+    
+    # Sort each row by X coordinate (left to right)
+    for row in all_rows:
+        row.sort(key=lambda pt: pt[0])
+    
+    print(f"Found {len(all_rows)} rows of seats from detections")
+    
+    # Process each row
+    for row_idx, row_seats in enumerate(all_rows[:10], 1):  # Limit to 10 rows
         row_name = f"row_{row_idx}"
+        row_data[row_name] = {}
         
-        # Create 4 seats per row with coordinates format
-        row_data[row_name] = {
-            "column_one": {
-                "class_id": 1,  # Default unoccupied
-                "coordinates": {"x": 100.0 + row_idx * 100, "y": 100.0}
-            },
-            "column_two": {
-                "class_id": 1,
-                "coordinates": {"x": 100.0 + row_idx * 100, "y": 200.0}
-            },
-            "column_three": {
-                "class_id": 1,
-                "coordinates": {"x": 100.0 + row_idx * 100, "y": 300.0}
-            },
-            "column_four": {
-                "class_id": 1,
-                "coordinates": {"x": 100.0 + row_idx * 100, "y": 400.0}
+        # Determine number of seats for this row
+        max_seats = 6 if row_idx == 10 else 4
+        num_seats = min(len(row_seats), max_seats)
+        
+        # Column names
+        col_names = ["column_one", "column_two", "column_three", "column_four", "column_five", "column_six"]
+        
+        # Process actual detected seats
+        for seat_idx in range(num_seats):
+            col_name = col_names[seat_idx]
+            seat_x, seat_y = row_seats[seat_idx]
+            
+            # Find the class_id for this seat position
+            class_id = find_class_id_by_coordinates(seat_x, seat_y, detections, tolerance=100)
+            
+            row_data[row_name][col_name] = {
+                "class_id": class_id,
+                "coordinates": {"x": seat_x, "y": seat_y}
             }
-        }
+        
+        # Fill remaining seats as unoccupied if needed
+        for seat_idx in range(num_seats, max_seats):
+            col_name = col_names[seat_idx]
+            # Generate position for missing seats (spread them out)
+            base_x = row_seats[0][0] if row_seats else 100 + row_idx * 50
+            base_y = row_seats[0][1] if row_seats else 100 + seat_idx * 60
+            
+            row_data[row_name][col_name] = {
+                "class_id": 1,  # unoccupied
+                "coordinates": {"x": base_x + seat_idx * 50, "y": base_y}
+            }
     
-    # Create row 10 with 6 seats
-    row_data["row_10"] = {
-        "column_one": {"class_id": 1, "coordinates": {"x": 1100.0, "y": 100.0}},
-        "column_two": {"class_id": 1, "coordinates": {"x": 1100.0, "y": 150.0}},
-        "column_three": {"class_id": 1, "coordinates": {"x": 1100.0, "y": 200.0}},
-        "column_four": {"class_id": 1, "coordinates": {"x": 1100.0, "y": 250.0}},
-        "column_five": {"class_id": 1, "coordinates": {"x": 1100.0, "y": 300.0}},
-        "column_six": {"class_id": 1, "coordinates": {"x": 1100.0, "y": 350.0}}
-    }
-    
-    # Now map actual detections to seats based on proximity
-    for detection in detections:
-        det_x = (detection["x_min"] + detection["x_max"]) / 2
-        det_y = (detection["y_min"] + detection["y_max"]) / 2
+    # Fill remaining rows if we have fewer than 10 rows
+    for row_idx in range(len(all_rows) + 1, 11):
+        row_name = f"row_{row_idx}"
+        row_data[row_name] = {}
         
-        # Find closest seat
-        min_distance = float('inf')
-        closest_seat = None
+        max_seats = 6 if row_idx == 10 else 4
+        col_names = ["column_one", "column_two", "column_three", "column_four", "column_five", "column_six"]
         
-        for row_name, row_seats in row_data.items():
-            for col_name, seat_data in row_seats.items():
-                seat_x = seat_data["coordinates"]["x"]
-                seat_y = seat_data["coordinates"]["y"]
-                
-                # Simple distance calculation (can be improved)
-                distance = ((det_x - seat_x) ** 2 + (det_y - seat_y) ** 2) ** 0.5
-                
-                if distance < min_distance:
-                    min_distance = distance
-                    closest_seat = (row_name, col_name)
-        
-        # Update closest seat with detection class_id
-        if closest_seat and min_distance < 1000:  # Reasonable threshold
-            row_name, col_name = closest_seat
-            row_data[row_name][col_name]["class_id"] = detection.get("class_id", 0)
+        for seat_idx in range(max_seats):
+            col_name = col_names[seat_idx]
+            # Generate positions for empty rows
+            x = 100 + row_idx * 50
+            y = 100 + seat_idx * 60
+            
+            row_data[row_name][col_name] = {
+                "class_id": 1,  # unoccupied
+                "coordinates": {"x": x, "y": y}
+            }
     
     return row_data
 
