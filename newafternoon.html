@@ -246,7 +246,8 @@
       }
 
       // Generate seat elements dynamically with grid layout and aisle separation
-      function generateSeats(layoutData) {
+      // Make this function globally accessible for auto-refresh
+      window.generateSeats = function generateSeats(layoutData) {
         const container = document.getElementById("busContainer");
         const busImage = document.getElementById("busImage");
 
