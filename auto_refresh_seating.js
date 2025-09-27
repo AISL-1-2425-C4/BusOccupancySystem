@@ -266,11 +266,68 @@ class SeatingAutoRefresh {
     }
 }
 
+/**
+ * Hide JSON output elements from the page
+ */
+function hideJsonOutput() {
+    console.log('🧹 Hiding JSON output elements');
+    
+    // Common selectors for JSON output elements
+    const jsonSelectors = [
+        '#output',
+        '#json-output', 
+        '#raw-data',
+        '#seat-data',
+        '#debug-output',
+        'pre',
+        '.json-display',
+        '.raw-json',
+        '.debug-info'
+    ];
+    
+    // Hide all matching elements
+    jsonSelectors.forEach(selector => {
+        try {
+            const elements = document.querySelectorAll(selector);
+            elements.forEach(element => {
+                const text = element.textContent || '';
+                // Check if element contains JSON-like content
+                if (text.includes('{') && (text.includes('"Row_') || text.includes('"class_id"') || text.includes('"coordinates"'))) {
+                    element.style.display = 'none';
+                    console.log('✅ Hidden JSON element:', element.tagName, element.id || element.className);
+                }
+            });
+        } catch (e) {
+            // Ignore invalid selectors
+        }
+    });
+    
+    // Also check for elements with JSON-like content
+    const allElements = document.querySelectorAll('*');
+    allElements.forEach(element => {
+        const text = element.textContent || '';
+        // Check if it's a JSON structure showing seating data
+        if ((text.includes('"Row_') && text.includes('"column_')) || 
+            (text.includes('"class_id"') && text.includes('"coordinates"')) ||
+            (text.includes('{') && text.includes('"x":') && text.includes('"y":'))) {
+            
+            // Don't hide if it's part of a script tag or small inline content
+            if (element.tagName !== 'SCRIPT' && text.length > 50) {
+                element.style.display = 'none';
+                console.log('✅ Hidden JSON-like content in:', element.tagName);
+            }
+        }
+    });
+}
+
 // Initialize auto-refresh when page loads
 let seatingRefresh;
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🚀 Initializing seating auto-refresh');
+    
+    // Hide JSON output elements
+    hideJsonOutput();
     
     seatingRefresh = new SeatingAutoRefresh();
     seatingRefresh.startAutoRefresh();
