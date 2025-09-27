@@ -4,7 +4,8 @@ Simplified Frontend API for debugging
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
 import os
 import json
 import logging
@@ -108,6 +109,62 @@ async def get_seating_layout():
             status_code=500,
             detail=f"Error retrieving seating layout: {str(e)}"
         )
+
+# Serve HTML files
+@app.get("/morning")
+async def serve_morning():
+    """Serve morning HTML page"""
+    html_files = ["morning.html", "newmorning.html"]
+    for html_file in html_files:
+        if os.path.exists(html_file):
+            return FileResponse(html_file)
+    raise HTTPException(status_code=404, detail="Morning page not found")
+
+@app.get("/afternoon")
+async def serve_afternoon():
+    """Serve afternoon HTML page"""
+    html_files = ["afternoon.html", "newafternoon.html"]
+    for html_file in html_files:
+        if os.path.exists(html_file):
+            return FileResponse(html_file)
+    raise HTTPException(status_code=404, detail="Afternoon page not found")
+
+@app.get("/bus-layout")
+async def serve_bus_layout():
+    """Serve the main bus layout HTML"""
+    html_files = ["dynamic_seating.html", "index.html"]
+    for html_file in html_files:
+        if os.path.exists(html_file):
+            return FileResponse(html_file)
+    raise HTTPException(status_code=404, detail="Bus layout HTML not found")
+
+# Serve static files (images, CSS, JS)
+if os.path.exists("images"):
+    app.mount("/images", StaticFiles(directory="images"), name="images")
+if os.path.exists("static"):
+    app.mount("/static", StaticFiles(directory="static"), name="static")
+
+# Serve the main index page at root after API routes
+@app.get("/index")
+@app.get("/home")
+async def serve_index():
+    """Serve the main index page"""
+    if os.path.exists("index.html"):
+        return FileResponse("index.html")
+    # Return a simple HTML page if index.html doesn't exist
+    return """
+    <!DOCTYPE html>
+    <html>
+    <head><title>Bus Occupancy System</title></head>
+    <body>
+        <h1>Bus Occupancy System</h1>
+        <p><a href="/morning">Morning Schedule</a></p>
+        <p><a href="/afternoon">Afternoon Schedule</a></p>
+        <p><a href="/bus-layout">Bus Layout</a></p>
+        <p><a href="/api/seating-layout">API: Seating Layout</a></p>
+    </body>
+    </html>
+    """
 
 if __name__ == "__main__":
     import uvicorn
