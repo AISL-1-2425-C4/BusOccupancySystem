@@ -36,7 +36,7 @@ app.add_middleware(
 class WebhookPayload(BaseModel):
     event: str
     record_id: int
-    data: Dict[str, Any]
+    detection_results: Any = None
     timestamp: str
     secret: str
 
@@ -68,37 +68,28 @@ async def webhook_new_data(payload: WebhookPayload):
         
         logger.info(f"Received webhook for record {payload.record_id}")
         
-        # Check if this contains detection_results
-        if "detection_results" in payload.data:
-            detection_results = payload.data["detection_results"]
+        # Check if detection_results is at the root of the payload
+        if payload.detection_results is not None:
+            detection_results = payload.detection_results
             logger.info(f"Processing {len(detection_results)} detection results")
-            
-            # Process the new detection data using the full seating.py algorithm
             try:
                 from seating_processor import process_seating_layout
                 seating_layout = process_seating_layout(detection_results)
-                
                 if seating_layout:
                     logger.info(f"Successfully processed {len(detection_results)} detections using full seating.py algorithm")
                 else:
                     logger.warning("seating_processor returned no layout")
-                    
             except ImportError as e:
                 logger.error(f"Could not import seating_processor: {e}")
                 seating_layout = None
             except Exception as e:
                 logger.error(f"Error in seating_processor: {e}")
                 seating_layout = None
-            
             if seating_layout:
-                # Store in memory (works in Vercel)
                 global latest_seating_layout, last_updated
                 latest_seating_layout = seating_layout
                 last_updated = datetime.utcnow().isoformat()
-                
-                # Try to save to file (may not persist in Vercel, but worth trying)
                 save_seating_layout_to_file(seating_layout)
-                
                 return {
                     "success": True,
                     "message": "Detection data processed and cached",
