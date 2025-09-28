@@ -219,8 +219,49 @@
     </div>
 
     <h2>Morning Bus</h2>
+    <p
+      id="lastUpdated"
+      style="text-align: center; margin-top: 10px; font-size: 14px; color: #555"
+    >
+      Last Updated: --
+    </p>
 
     <script>
+      function updateTimestamp() {
+        const now = new Date();
+        document.getElementById("lastUpdated").textContent =
+          "Last Updated: " + now.toLocaleTimeString();
+      }
+
+      // Call it once on page load
+      document.addEventListener("DOMContentLoaded", updateTimestamp);
+
+      // Also call it whenever seats reload
+      async function loadDynamicSeats() {
+        try {
+          const response = await fetch("row_seating_layout.json");
+          if (!response.ok)
+            throw new Error(`HTTP error! status: ${response.status}`);
+
+          seatLayoutData = await response.json();
+          console.log("Loaded seat layout:", seatLayoutData);
+
+          document.getElementById("loading").style.display = "none";
+          document.getElementById("busContainer").style.display = "flex";
+
+          generateSeats(seatLayoutData);
+
+          // ✅ Update timestamp here
+          updateTimestamp();
+        } catch (error) {
+          console.error("Error loading seat layout:", error);
+          document.getElementById("loading").style.display = "none";
+          const errorDiv = document.getElementById("error");
+          errorDiv.style.display = "block";
+          errorDiv.textContent = `Error loading seat layout: ${error.message}`;
+        }
+      }
+
       let seatLayoutData = null;
 
       // Main function to load and display seats dynamically
@@ -260,7 +301,7 @@
 
         // CLEAR EXISTING SEATS FIRST - This is the fix!
         const existingSeats = container.querySelectorAll(".dynamic-seat");
-        existingSeats.forEach(seat => seat.remove());
+        existingSeats.forEach((seat) => seat.remove());
         console.log(`🧹 Cleared ${existingSeats.length} existing seats`);
 
         // Get row and column counts
@@ -344,12 +385,21 @@
           // Process each column in the row (becomes visual rows, top to bottom)
           currentRowColumns.forEach((columnKey, columnIndex) => {
             const seatData = rowData[columnKey];
-            
-            console.log(`Checking seat ${rowKey}_${columnKey}:`, seatData);
-            console.log(`Has coordinates: ${!!seatData.coordinates}, Has position: ${!!seatData.position}, Has class_id: ${seatData.class_id !== undefined}`);
 
-            if ((seatData.coordinates || seatData.position) && seatData.class_id !== undefined) {
-              console.log(`✅ Creating seat ${rowKey}_${columnKey} - passed condition check`);
+            console.log(`Checking seat ${rowKey}_${columnKey}:`, seatData);
+            console.log(
+              `Has coordinates: ${!!seatData.coordinates}, Has position: ${!!seatData.position}, Has class_id: ${
+                seatData.class_id !== undefined
+              }`
+            );
+
+            if (
+              (seatData.coordinates || seatData.position) &&
+              seatData.class_id !== undefined
+            ) {
+              console.log(
+                `✅ Creating seat ${rowKey}_${columnKey} - passed condition check`
+              );
               seatCounter++;
 
               // Create seat element
@@ -421,7 +471,7 @@
         console.log(
           `Container dimensions: ${containerWidth}x${containerHeight}px`
         );
-      }
+      };
 
       // Add aisle divider lines
       function addAisleDividers(container, containerHeight, has4SeatRows) {
@@ -523,7 +573,28 @@ Original Coordinates: (${seatData.coordinates.x.toFixed(
       // Load seats when page loads
       document.addEventListener("DOMContentLoaded", loadDynamicSeats);
     </script>
-    
+
     <!-- Auto-refresh removed per user request -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+      // Initialize Supabase
+      const supabaseUrl = "https://YOUR_PROJECT_REF.supabase.co"; // replace with your Supabase project URL
+      const supabaseKey = "YOUR_ANON_KEY"; // replace with your anon/public key
+      const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+      // Subscribe to changes in the "bus_seating" table
+      supabase
+        .channel("bus_seating_changes")
+        .on(
+          "postgres_changes",
+          { event: "*", schema: "public", table: "bus_seating" },
+          (payload) => {
+            console.log("🔔 Change detected:", payload);
+            // Reload seats whenever there’s an insert/update/delete
+            loadDynamicSeats();
+          }
+        )
+        .subscribe();
+    </script>
   </body>
 </html>
