@@ -166,6 +166,9 @@
       .occupied {
         background-color: red;
       }
+      .virtual {
+        background-color: black;
+      }
     </style>
     <link
       href="https://fonts.googleapis.com/css2?family=Karla:wght@400;700&display=swap"
@@ -200,6 +203,10 @@
       <div class="legend-item">
         <div class="legend-color occupied"></div>
         <span>Occupied (Class ID: 0)</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color virtual"></div>
+        <span>Unknown/Virtual (Class ID: 2)</span>
       </div>
     </div>
 
@@ -352,11 +359,15 @@
               seatImg.alt = `Seat ${rowKey} ${columnKey}`;
               seatImg.style.width = `${seatSize}px`;
 
-              // Set image based on class_id (0 = occupied/red, 1 = available/green)
+              // Set image based on class_id (0 = occupied/red, 1 = available/green, 2 = virtual/black)
               if (seatData.class_id === 0) {
                 seatImg.src = "images/CHAIRR.JPG"; // Occupied (red)
-              } else {
+              } else if (seatData.class_id === 1) {
                 seatImg.src = "images/CHAIRG.JPG"; // Available (green)
+              } else if (seatData.class_id === 2) {
+                seatImg.src = "images/CHAIRB.JPG"; // Virtual/unknown (black)
+              } else {
+                seatImg.src = "images/CHAIRG.JPG"; // Default to green
               }
 
               // Calculate grid position with aisle separation

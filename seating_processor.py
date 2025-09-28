@@ -110,54 +110,116 @@ def process_seating_layout(detections_input):
 
         # Find pairs within each side based on closest Y-coordinates
         def find_side_pairs(seats, side_name, exclude_seats=None):
-            """Find pairs within one side based on closest Y-coordinates"""
+            # --- Begin: seating.py logic for virtual dots ---
+            def get_side_of_dot(dot, pairs):
+                min_dist = float('inf')
+                side = None
+                for a, b in pairs:
+                    for paired_dot in (a, b):
+                        dist = abs(dot[0] - paired_dot[0])
+                        if dist < min_dist:
+                            min_dist = dist
+                            side = 'right' if dot[0] > paired_dot[0] else 'left'
+                return side
+
+            generated_virtual_dots = []
+
             if len(seats) < 2:
                 return []
-            
             if exclude_seats is None:
                 exclude_seats = []
-            
-            # Filter out seats that are already in the cross-aisle pair
             available_seats = [seat for seat in seats if seat not in exclude_seats]
-            
             if len(available_seats) < 2:
                 return []
-            
-            # Sort seats from BOTTOM to TOP (highest Y to lowest Y)
-            available_seats_sorted = sorted(available_seats, key=lambda pt: pt[1], reverse=True)
-            
-            side_pairs = []
-            used = set()
-            
-            # For each unused seat, find its closest horizontal partner
-            for i, seat1 in enumerate(available_seats_sorted):
-                if i in used:
-                    continue
-                
-                best_partner = None
-                best_partner_idx = None
-                min_y_distance = float('inf')
-                
-                # Find the closest seat by Y-coordinate (same row)
-                for j, seat2 in enumerate(available_seats_sorted):
-                    if i == j or j in used:
+            pairs = []
+            y_threshold = 35
+            if side_name.lower() == "left" or side_name.lower() == "right":
+                sorted_seats = sorted(available_seats, key=lambda pt: pt[1], reverse=True)
+                paired = set()
+                if len(sorted_seats) >= 2:
+                    s1, s2 = sorted_seats[-2], sorted_seats[-1]
+                    y_diff = abs(s1[1] - s2[1])
+                    if y_diff <= y_threshold:
+                        pairs.append((s1, s2))
+                        paired.add(s1)
+                        paired.add(s2)
+                        print(f"[{side_name.capitalize()} Last Row Pairing] Paired {s1} and {s2} (y_diff={y_diff:.1f})")
+                        sorted_seats = sorted_seats[:-2]
+                    else:
+                        print(f"[{side_name.capitalize()} Last Row Pairing] Skipped pairing {s1} and {s2} (y_diff={y_diff:.1f} > {y_threshold})")
+                i = 0
+                while i + 1 < len(sorted_seats):
+                    s1, s2 = sorted_seats[i], sorted_seats[i+1]
+                    if s1 in paired or s2 in paired:
+                        i += 1
                         continue
-                    
-                    # Use pure Y-distance to find seats in the same row
-                    y_distance = abs(seat1[1] - seat2[1])
-                    
-                    if y_distance < min_y_distance:
-                        min_y_distance = y_distance
-                        best_partner = seat2
-                        best_partner_idx = j
-                
-                # If we found a partner, pair them
-                if best_partner is not None:
-                    side_pairs.append((seat1, best_partner))
-                    used.add(i)
-                    used.add(best_partner_idx)
-            
-            return side_pairs
+                    y_diff = abs(s1[1] - s2[1])
+                    if y_diff <= y_threshold:
+                        pairs.append((s1, s2))
+                        paired.add(s1)
+                        paired.add(s2)
+                        print(f"[{side_name.capitalize()} Pairing] Paired {s1} and {s2} (y_diff={y_diff:.1f})")
+                        i += 2
+                    else:
+                        print(f"[{side_name.capitalize()} Pairing] Skipped pairing {s1} and {s2} (y_diff={y_diff:.1f} > {y_threshold})")
+                        i += 1
+                unpaired = [s for s in sorted_seats if s not in paired]
+                i = 0
+                while i + 1 < len(unpaired):
+                    s1, s2 = unpaired[i], unpaired[i+1]
+                    y_diff = abs(s1[1] - s2[1])
+                    if y_diff <= y_threshold:
+                        pairs.append((s1, s2))
+                        paired.add(s1)
+                        paired.add(s2)
+                        print(f"[{side_name.capitalize()} Second Pass] Paired {s1} and {s2} (y_diff={y_diff:.1f})")
+                        i += 2
+                    else:
+                        print(f"[{side_name.capitalize()} Second Pass] Skipped pairing {s1} and {s2} (y_diff={y_diff:.1f} > {y_threshold})")
+                        i += 1
+                all_seats = sorted_seats + ([s1, s2] if len(sorted_seats) < len(available_seats) else [])
+                for s in all_seats:
+                    if s in paired:
+                        continue
+                    candidates = [(other, abs(s[1] - other[1])) for other in all_seats if other != s and abs(s[1] - other[1]) <= y_threshold]
+                    if not candidates:
+                        continue
+                    best, best_y = min(candidates, key=lambda x: x[1])
+                    idx = None
+                    for idx_, (a, b) in enumerate(pairs):
+                        if best == a or best == b:
+                            idx = idx_
+                            current_pair = (a, b)
+                            break
+                    if idx is not None:
+                        other_in_pair = current_pair[0] if current_pair[1] == best else current_pair[1]
+                        current_y = abs(best[1] - other_in_pair[1])
+                        if best_y < current_y:
+                            pairs.pop(idx)
+                            paired.discard(other_in_pair)
+                            pairs.append((s, best))
+                            paired.add(s)
+                            paired.add(best)
+                            print(f"[{side_name.capitalize()} Re-Pairing] {s} re-paired with {best} (y_diff={best_y:.1f}), replacing previous pair (y_diff={current_y:.1f})")
+            else:
+                print(f"[Pairing] Unknown side: {side_name}")
+            all_paired = set()
+            for a, b in pairs:
+                all_paired.add(a)
+                all_paired.add(b)
+            unpaired_final = [s for s in available_seats if s not in all_paired]
+            for dot in unpaired_final:
+                side = get_side_of_dot(dot, pairs)
+                offset = 50
+                if side == 'right':
+                    virtual_dot = (dot[0] - offset, dot[1])
+                else:
+                    virtual_dot = (dot[0] + offset, dot[1])
+                pairs.append((dot, virtual_dot))
+                generated_virtual_dots.append(virtual_dot)
+                print(f"[Virtual Pairing] Paired {dot} with generated dot {virtual_dot} (side: {side}, offset: {offset})")
+            find_side_pairs.generated_virtual_dots = generated_virtual_dots
+            return pairs
 
         # Get the seats that are already in the cross-aisle pair to exclude them
         cross_aisle_seats = []
@@ -229,17 +291,17 @@ def process_seating_layout(detections_input):
 
         # Create function to find class_id from coordinates
         def find_class_id_by_coordinates(x, y, detections, tolerance=50):
-            """Find the class_id of a detection by matching coordinates within tolerance"""
+            # Check if this is a generated virtual dot
+            if hasattr(find_side_pairs, 'generated_virtual_dots'):
+                for vdot in find_side_pairs.generated_virtual_dots:
+                    if abs(vdot[0] - x) < 1e-3 and abs(vdot[1] - y) < 1e-3:
+                        return 2  # class_id 2 for unknown/generated
             for detection in detections:
                 det_x_center = (detection["x_min"] + detection["x_max"]) / 2
                 det_y_center = (detection["y_min"] + detection["y_max"]) / 2
-                
-                # Check if coordinates match within tolerance
                 distance = ((det_x_center - x) ** 2 + (det_y_center - y) ** 2) ** 0.5
                 if distance <= tolerance:
                     return detection["class_id"]
-            
-            # Default to unoccupied if no match found
             return 1
 
         # --- Begin: Last row (6-seat group) logic from seating.py ---
