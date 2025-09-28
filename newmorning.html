@@ -236,23 +236,29 @@
       // Call it once on page load
       document.addEventListener("DOMContentLoaded", updateTimestamp);
 
-      // Also call it whenever seats reload
       async function loadDynamicSeats() {
         try {
           const response = await fetch("row_seating_layout.json");
           if (!response.ok)
             throw new Error(`HTTP error! status: ${response.status}`);
 
-          seatLayoutData = await response.json();
-          console.log("Loaded seat layout:", seatLayoutData);
+          const newLayout = await response.json();
+          console.log("Loaded seat layout:", newLayout);
 
-          document.getElementById("loading").style.display = "none";
-          document.getElementById("busContainer").style.display = "flex";
+          // ✅ Only update if layout is not empty AND different from current
+          if (
+            newLayout &&
+            JSON.stringify(newLayout) !== JSON.stringify(seatLayoutData)
+          ) {
+            seatLayoutData = newLayout;
+            document.getElementById("loading").style.display = "none";
+            document.getElementById("busContainer").style.display = "flex";
 
-          generateSeats(seatLayoutData);
-
-          // ✅ Update timestamp here
-          updateTimestamp();
+            generateSeats(seatLayoutData);
+            updateTimestamp();
+          } else {
+            console.log("No changes detected — keeping existing seats");
+          }
         } catch (error) {
           console.error("Error loading seat layout:", error);
           document.getElementById("loading").style.display = "none";
@@ -263,35 +269,6 @@
       }
 
       let seatLayoutData = null;
-
-      // Main function to load and display seats dynamically
-      async function loadDynamicSeats() {
-        try {
-          // Fetch the row seating layout JSON
-          const response = await fetch("row_seating_layout.json");
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-
-          seatLayoutData = await response.json();
-          console.log("Loaded seat layout:", seatLayoutData);
-
-          // Hide loading, show container
-          document.getElementById("loading").style.display = "none";
-          document.getElementById("busContainer").style.display = "flex";
-
-          // Generate seats dynamically
-          generateSeats(seatLayoutData);
-
-          // JSON display removed for cleaner frontend
-        } catch (error) {
-          console.error("Error loading seat layout:", error);
-          document.getElementById("loading").style.display = "none";
-          const errorDiv = document.getElementById("error");
-          errorDiv.style.display = "block";
-          errorDiv.textContent = `Error loading seat layout: ${error.message}`;
-        }
-      }
 
       // Generate seat elements dynamically with grid layout and aisle separation
       // Make this function globally accessible for auto-refresh
