@@ -8,24 +8,41 @@ import sys
 webhook_file = os.getenv('WEBHOOK_DETECTION_FILE')
 use_webhook = "--webhook" in sys.argv
 
+def load_detection_data(file_path):
+    """Load detection data from JSON file, handling both old and new formats"""
+    try:
+        with open(file_path, "r") as file:
+            data = json.load(file)
+        
+        # Handle new format with 'detections' key
+        if isinstance(data, dict) and 'detections' in data:
+            detections = data['detections']
+            print(f"Loaded {len(detections)} detections from new format (with 'detections' key)")
+            if 'inference_time_sec' in data:
+                print(f"Inference time: {data['inference_time_sec']} seconds")
+        # Handle old format (direct array)
+        elif isinstance(data, list):
+            detections = data
+            print(f"Loaded {len(detections)} detections from old format (direct array)")
+        # Handle old format with 'detection_results' key
+        elif isinstance(data, dict) and 'detection_results' in data:
+            detections = data['detection_results']
+            print(f"Loaded {len(detections)} detections from old format (with 'detection_results' key)")
+        else:
+            print("Error: Unrecognized JSON format")
+            detections = []
+            
+        return detections
+    except Exception as e:
+        print(f"Error loading file {file_path}: {e}")
+        return []
+
 if use_webhook and webhook_file and os.path.exists(webhook_file):
     print(f"Loading detection data from webhook file: {webhook_file}")
-    try:
-        with open(webhook_file, "r") as file:
-            detections = json.load(file)
-        print(f"Loaded {len(detections)} detections from webhook")
-    except Exception as e:
-        print(f"Error loading webhook file: {e}")
-        detections = []
+    detections = load_detection_data(webhook_file)
 else:
     # Default behavior - load from JSON_Data
-    try:
-        with open("JSON_Data/detection_results3.json", "r") as file:
-            detections = json.load(file)
-        print(f"Loaded {len(detections)} detections from JSON_Data/detection_results3.json")
-    except FileNotFoundError:
-        print("Error: JSON_Data/detection_results3.json not found.")
-        detections = []
+    detections = load_detection_data("JSON_Data/detection_results3.json")
 
 # Extract midpoints from detections
 midpoints = []
