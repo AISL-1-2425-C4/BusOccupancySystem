@@ -16,13 +16,14 @@ def process_seating_layout(detections_input):
     Returns:
         Dictionary with row-based seating layout, or None if processing fails
     """
+    detections = detections_input
+    print(f"🚌 Processing {len(detections)} detections using full seating.py algorithm...")
+
+    if not detections:
+        return None
+
+    # All helper functions and logic as before...
     try:
-        detections = detections_input
-        print(f"🚌 Processing {len(detections)} detections using full seating.py algorithm...")
-        
-        if not detections:
-            return None
-        
         # Extract midpoints from detections
         midpoints = []
         for detection in detections:
@@ -304,8 +305,10 @@ def process_seating_layout(detections_input):
         row_json_data = create_row_json_output(cross_aisle_pair_groups, aisle_pair, detections)
         
         print(f"✅ Generated seating layout with {len(row_json_data)} rows")
+        print("--- Seating Layout Output (row_json_data) ---")
+        print(json.dumps(row_json_data, indent=2))
+        print("--- End of Seating Layout Output ---")
         return row_json_data
-        
     except Exception as e:
         print(f"❌ Error in process_seating_layout: {e}")
         return None
@@ -347,5 +350,8 @@ if __name__ == "__main__":
         with open("row_seating_layout.json", "w") as f:
             json.dump(result, f, indent=2)
         print(f"Row-based seating layout saved to 'row_seating_layout.json'")
+        print("--- Seating Layout Output (row_seating_layout.json) ---")
+        print(json.dumps(result, indent=2))
+        print("--- End of Seating Layout Output ---")
     else:
         print("Failed to process seating layout")
