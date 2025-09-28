@@ -133,20 +133,22 @@ def process_seating_layout(detections_input):
                 return []
             pairs = []
             y_threshold = 35
+            x_threshold = 30  # New: minimum x-difference between pairs
             if side_name.lower() == "left" or side_name.lower() == "right":
                 sorted_seats = sorted(available_seats, key=lambda pt: pt[1], reverse=True)
                 paired = set()
                 if len(sorted_seats) >= 2:
                     s1, s2 = sorted_seats[-2], sorted_seats[-1]
                     y_diff = abs(s1[1] - s2[1])
-                    if y_diff <= y_threshold:
+                    x_diff = abs(s1[0] - s2[0])
+                    if y_diff <= y_threshold and x_diff > x_threshold:
                         pairs.append((s1, s2))
                         paired.add(s1)
                         paired.add(s2)
-                        print(f"[{side_name.capitalize()} Last Row Pairing] Paired {s1} and {s2} (y_diff={y_diff:.1f})")
+                        print(f"[{side_name.capitalize()} Last Row Pairing] Paired {s1} and {s2} (y_diff={y_diff:.1f}, x_diff={x_diff:.1f})")
                         sorted_seats = sorted_seats[:-2]
                     else:
-                        print(f"[{side_name.capitalize()} Last Row Pairing] Skipped pairing {s1} and {s2} (y_diff={y_diff:.1f} > {y_threshold})")
+                        print(f"[{side_name.capitalize()} Last Row Pairing] Skipped pairing {s1} and {s2} (y_diff={y_diff:.1f}, x_diff={x_diff:.1f})")
                 i = 0
                 while i + 1 < len(sorted_seats):
                     s1, s2 = sorted_seats[i], sorted_seats[i+1]
@@ -154,28 +156,30 @@ def process_seating_layout(detections_input):
                         i += 1
                         continue
                     y_diff = abs(s1[1] - s2[1])
-                    if y_diff <= y_threshold:
+                    x_diff = abs(s1[0] - s2[0])
+                    if y_diff <= y_threshold and x_diff > x_threshold:
                         pairs.append((s1, s2))
                         paired.add(s1)
                         paired.add(s2)
-                        print(f"[{side_name.capitalize()} Pairing] Paired {s1} and {s2} (y_diff={y_diff:.1f})")
+                        print(f"[{side_name.capitalize()} Pairing] Paired {s1} and {s2} (y_diff={y_diff:.1f}, x_diff={x_diff:.1f})")
                         i += 2
                     else:
-                        print(f"[{side_name.capitalize()} Pairing] Skipped pairing {s1} and {s2} (y_diff={y_diff:.1f} > {y_threshold})")
+                        print(f"[{side_name.capitalize()} Pairing] Skipped pairing {s1} and {s2} (y_diff={y_diff:.1f}, x_diff={x_diff:.1f})")
                         i += 1
                 unpaired = [s for s in sorted_seats if s not in paired]
                 i = 0
                 while i + 1 < len(unpaired):
                     s1, s2 = unpaired[i], unpaired[i+1]
                     y_diff = abs(s1[1] - s2[1])
-                    if y_diff <= y_threshold:
+                    x_diff = abs(s1[0] - s2[0])
+                    if y_diff <= y_threshold and x_diff > x_threshold:
                         pairs.append((s1, s2))
                         paired.add(s1)
                         paired.add(s2)
-                        print(f"[{side_name.capitalize()} Second Pass] Paired {s1} and {s2} (y_diff={y_diff:.1f})")
+                        print(f"[{side_name.capitalize()} Second Pass] Paired {s1} and {s2} (y_diff={y_diff:.1f}, x_diff={x_diff:.1f})")
                         i += 2
                     else:
-                        print(f"[{side_name.capitalize()} Second Pass] Skipped pairing {s1} and {s2} (y_diff={y_diff:.1f} > {y_threshold})")
+                        print(f"[{side_name.capitalize()} Second Pass] Skipped pairing {s1} and {s2} (y_diff={y_diff:.1f}, x_diff={x_diff:.1f})")
                         i += 1
                 all_seats = sorted_seats + ([s1, s2] if len(sorted_seats) < len(available_seats) else [])
                 for s in all_seats:
@@ -304,22 +308,60 @@ def process_seating_layout(detections_input):
                     return detection["class_id"]
             return 1
 
-        # --- Begin: Last row (6-seat group) logic from seating.py ---
-        # Find the ONE cross-aisle pair with closest x-values to the aisle (already found as aisle_pair)
+        # --- Begin: seating.py-mimic last row (6-seat group) logic ---
+        def generate_virtual_pair_for(pair, side):
+            y1 = pair[0][1]
+            y2 = pair[1][1]
+            if side == 'left':
+                x1 = aisle_position + 100
+                x2 = aisle_position + 150
+            else:
+                x1 = aisle_position - 100
+                x2 = aisle_position - 150
+            return ((x1, y1), (x2, y2))
+
         last_row_group = None
-        if aisle_pair and cross_aisle_pair_groups:
-            # Find the top-most cross-aisle pair group (lowest Y-coordinate) for last row connection
-            top_group = min(cross_aisle_pair_groups, 
-                           key=lambda group: group['y_center'])
-            # Create last row group: top blue pair + cross-aisle pair + top red pair
-            last_row_group = {
-                'bottom_left_pair': top_group['left_pair'],
-                'cross_aisle_pair': aisle_pair,
-                'bottom_right_pair': top_group['right_pair'],
-                'total_chairs': 6
-            }
-            # Remove the top_group from cross_aisle_pair_groups to avoid duplicate drawing
-            cross_aisle_pair_groups.remove(top_group)
+        if left_side_pairs and right_side_pairs:
+            left_lowest_pair = min(left_side_pairs, key=lambda pair: (pair[0][1] + pair[1][1]) / 2)
+            right_lowest_pair = min(right_side_pairs, key=lambda pair: (pair[0][1] + pair[1][1]) / 2)
+
+            # Determine last row group and cross-aisle pair (real or virtual)
+            if aisle_pair:
+                cross_aisle = aisle_pair
+                last_row_group = {
+                    'bottom_left_pair': left_lowest_pair,
+                    'cross_aisle_pair': cross_aisle,
+                    'bottom_right_pair': right_lowest_pair,
+                    'total_chairs': 6
+                }
+            else:
+                left_y = (left_lowest_pair[0][1] + left_lowest_pair[1][1]) / 2
+                right_y = (right_lowest_pair[0][1] + right_lowest_pair[1][1]) / 2
+                if left_y > right_y:
+                    cross_aisle = generate_virtual_pair_for(left_lowest_pair, 'left')
+                    last_row_group = {
+                        'bottom_left_pair': left_lowest_pair,
+                        'cross_aisle_pair': cross_aisle,
+                        'bottom_right_pair': right_lowest_pair,
+                        'total_chairs': 6
+                    }
+                else:
+                    cross_aisle = generate_virtual_pair_for(right_lowest_pair, 'right')
+                    last_row_group = {
+                        'bottom_left_pair': left_lowest_pair,
+                        'cross_aisle_pair': cross_aisle,
+                        'bottom_right_pair': right_lowest_pair,
+                        'total_chairs': 6
+                    }
+            # Remove any cross-aisle pair group that matches the last row's left and right pairs
+            to_remove = []
+            for group in cross_aisle_pair_groups:
+                if (group['left_pair'] == left_lowest_pair and group['right_pair'] == right_lowest_pair):
+                    to_remove.append(group)
+            for group in to_remove:
+                cross_aisle_pair_groups.remove(group)
+        else:
+            last_row_group = None
 
         # Create row-based JSON output (with last row group)
         def create_row_json_output_with_last_row(cross_aisle_pair_groups, aisle_pair, detections, last_row_group):
