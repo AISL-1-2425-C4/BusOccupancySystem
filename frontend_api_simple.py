@@ -282,6 +282,12 @@ async def serve_bus_layout():
             return FileResponse(html_file)
     raise HTTPException(status_code=404, detail="Bus layout HTML not found")
 
+@app.get("/availability.html")
+async def serve_availability():
+    if os.path.exists("availability.html"):
+        return FileResponse("availability.html")
+    raise HTTPException(status_code=404, detail="Availability page not found")
+
 # Serve CSS files
 @app.get("/style.css")
 async def serve_css():
