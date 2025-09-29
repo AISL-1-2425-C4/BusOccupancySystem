@@ -18,7 +18,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 SUPABASE_URL = os.getenv("SUPABASE_URL")  # e.g. https://abcxyz.supabase.co
-SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_KEY")  # service_role key
+SUPABASE_KEY = os.getenv("SUPABASE_KEY")  # service_role key
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -83,6 +83,9 @@ async def get_last_five_excluding_latest():
         return rows[1:]  # skip latest, return next 5
 
 #obtain 5 data entries from db
+
+
+
 @app.post("/api/webhook/new-data")
 async def webhook_new_data(payload: WebhookPayload):
     """
