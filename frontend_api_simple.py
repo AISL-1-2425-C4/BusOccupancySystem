@@ -71,7 +71,7 @@ async def get_last_five_excluding_latest():
             },
             params={
                 "select": "id,created_at,json_data",
-                "order": "created_at.desc",
+                "order": "id.desc",
                 "limit": 6  # latest + 5 before it
             }
         )
@@ -80,7 +80,17 @@ async def get_last_five_excluding_latest():
             raise HTTPException(status_code=500, detail=f"Supabase error: {resp.text}")
 
         rows = resp.json()
-        return rows[1:]  # skip latest, return next 5
+        # skip latest, return next 5, and include json_data in the output
+        last_five = rows[1:]
+        # Return id, created_at, and json_data for each
+        return [
+            {
+                "id": r.get("id"),
+                "created_at": r.get("created_at"),
+                "json_data": r.get("json_data")
+            }
+            for r in last_five
+        ]
 
 #obtain 5 data entries from db
 
