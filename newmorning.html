@@ -241,7 +241,10 @@
 
       async function loadDynamicSeats() {
         try {
-          const response = await fetch("row_seating_layout.json");
+          // 👇 cache-busting: add timestamp so browser doesn’t reuse old JSON
+          const response = await fetch(
+            "row_seating_layout.json?nocache=" + Date.now()
+          );
           if (!response.ok)
             throw new Error(`HTTP error! status: ${response.status}`);
 
@@ -270,6 +273,10 @@
           errorDiv.textContent = `Error loading seat layout: ${error.message}`;
         }
       }
+
+      // 👇 make sure you have this once after DOMContentLoaded
+      document.addEventListener("DOMContentLoaded", loadDynamicSeats);
+      setInterval(loadDynamicSeats, 5000); // auto refresh every 5 seconds
 
       let seatLayoutData = null;
 
