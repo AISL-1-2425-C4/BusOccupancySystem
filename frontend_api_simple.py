@@ -12,6 +12,13 @@ import logging
 from datetime import datetime
 from typing import Any, Dict
 from pydantic import BaseModel
+import httpx
+from dotenv import load_dotenv
+
+load_dotenv()
+
+SUPABASE_URL = os.getenv("SUPABASE_URL")  # e.g. https://abcxyz.supabase.co
+SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_KEY")  # service_role key
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -54,11 +61,35 @@ async def health():
     """Health check"""
     return {"status": "healthy", "timestamp": datetime.utcnow().isoformat()}
 
+async def get_last_five_excluding_latest():
+    async with httpx.AsyncClient() as client:
+        resp = await client.get(
+            f"{SUPABASE_URL}/rest/v1/push_requests",
+            headers={
+                "apikey": SUPABASE_KEY,
+                "Authorization": f"Bearer {SUPABASE_KEY}"
+            },
+            params={
+                "select": "id,created_at,json_data",
+                "order": "created_at.desc",
+                "limit": 6  # latest + 5 before it
+            }
+        )
+
+        if resp.status_code != 200:
+            raise HTTPException(status_code=500, detail=f"Supabase error: {resp.text}")
+
+        rows = resp.json()
+        return rows[1:]  # skip latest, return next 5
+
+
 @app.post("/api/webhook/new-data")
 async def webhook_new_data(payload: WebhookPayload):
     """
     Webhook endpoint to receive notifications about new detection data
     """
+    response = {}
+
     try:
         # Verify webhook secret
         expected_secret = os.getenv("WEBHOOK_SECRET", "your-secure-webhook-secret-123")
@@ -67,11 +98,13 @@ async def webhook_new_data(payload: WebhookPayload):
             raise HTTPException(status_code=401, detail="Invalid webhook secret")
         
         logger.info(f"Received webhook for record {payload.record_id}")
-        
-        # Check if detection_results is at the root of the payload
+
+        seating_layout = None
+
         if payload.detection_results is not None:
             detection_results = payload.detection_results
             logger.info(f"Processing {len(detection_results)} detection results")
+
             try:
                 from seating_processor import process_seating_layout
                 seating_layout = process_seating_layout(detection_results)
@@ -81,16 +114,16 @@ async def webhook_new_data(payload: WebhookPayload):
                     logger.warning("seating_processor returned no layout")
             except ImportError as e:
                 logger.error(f"Could not import seating_processor: {e}")
-                seating_layout = None
             except Exception as e:
                 logger.error(f"Error in seating_processor: {e}")
-                seating_layout = None
+
             if seating_layout:
                 global latest_seating_layout, last_updated
                 latest_seating_layout = seating_layout
                 last_updated = datetime.utcnow().isoformat()
                 save_seating_layout_to_file(seating_layout)
-                return {
+
+                response = {
                     "success": True,
                     "message": "Detection data processed and cached",
                     "record_id": payload.record_id,
@@ -98,23 +131,40 @@ async def webhook_new_data(payload: WebhookPayload):
                     "updated_at": last_updated
                 }
             else:
-                logger.warning("Failed to process seating layout")
-                return {
+                response = {
                     "success": False,
                     "message": "Failed to process seating layout",
                     "record_id": payload.record_id
                 }
         else:
             logger.info("No detection_results in webhook payload")
-            return {
+            response = {
                 "success": True,
                 "message": "No detection data to process",
                 "record_id": payload.record_id
             }
-            
+
+        # ✅ Add last 5 records from DB (excluding latest)
+        try:
+            last_five = await get_last_five_excluding_latest()
+            response["last_five_records"] = last_five
+
+            # Log IDs and timestamps for clarity
+            logger.info(
+                f"Fetched {len(last_five)} previous records: "
+                + ", ".join([f"id={r['id']} created_at={r['created_at']}" for r in last_five])
+            )
+
+        except Exception as e:
+            logger.error(f"Error fetching last five records: {e}")
+            response["last_five_records"] = []
+
+
     except Exception as e:
         logger.error(f"Error processing webhook: {e}")
         raise HTTPException(status_code=500, detail=f"Error processing webhook: {str(e)}")
+
+    return response
 
 @app.get("/api/seating-layout")
 async def get_seating_layout():
