@@ -82,7 +82,7 @@ async def get_last_five_excluding_latest():
         rows = resp.json()
         return rows[1:]  # skip latest, return next 5
 
-
+#obtain 5 data entries from db
 @app.post("/api/webhook/new-data")
 async def webhook_new_data(payload: WebhookPayload):
     """
