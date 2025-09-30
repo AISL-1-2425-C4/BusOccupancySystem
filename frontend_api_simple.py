@@ -143,11 +143,18 @@ async def webhook_new_data(payload: WebhookPayload):
                     last_four_raw = await get_last_five_excluding_latest()
 
                     # Process them before returning
-                    previous_processed_layouts = []   # 👈 store globally
+                    previous_processed_layouts = []
                     for r in last_four_raw:
-                        processed = process_seating_layout(r["json_data"])
-                        if processed:
-                            previous_processed_layouts.append(processed)
+                        json_data = r.get("json_data", {})
+                        detections = json_data.get("detection_results", [])
+                        if detections:
+                            processed = process_seating_layout(detections)
+                            if processed:
+                                previous_processed_layouts.append({
+                                    "record_id": r["id"],  # keep track of which record
+                                    "layout": processed
+                                })
+
 
                     response["previous_layouts"] = previous_processed_layouts
 
