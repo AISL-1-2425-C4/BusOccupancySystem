@@ -50,6 +50,7 @@ class WebhookPayload(BaseModel):
 # Global variable to store latest seating layout (in-memory cache)
 latest_seating_layout = None
 last_updated = None
+previous_processed_layouts: list = []   # 👈 add this
 
 @app.get("/")
 async def root():
@@ -72,7 +73,7 @@ async def get_last_five_excluding_latest():
             params={
                 "select": "id,created_at,json_data",
                 "order": "id.desc",
-                "limit": 6  # latest + 5 before it
+                "limit": 5  # latest + 5 before it
             }
         )
 
@@ -131,18 +132,39 @@ async def webhook_new_data(payload: WebhookPayload):
                 logger.error(f"Error in seating_processor: {e}")
 
             if seating_layout:
-                global latest_seating_layout, last_updated
+                global latest_seating_layout, last_updated, previous_processed_layouts
                 latest_seating_layout = seating_layout
                 last_updated = datetime.utcnow().isoformat()
-                save_seating_layout_to_file(seating_layout)
 
                 response = {
                     "success": True,
                     "message": "Detection data processed and cached",
                     "record_id": payload.record_id,
                     "rows_processed": len(seating_layout),
-                    "updated_at": last_updated
+                    "updated_at": last_updated,
+                    "latest_layout": latest_seating_layout,           # 👈 newest one
+                    "previous_layouts": previous_processed_layouts,   # 👈 4 older ones
                 }
+
+                # Fetch the last 4 raw layouts from Supabase
+                try:
+                    last_four_raw = await get_last_five_excluding_latest()
+
+                    # Process them before returning
+                    previous_processed_layouts = []   # 👈 store globally
+                    for r in last_four_raw:
+                        processed = process_seating_layout(r["json_data"])
+                        if processed:
+                            previous_processed_layouts.append(processed)
+
+                    response["previous_layouts"] = previous_processed_layouts
+
+                except Exception as e:
+                    logger.error(f"Error fetching/processing last four layouts: {e}")
+                    response["previous_layouts"] = []
+                    previous_processed_layouts = []  # reset if failed
+
+
             else:
                 response = {
                     "success": False,
