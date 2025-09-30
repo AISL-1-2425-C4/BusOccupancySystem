@@ -136,15 +136,7 @@ async def webhook_new_data(payload: WebhookPayload):
                 latest_seating_layout = seating_layout
                 last_updated = datetime.utcnow().isoformat()
 
-                response = {
-                    "success": True,
-                    "message": "Detection data processed and cached",
-                    "record_id": payload.record_id,
-                    "rows_processed": len(seating_layout),
-                    "updated_at": last_updated,
-                    "latest_layout": latest_seating_layout,           # 👈 newest one
-                    "previous_layouts": previous_processed_layouts,   # 👈 4 older ones
-                }
+
 
                 # Fetch the last 4 raw layouts from Supabase
                 try:
@@ -163,6 +155,16 @@ async def webhook_new_data(payload: WebhookPayload):
                     logger.error(f"Error fetching/processing last four layouts: {e}")
                     response["previous_layouts"] = []
                     previous_processed_layouts = []  # reset if failed
+
+                response = {
+                    "success": True,
+                    "message": "Detection data processed and cached",
+                    "record_id": payload.record_id,
+                    "rows_processed": len(seating_layout),
+                    "updated_at": last_updated,
+                    "latest_layout": latest_seating_layout,           # 👈 newest one
+                    "previous_layouts": previous_processed_layouts,   # 👈 4 older ones
+                }
 
 
             else:
