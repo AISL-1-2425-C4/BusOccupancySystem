@@ -21,7 +21,7 @@
   },
   {
     "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
-    "class_id": 0,
+    "class_id": 1,
     "class_name": "occupied",
     "confidence": 0.9013,
     "x_min": 2178.01,
@@ -31,7 +31,7 @@
   },
   {
     "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
-    "class_id": 0,
+    "class_id": 1,
     "class_name": "occupied",
     "confidence": 0.8755,
     "x_min": 1360.89,
@@ -61,7 +61,7 @@
   },
   {
     "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
-    "class_id": 1,
+    "class_id": 0,
     "class_name": "occupied",
     "confidence": 0.8595,
     "x_min": 2128.45,

@@ -514,9 +514,14 @@ if __name__ == "__main__":
             with open("JSON_Data/detection_results3.json", "r") as file:
                 data = json.load(file)
 
-            # Handle either {"detections": [...]} or just [...]
-            if isinstance(data, dict) and "detections" in data:
-                detections = data["detections"]
+            # ✅ Normalize to just a list of detections
+            if isinstance(data, dict):
+                if "detection_results" in data:
+                    detections = data["detection_results"]
+                elif "detections" in data:
+                    detections = data["detections"]
+                else:
+                    detections = list(data.values())
             else:
                 detections = data
 
@@ -525,6 +530,7 @@ if __name__ == "__main__":
         except FileNotFoundError:
             print("Error: JSON_Data/detection_results3.json not found.")
             detections = []
+
     
     # Process the seating layout
     result = process_seating_layout(detections)
@@ -539,3 +545,17 @@ if __name__ == "__main__":
         print("--- End of Seating Layout Output ---")
     else:
         print("Failed to process seating layout")
+
+
+with open("JSON_Data/detection_results3.json", "r") as f:
+    data = json.load(f)
+
+print("DEBUG raw top-level keys:", data.keys() if isinstance(data, dict) else "not a dict")
+
+if isinstance(data, dict):
+    # check if any list inside
+    for k, v in data.items():
+        print(f"Key: {k}, Type: {type(v)}")
+
+
+
