@@ -50,6 +50,7 @@ class WebhookPayload(BaseModel):
 # Global variable to store latest seating layout (in-memory cache)
 latest_seating_layout = None
 last_updated = None
+previous_processed_layouts: list = []   # 👈 add this
 
 @app.get("/")
 async def root():
@@ -72,7 +73,7 @@ async def get_last_five_excluding_latest():
             params={
                 "select": "id,created_at,json_data",
                 "order": "id.desc",
-                "limit": 6  # latest + 5 before it
+                "limit": 5  # latest + 5 before it
             }
         )
 
@@ -131,18 +132,56 @@ async def webhook_new_data(payload: WebhookPayload):
                 logger.error(f"Error in seating_processor: {e}")
 
             if seating_layout:
-                global latest_seating_layout, last_updated
+                global latest_seating_layout, last_updated, previous_processed_layouts
                 latest_seating_layout = seating_layout
                 last_updated = datetime.utcnow().isoformat()
-                save_seating_layout_to_file(seating_layout)
+
+
+
+                # Fetch the last 4 raw layouts from Supabase
+                try:
+                    last_four_raw = await get_last_five_excluding_latest()
+
+                    # Process them before returning
+                    previous_processed_layouts = []
+                    for r in last_four_raw:
+                        json_data = r.get("json_data", {})
+                        detections = json_data.get("detection_results", [])
+                        if detections:
+                            processed = process_seating_layout(detections)
+                            if processed:
+                                previous_processed_layouts.append({
+                                    "record_id": r["id"],  # keep track of which record
+                                    "layout": processed
+                                })
+
+
+                    response["previous_layouts"] = previous_processed_layouts
+
+                except Exception as e:
+                    logger.error(f"Error fetching/processing last four layouts: {e}")
+                    response["previous_layouts"] = []
+                    previous_processed_layouts = []  # reset if failed
+
+                # Combine latest + previous 4 into one majority-voted layout
+                all_layouts = [latest_seating_layout] + [p["layout"] for p in previous_processed_layouts]
+                final_layout = merge_seating_layouts(all_layouts)
+
+                # Save the final merged layout into cache
+                latest_seating_layout = final_layout
 
                 response = {
                     "success": True,
-                    "message": "Detection data processed and cached",
+                    "message": "Detection data processed and merged (majority vote)",
                     "record_id": payload.record_id,
-                    "rows_processed": len(seating_layout),
-                    "updated_at": last_updated
+                    "rows_processed": len(final_layout),
+                    "updated_at": last_updated,
+                    "latest_layout": final_layout,                    # 👈 merged layout (frontend will use this)
+                    "previous_layouts": previous_processed_layouts,   # 👈 still keep raw 4 older ones
                 }
+
+
+
             else:
                 response = {
                     "success": False,
@@ -303,6 +342,46 @@ async def serve_auto_refresh_js():
     if os.path.exists("auto_refresh_seating.js"):
         return FileResponse("auto_refresh_seating.js", media_type="application/javascript")
     raise HTTPException(status_code=404, detail="JavaScript file not found")
+from collections import Counter
+
+def merge_seating_layouts(layouts: list[dict]) -> dict:
+    """
+    Merge multiple seating layouts by majority vote on class_id.
+    Keeps coordinates from the most recent layout.
+    """
+    if not layouts:
+        return {}
+
+    # Use the most recent layout as the base (so we keep coords/structure)
+    base_layout = layouts[0]  
+
+    merged = {}
+
+    for row, cols in base_layout.items():
+        merged[row] = {}
+        for col, seat_info in cols.items():
+            # Collect all class_id values for this seat across all layouts
+            class_ids = []
+            coords = seat_info.get("coordinates", {})
+            for layout in layouts:
+                try:
+                    seat = layout[row][col]
+                    class_ids.append(seat["class_id"])
+                except KeyError:
+                    continue  # skip if missing in that layout
+
+            if class_ids:
+                # Majority vote
+                most_common = Counter(class_ids).most_common(1)[0][0]
+            else:
+                most_common = seat_info["class_id"]  # fallback
+
+            merged[row][col] = {
+                "class_id": most_common,
+                "coordinates": coords,  # preserve coords from latest
+            }
+
+    return merged
 
 # Serve JSON files for backward compatibility
 @app.get("/row_seating_layout.json")

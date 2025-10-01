@@ -15,8 +15,8 @@ def load_detection_data(file_path):
             data = json.load(file)
         
         # Handle new format with 'detections' key
-        if isinstance(data, dict) and 'detections' in data:
-            detections = data['detections']
+        if isinstance(data, dict) and 'detection_results' in data:
+            detections = data['detection_results']
             print(f"Loaded {len(detections)} detections from new format (with 'detections' key)")
             if 'inference_time_sec' in data:
                 print(f"Inference time: {data['inference_time_sec']} seconds")
@@ -927,11 +927,15 @@ def create_row_json_output(cross_aisle_pair_groups, aisle_pair, detections, last
 print(f"\nGenerating row-based JSON output:")
 row_json_data = create_row_json_output(cross_aisle_pair_groups, aisle_pair, detections, last_row_group)
 
-# Save row-based JSON
-with open("row_seating_layout.json", "w") as f:
+
+# Save row-based JSON with dynamic filename for debugging
+import datetime
+timestamp_str = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+row_json_filename = f"row_seating_layout_{timestamp_str}.json"
+with open(row_json_filename, "w") as f:
     json.dump(row_json_data, f, indent=2)
 
-print(f"Row-based seating layout saved to 'row_seating_layout.json'")
+print(f"Row-based seating layout saved to '{row_json_filename}'")
 
 # Also save the original seat mapping
 with open("seat_mapping.json", "w") as f:
