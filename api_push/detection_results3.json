@@ -1,412 +1,412 @@
 [
-    {
-        "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
-        "class_id": 1,
-        "class_name": "unoccupied",
-        "confidence": 0.9101,
-        "x_min": 2718.45,
-        "y_min": 1587.07,
-        "x_max": 3177.09,
-        "y_max": 2442.6
-    },
-    {
-        "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
-        "class_id": 1,
-        "class_name": "unoccupied",
-        "confidence": 0.9052,
-        "x_min": 1065.9,
-        "y_min": 1530.55,
-        "x_max": 1552.16,
-        "y_max": 2460.38
-    },
-    {
-        "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
-        "class_id": 0,
-        "class_name": "occupied",
-        "confidence": 0.9013,
-        "x_min": 2178.01,
-        "y_min": 1583.09,
-        "x_max": 2669.04,
-        "y_max": 2438.98
-    },
-    {
-        "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
-        "class_id": 0,
-        "class_name": "occupied",
-        "confidence": 0.8755,
-        "x_min": 1360.89,
-        "y_min": 1326.29,
-        "x_max": 1687.29,
-        "y_max": 1529.45
-    },
-    {
-        "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
-        "class_id": 0,
-        "class_name": "occupied",
-        "confidence": 0.8713,
-        "x_min": 973.33,
-        "y_min": 1309.56,
-        "x_max": 1331.77,
-        "y_max": 1534.73
-    },
-    {
-        "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
-        "class_id": 0,
-        "class_name": "occupied",
-        "confidence": 0.8683,
-        "x_min": 2492.94,
-        "y_min": 1364.41,
-        "x_max": 2836.05,
-        "y_max": 1591.26
-    },
-    {
-        "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
-        "class_id": 0,
-        "class_name": "occupied",
-        "confidence": 0.8595,
-        "x_min": 2128.45,
-        "y_min": 1361.55,
-        "x_max": 2444.57,
-        "y_max": 1575.67
-    },
-    {
-        "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
-        "class_id": 0,
-        "class_name": "occupied",
-        "confidence": 0.8501,
-        "x_min": 475.58,
-        "y_min": 1522.98,
-        "x_max": 1030.21,
-        "y_max": 2465.7
-    },
-    {
-        "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
-        "class_id": 1,
-        "class_name": "unoccupied",
-        "confidence": 0.833,
-        "x_min": 1689.43,
-        "y_min": 1108.7,
-        "x_max": 1844.6,
-        "y_max": 1154.03
-    },
-    {
-        "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
-        "class_id": 0,
-        "class_name": "occupied",
-        "confidence": 0.8323,
-        "x_min": 2103.74,
-        "y_min": 1241.98,
-        "x_max": 2335.98,
-        "y_max": 1357.88
-    },
-    {
-        "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
-        "class_id": 0,
-        "class_name": "occupied",
-        "confidence": 0.8321,
-        "x_min": 1527.9,
-        "y_min": 1214.41,
-        "x_max": 1759.71,
-        "y_max": 1333.04
-    },
-    {
-        "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
-        "class_id": 0,
-        "class_name": "occupied",
-        "confidence": 0.8242,
-        "x_min": 2312.99,
-        "y_min": 1168.49,
-        "x_max": 2513.79,
-        "y_max": 1245.32
-    },
-    {
-        "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
-        "class_id": 1,
-        "class_name": "unoccupied",
-        "confidence": 0.8192,
-        "x_min": 2371.56,
-        "y_min": 1242.15,
-        "x_max": 2617.65,
-        "y_max": 1361.24
-    },
-    {
-        "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
-        "class_id": 0,
-        "class_name": "occupied",
-        "confidence": 0.8148,
-        "x_min": 1247.94,
-        "y_min": 1210.09,
-        "x_max": 1491.71,
-        "y_max": 1323.09
-    },
-    {
-        "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
-        "class_id": 0,
-        "class_name": "occupied",
-        "confidence": 0.8028,
-        "x_min": 1621.78,
-        "y_min": 1152.59,
-        "x_max": 1809.36,
-        "y_max": 1216.17
-    },
-    {
-        "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
-        "class_id": 0,
-        "class_name": "occupied",
-        "confidence": 0.7905,
-        "x_min": 1386.68,
-        "y_min": 1149.75,
-        "x_max": 1594.96,
-        "y_max": 1214.28
-    },
-    {
-        "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
-        "class_id": 1,
-        "class_name": "unoccupied",
-        "confidence": 0.7809,
-        "x_min": 2154.23,
-        "y_min": 929.75,
-        "x_max": 2229.22,
-        "y_max": 999.55
-    },
-    {
-        "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
-        "class_id": 1,
-        "class_name": "unoccupied",
-        "confidence": 0.7762,
-        "x_min": 1839.61,
-        "y_min": 915.88,
-        "x_max": 1912.22,
-        "y_max": 984.68
-    },
-    {
-        "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
-        "class_id": 1,
-        "class_name": "unoccupied",
-        "confidence": 0.7739,
-        "x_min": 1924.96,
-        "y_min": 920.71,
-        "x_max": 1991.28,
-        "y_max": 1076.56
-    },
-    {
-        "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
-        "class_id": 1,
-        "class_name": "unoccupied",
-        "confidence": 0.7736,
-        "x_min": 2260.62,
-        "y_min": 1122.64,
-        "x_max": 2418.67,
-        "y_max": 1168.44
-    },
-    {
-        "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
-        "class_id": 0,
-        "class_name": "occupied",
-        "confidence": 0.7625,
-        "x_min": 1497.4,
-        "y_min": 1092.77,
-        "x_max": 1661.75,
-        "y_max": 1153.04
-    },
-    {
-        "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
-        "class_id": 1,
-        "class_name": "unoccupied",
-        "confidence": 0.7405,
-        "x_min": 1760.25,
-        "y_min": 916.46,
-        "x_max": 1835.39,
-        "y_max": 985.07
-    },
-    {
-        "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
-        "class_id": 0,
-        "class_name": "occupied",
-        "confidence": 0.7265,
-        "x_min": 2085.3,
-        "y_min": 1121.11,
-        "x_max": 2236.18,
-        "y_max": 1166.78
-    },
-    {
-        "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
-        "class_id": 1,
-        "class_name": "unoccupied",
-        "confidence": 0.7064,
-        "x_min": 1816.51,
-        "y_min": 1005.3,
-        "x_max": 1905.92,
-        "y_max": 1027.29
-    },
-    {
-        "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
-        "class_id": 1,
-        "class_name": "unoccupied",
-        "confidence": 0.6949,
-        "x_min": 1999.42,
-        "y_min": 924.51,
-        "x_max": 2055.74,
-        "y_max": 1072.22
-    },
-    {
-        "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
-        "class_id": 0,
-        "class_name": "occupied",
-        "confidence": 0.6777,
-        "x_min": 2207.76,
-        "y_min": 1060.54,
-        "x_max": 2324.99,
-        "y_max": 1087.6
-    },
-    {
-        "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
-        "class_id": 1,
-        "class_name": "unoccupied",
-        "confidence": 0.6757,
-        "x_min": 2076.45,
-        "y_min": 1053.23,
-        "x_max": 2192.68,
-        "y_max": 1081.97
-    },
-    {
-        "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
-        "class_id": 1,
-        "class_name": "unoccupied",
-        "confidence": 0.6564,
-        "x_min": 1770.77,
-        "y_min": 1044.79,
-        "x_max": 1882.46,
-        "y_max": 1075.44
-    },
-    {
-        "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
-        "class_id": 1,
-        "class_name": "unoccupied",
-        "confidence": 0.6404,
-        "x_min": 2099.59,
-        "y_min": 1169.84,
-        "x_max": 2183.42,
-        "y_max": 1243.99
-    },
-    {
-        "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
-        "class_id": 0,
-        "class_name": "occupied",
-        "confidence": 0.6214,
-        "x_min": 1573.29,
-        "y_min": 1062.71,
-        "x_max": 1713.36,
-        "y_max": 1096.38
-    },
-    {
-        "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
-        "class_id": 0,
-        "class_name": "occupied",
-        "confidence": 0.5765,
-        "x_min": 1653.75,
-        "y_min": 1023.85,
-        "x_max": 1767.66,
-        "y_max": 1053.66
-    },
-    {
-        "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
-        "class_id": 1,
-        "class_name": "unoccupied",
-        "confidence": 0.5446,
-        "x_min": 2081.43,
-        "y_min": 927.93,
-        "x_max": 2148.87,
-        "y_max": 988.03
-    },
-    {
-        "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
-        "class_id": 1,
-        "class_name": "unoccupied",
-        "confidence": 0.5222,
-        "x_min": 2073.45,
-        "y_min": 1029.45,
-        "x_max": 2172.33,
-        "y_max": 1054.43
-    },
-    {
-        "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
-        "class_id": 0,
-        "class_name": "occupied",
-        "confidence": 0.4928,
-        "x_min": 1611.36,
-        "y_min": 1040.8,
-        "x_max": 1741.23,
-        "y_max": 1071.47
-    },
-    {
-        "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
-        "class_id": 1,
-        "class_name": "unoccupied",
-        "confidence": 0.4928,
-        "x_min": 1791.49,
-        "y_min": 1022.39,
-        "x_max": 1896.01,
-        "y_max": 1049.83
-    },
-    {
-        "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
-        "class_id": 1,
-        "class_name": "unoccupied",
-        "confidence": 0.4786,
-        "x_min": 2233.45,
-        "y_min": 1088.78,
-        "x_max": 2369.34,
-        "y_max": 1123.77
-    },
-    {
-        "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
-        "class_id": 0,
-        "class_name": "occupied",
-        "confidence": 0.4754,
-        "x_min": 1688.31,
-        "y_min": 1004.64,
-        "x_max": 1794.0,
-        "y_max": 1026.4
-    },
-    {
-        "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
-        "class_id": 1,
-        "class_name": "unoccupied",
-        "confidence": 0.3817,
-        "x_min": 2163.83,
-        "y_min": 1007.46,
-        "x_max": 2240.04,
-        "y_max": 1026.01
-    },
-    {
-        "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
-        "class_id": 0,
-        "class_name": "occupied",
-        "confidence": 0.3287,
-        "x_min": 2193.27,
-        "y_min": 1036.42,
-        "x_max": 2298.94,
-        "y_max": 1062.72
-    },
-    {
-        "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
-        "class_id": 1,
-        "class_name": "unoccupied",
-        "confidence": 0.2553,
-        "x_min": 2064.97,
-        "y_min": 1009.12,
-        "x_max": 2150.19,
-        "y_max": 1028.95
-    },
-    {
-        "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
-        "class_id": 1,
-        "class_name": "unoccupied",
-        "confidence": 0.1198,
-        "x_min": 2308.35,
-        "y_min": 1168.68,
-        "x_max": 2509.11,
-        "y_max": 1244.86
-    }
+  {
+    "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
+    "class_id": 1,
+    "class_name": "unoccupied",
+    "confidence": 0.9101,
+    "x_min": 2718.45,
+    "y_min": 1587.07,
+    "x_max": 3177.09,
+    "y_max": 2442.6
+  },
+  {
+    "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
+    "class_id": 1,
+    "class_name": "unoccupied",
+    "confidence": 0.9052,
+    "x_min": 1065.9,
+    "y_min": 1530.55,
+    "x_max": 1552.16,
+    "y_max": 2460.38
+  },
+  {
+    "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
+    "class_id": 0,
+    "class_name": "occupied",
+    "confidence": 0.9013,
+    "x_min": 2178.01,
+    "y_min": 1583.09,
+    "x_max": 2669.04,
+    "y_max": 2438.98
+  },
+  {
+    "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
+    "class_id": 0,
+    "class_name": "occupied",
+    "confidence": 0.8755,
+    "x_min": 1360.89,
+    "y_min": 1326.29,
+    "x_max": 1687.29,
+    "y_max": 1529.45
+  },
+  {
+    "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
+    "class_id": 1,
+    "class_name": "occupied",
+    "confidence": 0.8713,
+    "x_min": 973.33,
+    "y_min": 1309.56,
+    "x_max": 1331.77,
+    "y_max": 1534.73
+  },
+  {
+    "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
+    "class_id": 1,
+    "class_name": "occupied",
+    "confidence": 0.8683,
+    "x_min": 2492.94,
+    "y_min": 1364.41,
+    "x_max": 2836.05,
+    "y_max": 1591.26
+  },
+  {
+    "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
+    "class_id": 1,
+    "class_name": "occupied",
+    "confidence": 0.8595,
+    "x_min": 2128.45,
+    "y_min": 1361.55,
+    "x_max": 2444.57,
+    "y_max": 1575.67
+  },
+  {
+    "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
+    "class_id": 0,
+    "class_name": "occupied",
+    "confidence": 0.8501,
+    "x_min": 475.58,
+    "y_min": 1522.98,
+    "x_max": 1030.21,
+    "y_max": 2465.7
+  },
+  {
+    "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
+    "class_id": 1,
+    "class_name": "unoccupied",
+    "confidence": 0.833,
+    "x_min": 1689.43,
+    "y_min": 1108.7,
+    "x_max": 1844.6,
+    "y_max": 1154.03
+  },
+  {
+    "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
+    "class_id": 0,
+    "class_name": "occupied",
+    "confidence": 0.8323,
+    "x_min": 2103.74,
+    "y_min": 1241.98,
+    "x_max": 2335.98,
+    "y_max": 1357.88
+  },
+  {
+    "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
+    "class_id": 0,
+    "class_name": "occupied",
+    "confidence": 0.8321,
+    "x_min": 1527.9,
+    "y_min": 1214.41,
+    "x_max": 1759.71,
+    "y_max": 1333.04
+  },
+  {
+    "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
+    "class_id": 0,
+    "class_name": "occupied",
+    "confidence": 0.8242,
+    "x_min": 2312.99,
+    "y_min": 1168.49,
+    "x_max": 2513.79,
+    "y_max": 1245.32
+  },
+  {
+    "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
+    "class_id": 1,
+    "class_name": "unoccupied",
+    "confidence": 0.8192,
+    "x_min": 2371.56,
+    "y_min": 1242.15,
+    "x_max": 2617.65,
+    "y_max": 1361.24
+  },
+  {
+    "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
+    "class_id": 0,
+    "class_name": "occupied",
+    "confidence": 0.8148,
+    "x_min": 1247.94,
+    "y_min": 1210.09,
+    "x_max": 1491.71,
+    "y_max": 1323.09
+  },
+  {
+    "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
+    "class_id": 0,
+    "class_name": "occupied",
+    "confidence": 0.8028,
+    "x_min": 1621.78,
+    "y_min": 1152.59,
+    "x_max": 1809.36,
+    "y_max": 1216.17
+  },
+  {
+    "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
+    "class_id": 0,
+    "class_name": "occupied",
+    "confidence": 0.7905,
+    "x_min": 1386.68,
+    "y_min": 1149.75,
+    "x_max": 1594.96,
+    "y_max": 1214.28
+  },
+  {
+    "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
+    "class_id": 1,
+    "class_name": "unoccupied",
+    "confidence": 0.7809,
+    "x_min": 2154.23,
+    "y_min": 929.75,
+    "x_max": 2229.22,
+    "y_max": 999.55
+  },
+  {
+    "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
+    "class_id": 1,
+    "class_name": "unoccupied",
+    "confidence": 0.7762,
+    "x_min": 1839.61,
+    "y_min": 915.88,
+    "x_max": 1912.22,
+    "y_max": 984.68
+  },
+  {
+    "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
+    "class_id": 1,
+    "class_name": "unoccupied",
+    "confidence": 0.7739,
+    "x_min": 1924.96,
+    "y_min": 920.71,
+    "x_max": 1991.28,
+    "y_max": 1076.56
+  },
+  {
+    "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
+    "class_id": 1,
+    "class_name": "unoccupied",
+    "confidence": 0.7736,
+    "x_min": 2260.62,
+    "y_min": 1122.64,
+    "x_max": 2418.67,
+    "y_max": 1168.44
+  },
+  {
+    "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
+    "class_id": 0,
+    "class_name": "occupied",
+    "confidence": 0.7625,
+    "x_min": 1497.4,
+    "y_min": 1092.77,
+    "x_max": 1661.75,
+    "y_max": 1153.04
+  },
+  {
+    "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
+    "class_id": 1,
+    "class_name": "unoccupied",
+    "confidence": 0.7405,
+    "x_min": 1760.25,
+    "y_min": 916.46,
+    "x_max": 1835.39,
+    "y_max": 985.07
+  },
+  {
+    "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
+    "class_id": 0,
+    "class_name": "occupied",
+    "confidence": 0.7265,
+    "x_min": 2085.3,
+    "y_min": 1121.11,
+    "x_max": 2236.18,
+    "y_max": 1166.78
+  },
+  {
+    "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
+    "class_id": 1,
+    "class_name": "unoccupied",
+    "confidence": 0.7064,
+    "x_min": 1816.51,
+    "y_min": 1005.3,
+    "x_max": 1905.92,
+    "y_max": 1027.29
+  },
+  {
+    "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
+    "class_id": 1,
+    "class_name": "unoccupied",
+    "confidence": 0.6949,
+    "x_min": 1999.42,
+    "y_min": 924.51,
+    "x_max": 2055.74,
+    "y_max": 1072.22
+  },
+  {
+    "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
+    "class_id": 0,
+    "class_name": "occupied",
+    "confidence": 0.6777,
+    "x_min": 2207.76,
+    "y_min": 1060.54,
+    "x_max": 2324.99,
+    "y_max": 1087.6
+  },
+  {
+    "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
+    "class_id": 1,
+    "class_name": "unoccupied",
+    "confidence": 0.6757,
+    "x_min": 2076.45,
+    "y_min": 1053.23,
+    "x_max": 2192.68,
+    "y_max": 1081.97
+  },
+  {
+    "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
+    "class_id": 1,
+    "class_name": "unoccupied",
+    "confidence": 0.6564,
+    "x_min": 1770.77,
+    "y_min": 1044.79,
+    "x_max": 1882.46,
+    "y_max": 1075.44
+  },
+  {
+    "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
+    "class_id": 1,
+    "class_name": "unoccupied",
+    "confidence": 0.6404,
+    "x_min": 2099.59,
+    "y_min": 1169.84,
+    "x_max": 2183.42,
+    "y_max": 1243.99
+  },
+  {
+    "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
+    "class_id": 0,
+    "class_name": "occupied",
+    "confidence": 0.6214,
+    "x_min": 1573.29,
+    "y_min": 1062.71,
+    "x_max": 1713.36,
+    "y_max": 1096.38
+  },
+  {
+    "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
+    "class_id": 0,
+    "class_name": "occupied",
+    "confidence": 0.5765,
+    "x_min": 1653.75,
+    "y_min": 1023.85,
+    "x_max": 1767.66,
+    "y_max": 1053.66
+  },
+  {
+    "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
+    "class_id": 1,
+    "class_name": "unoccupied",
+    "confidence": 0.5446,
+    "x_min": 2081.43,
+    "y_min": 927.93,
+    "x_max": 2148.87,
+    "y_max": 988.03
+  },
+  {
+    "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
+    "class_id": 1,
+    "class_name": "unoccupied",
+    "confidence": 0.5222,
+    "x_min": 2073.45,
+    "y_min": 1029.45,
+    "x_max": 2172.33,
+    "y_max": 1054.43
+  },
+  {
+    "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
+    "class_id": 0,
+    "class_name": "occupied",
+    "confidence": 0.4928,
+    "x_min": 1611.36,
+    "y_min": 1040.8,
+    "x_max": 1741.23,
+    "y_max": 1071.47
+  },
+  {
+    "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
+    "class_id": 1,
+    "class_name": "unoccupied",
+    "confidence": 0.4928,
+    "x_min": 1791.49,
+    "y_min": 1022.39,
+    "x_max": 1896.01,
+    "y_max": 1049.83
+  },
+  {
+    "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
+    "class_id": 1,
+    "class_name": "unoccupied",
+    "confidence": 0.4786,
+    "x_min": 2233.45,
+    "y_min": 1088.78,
+    "x_max": 2369.34,
+    "y_max": 1123.77
+  },
+  {
+    "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
+    "class_id": 0,
+    "class_name": "occupied",
+    "confidence": 0.4754,
+    "x_min": 1688.31,
+    "y_min": 1004.64,
+    "x_max": 1794.0,
+    "y_max": 1026.4
+  },
+  {
+    "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
+    "class_id": 1,
+    "class_name": "unoccupied",
+    "confidence": 0.3817,
+    "x_min": 2163.83,
+    "y_min": 1007.46,
+    "x_max": 2240.04,
+    "y_max": 1026.01
+  },
+  {
+    "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
+    "class_id": 0,
+    "class_name": "occupied",
+    "confidence": 0.3287,
+    "x_min": 2193.27,
+    "y_min": 1036.42,
+    "x_max": 2298.94,
+    "y_max": 1062.72
+  },
+  {
+    "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
+    "class_id": 1,
+    "class_name": "unoccupied",
+    "confidence": 0.2553,
+    "x_min": 2064.97,
+    "y_min": 1009.12,
+    "x_max": 2150.19,
+    "y_max": 1028.95
+  },
+  {
+    "image": "C:\\Users\\rober\\Desktop\\acads\\DLSU\\12th Term\\dlrs_new\\test\\images\\1075488_dataset 2025-09-16 23-04-32_image_20250916_164708_f.jpg",
+    "class_id": 1,
+    "class_name": "unoccupied",
+    "confidence": 0.1198,
+    "x_min": 2308.35,
+    "y_min": 1168.68,
+    "x_max": 2509.11,
+    "y_max": 1244.86
+  }
 ]
