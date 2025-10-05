@@ -135,6 +135,49 @@ async def webhook_new_data(payload: WebhookPayload):
                 global latest_seating_layout, last_updated, previous_processed_layouts
                 latest_seating_layout = seating_layout
                 last_updated = datetime.utcnow().isoformat()
+                from uuid import uuid4
+
+                # === Save processed layout to Supabase (different table) ===
+                try:
+                    unique_id = str(uuid4())
+                    created_at = datetime.utcnow().isoformat()
+
+                    processed_record = {
+                        "uuid": unique_id,
+                        "created_at": created_at,
+                        "record_id": payload.record_id,
+                        "layout_data": seating_layout,       # You could also store 'final_layout' later if preferred
+                        "source": "webhook_new_data",
+                    }
+
+                    SUPABASE_PROCESSED_TABLE = os.getenv("SUPABASE_PROCESSED_TABLE", "processed_layouts")
+
+                    async with httpx.AsyncClient() as client:
+                        resp = await client.post(
+                            f"{SUPABASE_URL}/rest/v1/{SUPABASE_PROCESSED_TABLE}",
+                            headers={
+                                "apikey": SUPABASE_KEY,
+                                "Authorization": f"Bearer {SUPABASE_KEY}",
+                                "Content-Type": "application/json",
+                                "Prefer": "return=representation"
+                            },
+                            json=processed_record
+                        )
+
+                    if resp.status_code in [200, 201]:
+                        inserted = resp.json()[0]
+                        logger.info(
+                            f"✅ Successfully saved processed layout to Supabase table '{SUPABASE_PROCESSED_TABLE}' "
+                            f"(UUID={unique_id}, RecordID={payload.record_id})"
+                        )
+                    else:
+                        logger.error(
+                            f"❌ Failed to insert into '{SUPABASE_PROCESSED_TABLE}': {resp.status_code} {resp.text}"
+                        )
+
+                except Exception as e:
+                    logger.error(f"🔥 Error saving processed layout to Supabase: {e}")
+
 
 
 
