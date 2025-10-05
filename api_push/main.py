@@ -111,8 +111,17 @@ async def push_data(
 
         import uuid
 
+        # Log the received UUID for debugging
+        logger.info(f"Received UUID from payload: {payload.uuid}")
+        
         # Use existing UUID or generate a new one
         record_uuid = payload.uuid or str(uuid.uuid4())
+        
+        # Log what UUID we're actually using
+        if payload.uuid:
+            logger.info(f"Using provided UUID: {record_uuid}")
+        else:
+            logger.info(f"No UUID provided, generated new one: {record_uuid}")
 
         # Use `payload.data` if it exists; otherwise use the full model dict
         if payload.data:

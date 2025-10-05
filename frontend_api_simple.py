@@ -144,11 +144,17 @@ async def webhook_new_data(payload: WebhookPayload):
                 global latest_seating_layout, last_updated, previous_processed_layouts
                 latest_seating_layout = seating_layout
                 last_updated = datetime.utcnow().isoformat()
-                from uuid import uuid4
-
                 # === Save processed layout to Supabase (different table) ===
                 try:
-                    unique_id = str(uuid4())
+                    # Use UUID from webhook payload if available, otherwise generate new one
+                    unique_id = payload.data.get("uuid") if payload.data else None
+                    if not unique_id:
+                        from uuid import uuid4
+                        unique_id = str(uuid4())
+                        logger.warning("No UUID provided in webhook payload, generated new one")
+                    else:
+                        logger.info(f"Using UUID from webhook payload: {unique_id}")
+                    
                     created_at = datetime.utcnow().isoformat()
 
                     processed_record = {
@@ -226,6 +232,7 @@ async def webhook_new_data(payload: WebhookPayload):
                     "success": True,
                     "message": "Detection data processed and merged (majority vote)",
                     "record_id": payload.record_id,
+                    "uuid": unique_id,  # 👈 Include the UUID in response
                     "rows_processed": len(final_layout),
                     "updated_at": last_updated,
                     "latest_layout": final_layout,                    # 👈 merged layout (frontend will use this)
