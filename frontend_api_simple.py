@@ -43,7 +43,7 @@ app.add_middleware(
 class WebhookPayload(BaseModel):
     event: str
     record_id: int
-    detection_results: Any = None
+    data: Dict[str, Any] = None  # This contains detection_results and other data
     timestamp: str
     secret: str
 
@@ -115,8 +115,13 @@ async def webhook_new_data(payload: WebhookPayload):
 
         seating_layout = None
 
-        if payload.detection_results is not None:
-            detection_results = payload.detection_results
+        # Access detection_results from the nested data structure
+        detection_results = None
+        if payload.data and "detection_results" in payload.data:
+            detection_results = payload.data["detection_results"]
+            logger.info(f"Found detection_results in payload.data: {len(detection_results)} detections")
+        
+        if detection_results is not None:
             logger.info(f"Processing {len(detection_results)} detection results")
 
             try:
@@ -128,8 +133,12 @@ async def webhook_new_data(payload: WebhookPayload):
                     logger.warning("seating_processor returned no layout")
             except ImportError as e:
                 logger.error(f"Could not import seating_processor: {e}")
+                # Fallback to simple processing
+                seating_layout = process_detection_results_simple(detection_results)
             except Exception as e:
                 logger.error(f"Error in seating_processor: {e}")
+                # Fallback to simple processing
+                seating_layout = process_detection_results_simple(detection_results)
 
             if seating_layout:
                 global latest_seating_layout, last_updated, previous_processed_layouts
@@ -233,10 +242,12 @@ async def webhook_new_data(payload: WebhookPayload):
                 }
         else:
             logger.info("No detection_results in webhook payload")
+            logger.info(f"Payload data structure: {payload.data}")
             response = {
                 "success": True,
                 "message": "No detection data to process",
-                "record_id": payload.record_id
+                "record_id": payload.record_id,
+                "payload_data": payload.data
             }
 
         # ✅ Add last 5 records from DB (excluding latest)
