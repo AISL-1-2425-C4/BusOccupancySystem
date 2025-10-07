@@ -206,7 +206,13 @@ async def webhook_new_data(payload: WebhookPayload):
                     for r in last_four_raw:
                         record_id = r["id"]
                         json_data = r.get("json_data", {})
-                        detections = json_data.get("detection_results", [])
+                        
+                        # Try to get detection_results from nested structure (data.detection_results)
+                        # OR from direct structure (detection_results)
+                        detections = json_data.get("data", {}).get("detection_results", [])
+                        if not detections:
+                            # Fallback: try direct detection_results
+                            detections = json_data.get("detection_results", [])
                         
                         if not detections:
                             logger.warning(f"⚠️ Record {record_id} has no detection_results, skipping")
