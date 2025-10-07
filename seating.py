@@ -14,25 +14,33 @@ def load_detection_data(file_path):
         with open(file_path, "r") as file:
             data = json.load(file)
         
-        # Handle new format with 'detections' key
+        # Handle nested format with 'data.detection_results' (webhook format)
+        if isinstance(data, dict) and 'data' in data and isinstance(data['data'], dict):
+            if 'detection_results' in data['data']:
+                detections = data['data']['detection_results']
+                print(f"Loaded {len(detections)} detections from nested format (data.detection_results)")
+                if 'inference_time_sec' in data['data']:
+                    print(f"Inference time: {data['data']['inference_time_sec']} seconds")
+                return detections
+        
+        # Handle format with direct 'detection_results' key
         if isinstance(data, dict) and 'detection_results' in data:
             detections = data['detection_results']
-            print(f"Loaded {len(detections)} detections from new format (with 'detections' key)")
+            print(f"Loaded {len(detections)} detections from format with 'detection_results' key")
             if 'inference_time_sec' in data:
                 print(f"Inference time: {data['inference_time_sec']} seconds")
+            return detections
+        
         # Handle old format (direct array)
-        elif isinstance(data, list):
+        if isinstance(data, list):
             detections = data
             print(f"Loaded {len(detections)} detections from old format (direct array)")
-        # Handle old format with 'detection_results' key
-        elif isinstance(data, dict) and 'detection_results' in data:
-            detections = data['detection_results']
-            print(f"Loaded {len(detections)} detections from old format (with 'detection_results' key)")
-        else:
-            print("Error: Unrecognized JSON format")
-            detections = []
+            return detections
+        
+        print("Error: Unrecognized JSON format")
+        print(f"JSON keys: {data.keys() if isinstance(data, dict) else 'Not a dict'}")
+        return []
             
-        return detections
     except Exception as e:
         print(f"Error loading file {file_path}: {e}")
         return []
