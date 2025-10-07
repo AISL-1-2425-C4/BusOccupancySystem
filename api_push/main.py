@@ -3,6 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 import logging
 import os
+import uuid
+import time
 from datetime import datetime
 from typing import Any
 
@@ -23,6 +25,8 @@ async def notify_frontend_of_new_data(record_id, data):
     """
     import httpx
     
+    start_time = time.time()
+    
     # Configure your frontend webhook URL
     FRONTEND_WEBHOOK_URL = os.getenv("FRONTEND_WEBHOOK_URL", "https://your-frontend-deployment.vercel.app/api/webhook/new-data")
     WEBHOOK_SECRET = os.getenv("WEBHOOK_SECRET", "your-webhook-secret")
@@ -36,21 +40,28 @@ async def notify_frontend_of_new_data(record_id, data):
             "secret": WEBHOOK_SECRET
         }
         
-        async with httpx.AsyncClient() as client:
+        async with httpx.AsyncClient(timeout=httpx.Timeout(3)) as client:
             response = await client.post(
                 FRONTEND_WEBHOOK_URL,
                 json=webhook_payload,
-                timeout=10.0
+                headers={"Content-Type": "application/json"}
             )
             
         if response.status_code == 200:
-            logger.info(f"Webhook sent successfully to frontend for record {record_id}")
+            duration = time.time() - start_time
+            logger.info(f"✅ Webhook COMPLETED successfully for record {record_id} in {duration:.2f}s")
         else:
-            logger.warning(f"Webhook failed with status {response.status_code}: {response.text}")
+            duration = time.time() - start_time
+            logger.warning(f"❌ Webhook FAILED for record {record_id} in {duration:.2f}s: {response.status_code}")
             
+    except httpx.TimeoutException as e:
+        duration = time.time() - start_time
+        logger.error(f"⏰ Webhook TIMEOUT for record {record_id} in {duration:.2f}s: {e}")
+        # Don't raise exception in background task to avoid affecting main request
     except Exception as e:
-        logger.error(f"Error sending webhook to frontend: {e}")
-        raise
+        duration = time.time() - start_time
+        logger.error(f"💥 Webhook ERROR for record {record_id} in {duration:.2f}s: {e}")
+        # Don't raise exception in background task to avoid affecting main request
 
 # Create FastAPI application
 app = FastAPI(
@@ -107,21 +118,8 @@ async def push_data(
     token: str = Depends(verify_bearer_token)
 ):
     try:
-        logger.info(f"Received push request with token: {token[:10]}...")
-
-        import uuid
-
-        # Log the received UUID for debugging
-        logger.info(f"Received UUID from payload: {payload.uuid}")
-        
-        # Use existing UUID or generate a new one
+        # Use existing UUID or generate a new one (minimal logging)
         record_uuid = payload.uuid or str(uuid.uuid4())
-        
-        # Log what UUID we're actually using
-        if payload.uuid:
-            logger.info(f"Using provided UUID: {record_uuid}")
-        else:
-            logger.info(f"No UUID provided, generated new one: {record_uuid}")
 
         # Use `payload.data` if it exists; otherwise use the full model dict
         if payload.data:
@@ -129,9 +127,11 @@ async def push_data(
         else:
             data_content = payload.model_dump(exclude_none=True, exclude={"metadata"})
 
+        # Optimize JSON creation (avoid datetime conversion overhead)
+        now = datetime.utcnow()
         json_data = {
             "uuid": record_uuid,
-            "received_at": datetime.utcnow().isoformat(),
+            "received_at": now.isoformat(),
             "data": data_content,
             "metadata": payload.metadata or {},
             "processed": True
@@ -139,17 +139,19 @@ async def push_data(
 
         try:
             result = await supabase_client.insert_data("push_requests", json_data)
-            logger.info(f"Data stored successfully: {result}")
 
+            # Send webhook notification immediately (synchronous for reliability)
             if "detection_results" in data_content:
+                record_id = result.data[0]["id"]
                 try:
                     await notify_frontend_of_new_data(
-                        record_id=result.data[0]["id"],
+                        record_id=record_id,
                         data={**data_content, "uuid": record_uuid}
                     )
-                    logger.info(f"Frontend notification sent successfully for UUID {record_uuid}")
+                    pass  # Webhook sent successfully
                 except Exception as webhook_error:
-                    logger.error(f"Frontend notification error: {webhook_error}")
+                    logger.error(f"Webhook failed for record {record_id}: {webhook_error}")
+                    # Continue with response even if webhook fails
 
         except Exception as db_error:
             logger.error(f"Database error: {db_error}")
