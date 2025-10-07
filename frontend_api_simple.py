@@ -199,21 +199,33 @@ async def webhook_new_data(payload: WebhookPayload):
                 # Fetch the last 4 raw layouts from Supabase
                 try:
                     last_four_raw = await get_last_five_excluding_latest()
+                    logger.info(f"🔍 Fetched {len(last_four_raw)} raw records for majority voting")
 
                     # Process them before returning
                     previous_processed_layouts = []
                     for r in last_four_raw:
+                        record_id = r["id"]
                         json_data = r.get("json_data", {})
                         detections = json_data.get("detection_results", [])
-                        if detections:
-                            processed = process_seating_layout(detections)
-                            if processed:
-                                previous_processed_layouts.append({
-                                    "record_id": r["id"],  # keep track of which record
-                                    "layout": processed
-                                })
+                        
+                        if not detections:
+                            logger.warning(f"⚠️ Record {record_id} has no detection_results, skipping")
+                            continue
+                            
+                        logger.info(f"🔄 Processing record {record_id} with {len(detections)} detections for majority vote")
+                        processed = process_seating_layout(detections)
+                        
+                        if processed:
+                            logger.info(f"✅ Record {record_id} processed successfully, adding to majority vote pool")
+                            previous_processed_layouts.append({
+                                "record_id": record_id,
+                                "layout": processed
+                            })
+                        else:
+                            logger.warning(f"❌ Record {record_id} processing returned None/empty")
 
 
+                    logger.info(f"📊 Majority vote pool: 1 new + {len(previous_processed_layouts)} old = {1 + len(previous_processed_layouts)} total layouts")
                     response["previous_layouts"] = previous_processed_layouts
 
                 except Exception as e:
@@ -223,6 +235,7 @@ async def webhook_new_data(payload: WebhookPayload):
 
                 # Combine latest + previous 4 into one majority-voted layout
                 all_layouts = [latest_seating_layout] + [p["layout"] for p in previous_processed_layouts]
+                logger.info(f"🗳️ Merging {len(all_layouts)} layouts using majority voting")
                 final_layout = merge_seating_layouts(all_layouts)
 
                 # Save the final merged layout into cache
@@ -415,8 +428,11 @@ def merge_seating_layouts(layouts: list[dict]) -> dict:
 
     # Use the most recent layout as the base (so we keep coords/structure)
     base_layout = layouts[0]  
+    
+    logger.info(f"🔀 Merging {len(layouts)} layouts. Base layout has {len(base_layout)} rows")
 
     merged = {}
+    vote_log_sample = []  # Log first 3 seats to see voting in action
 
     for row, cols in base_layout.items():
         merged[row] = {}
@@ -424,23 +440,35 @@ def merge_seating_layouts(layouts: list[dict]) -> dict:
             # Collect all class_id values for this seat across all layouts
             class_ids = []
             coords = seat_info.get("coordinates", {})
-            for layout in layouts:
+            for idx, layout in enumerate(layouts):
                 try:
                     seat = layout[row][col]
                     class_ids.append(seat["class_id"])
                 except KeyError:
+                    logger.warning(f"⚠️ Layout #{idx} missing seat {row}/{col} (KeyError during merge)")
                     continue  # skip if missing in that layout
 
             if class_ids:
                 # Majority vote
-                most_common = Counter(class_ids).most_common(1)[0][0]
+                vote_counts = Counter(class_ids)
+                most_common = vote_counts.most_common(1)[0][0]
+                
+                # Log first few seats to see voting
+                if len(vote_log_sample) < 3:
+                    vote_log_sample.append(f"{row}/{col}: votes={dict(vote_counts)}, winner={most_common}")
             else:
                 most_common = seat_info["class_id"]  # fallback
+                if len(vote_log_sample) < 3:
+                    vote_log_sample.append(f"{row}/{col}: NO VOTES (using fallback={most_common})")
 
             merged[row][col] = {
                 "class_id": most_common,
                 "coordinates": coords,  # preserve coords from latest
             }
+
+    # Log sample voting results
+    for log_entry in vote_log_sample:
+        logger.info(f"  📊 Sample vote: {log_entry}")
 
     return merged
 
