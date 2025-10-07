@@ -111,7 +111,7 @@ async def webhook_new_data(payload: WebhookPayload):
             logger.warning("Invalid webhook secret received")
             raise HTTPException(status_code=401, detail="Invalid webhook secret")
         
-        logger.info(f"Received webhook for record {payload.record_id}")
+        logger.info(f"📥 Webhook #{payload.record_id}: Processing {len(payload.data.get('detection_results', []))} detections...")
 
         seating_layout = None
 
@@ -119,18 +119,14 @@ async def webhook_new_data(payload: WebhookPayload):
         detection_results = None
         if payload.data and "detection_results" in payload.data:
             detection_results = payload.data["detection_results"]
-            logger.info(f"Found detection_results in payload.data: {len(detection_results)} detections")
         
         if detection_results is not None:
-            logger.info(f"Processing {len(detection_results)} detection results")
 
             try:
                 from seating_processor import process_seating_layout
                 seating_layout = process_seating_layout(detection_results)
-                if seating_layout:
-                    logger.info(f"Successfully processed {len(detection_results)} detections using full seating.py algorithm")
-                else:
-                    logger.warning("seating_processor returned no layout")
+                if not seating_layout:
+                    logger.warning("⚠️ seating_processor returned no layout")
             except ImportError as e:
                 logger.error(f"Could not import seating_processor: {e}")
                 # Fallback to simple processing
@@ -179,16 +175,8 @@ async def webhook_new_data(payload: WebhookPayload):
                             json=processed_record
                         )
 
-                    if resp.status_code in [200, 201]:
-                        inserted = resp.json()[0]
-                        logger.info(
-                            f"✅ Successfully saved processed layout to Supabase table '{SUPABASE_PROCESSED_TABLE}' "
-                            f"(UUID={unique_id}, RecordID={payload.record_id})"
-                        )
-                    else:
-                        logger.error(
-                            f"❌ Failed to insert into '{SUPABASE_PROCESSED_TABLE}': {resp.status_code} {resp.text}"
-                        )
+                    if resp.status_code not in [200, 201]:
+                        logger.error(f"❌ Failed to save to '{SUPABASE_PROCESSED_TABLE}': {resp.status_code}")
 
                 except Exception as e:
                     logger.error(f"🔥 Error saving processed layout to Supabase: {e}")
@@ -199,7 +187,6 @@ async def webhook_new_data(payload: WebhookPayload):
                 # Fetch the last 4 raw layouts from Supabase
                 try:
                     last_four_raw = await get_last_five_excluding_latest()
-                    logger.info(f"🔍 Fetched {len(last_four_raw)} raw records for majority voting")
 
                     # Process them before returning
                     previous_processed_layouts = []
@@ -218,17 +205,14 @@ async def webhook_new_data(payload: WebhookPayload):
                             logger.warning(f"⚠️ Record {record_id} has no detection_results, skipping")
                             continue
                             
-                        logger.info(f"🔄 Processing record {record_id} with {len(detections)} detections for majority vote")
+                        # Silently process old records (reduce log spam)
                         processed = process_seating_layout(detections)
                         
                         if processed:
-                            logger.info(f"✅ Record {record_id} processed successfully, adding to majority vote pool")
                             previous_processed_layouts.append({
                                 "record_id": record_id,
                                 "layout": processed
                             })
-                        else:
-                            logger.warning(f"❌ Record {record_id} processing returned None/empty")
 
 
                     logger.info(f"📊 Majority vote pool: 1 new + {len(previous_processed_layouts)} old = {1 + len(previous_processed_layouts)} total layouts")
@@ -280,13 +264,6 @@ async def webhook_new_data(payload: WebhookPayload):
         try:
             last_five = await get_last_five_excluding_latest()
             response["last_five_records"] = last_five
-
-            # Log IDs and timestamps for clarity
-            logger.info(
-                f"Fetched {len(last_five)} previous records: "
-                + ", ".join([f"id={r['id']} created_at={r['created_at']}" for r in last_five])
-            )
-
         except Exception as e:
             logger.error(f"Error fetching last five records: {e}")
             response["last_five_records"] = []
@@ -434,11 +411,8 @@ def merge_seating_layouts(layouts: list[dict]) -> dict:
 
     # Use the most recent layout as the base (so we keep coords/structure)
     base_layout = layouts[0]  
-    
-    logger.info(f"🔀 Merging {len(layouts)} layouts. Base layout has {len(base_layout)} rows")
 
     merged = {}
-    vote_log_sample = []  # Log first 3 seats to see voting in action
 
     for row, cols in base_layout.items():
         merged[row] = {}
@@ -451,30 +425,27 @@ def merge_seating_layouts(layouts: list[dict]) -> dict:
                     seat = layout[row][col]
                     class_ids.append(seat["class_id"])
                 except KeyError:
-                    logger.warning(f"⚠️ Layout #{idx} missing seat {row}/{col} (KeyError during merge)")
                     continue  # skip if missing in that layout
 
             if class_ids:
                 # Majority vote
                 vote_counts = Counter(class_ids)
                 most_common = vote_counts.most_common(1)[0][0]
-                
-                # Log first few seats to see voting
-                if len(vote_log_sample) < 3:
-                    vote_log_sample.append(f"{row}/{col}: votes={dict(vote_counts)}, winner={most_common}")
             else:
                 most_common = seat_info["class_id"]  # fallback
-                if len(vote_log_sample) < 3:
-                    vote_log_sample.append(f"{row}/{col}: NO VOTES (using fallback={most_common})")
 
             merged[row][col] = {
                 "class_id": most_common,
                 "coordinates": coords,  # preserve coords from latest
             }
-
-    # Log sample voting results
-    for log_entry in vote_log_sample:
-        logger.info(f"  📊 Sample vote: {log_entry}")
+    
+    # Log summary statistics
+    total_seats = sum(len(cols) for cols in merged.values())
+    occupied_count = sum(1 for row_data in merged.values() for seat_data in row_data.values() if seat_data["class_id"] == 0)
+    available_count = sum(1 for row_data in merged.values() for seat_data in row_data.values() if seat_data["class_id"] == 1)
+    virtual_count = sum(1 for row_data in merged.values() for seat_data in row_data.values() if seat_data["class_id"] == 2)
+    
+    logger.info(f"📈 Merged result: {total_seats} seats total - Occupied: {occupied_count}, Available: {available_count}, Virtual: {virtual_count}")
 
     return merged
 
