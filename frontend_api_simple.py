@@ -452,42 +452,105 @@ def merge_seating_layouts(layouts: list[dict]) -> dict:
 # Serve JSON files for backward compatibility
 @app.get("/row_seating_layout.json")
 async def serve_seating_json():
-    """Serve seating layout JSON - Vercel-compatible version"""
+    """Serve seating layout JSON with live majority voting from last 5 records"""
     try:
         global latest_seating_layout, last_updated
         
-        # First try to return cached data from memory
-        if latest_seating_layout:
-            logger.info("Serving seating layout from memory cache")
-            return latest_seating_layout
+        logger.info("🔄 Fetching and merging last 5 seating layouts from Supabase...")
         
-        # Try to serve existing JSON file (if it exists)
-        if os.path.exists("row_seating_layout.json"):
-            logger.info("Serving seating layout from file")
-            return FileResponse("row_seating_layout.json", media_type="application/json")
-        
-        # Fallback: return dummy data
-        logger.info("Serving dummy seating layout")
-        dummy_layout = {
-            "Row1": {
-                "A": {"class_id": 0, "class_name": "occupied", "confidence": 0.95},
-                "B": {"class_id": 1, "class_name": "unoccupied", "confidence": 0.90}
-            },
-            "Row2": {
-                "A": {"class_id": 1, "class_name": "unoccupied", "confidence": 0.88},
-                "B": {"class_id": 0, "class_name": "occupied", "confidence": 0.92}
-            },
-            "Row3": {
-                "A": {"class_id": 1, "class_name": "unoccupied", "confidence": 0.85},
-                "B": {"class_id": 1, "class_name": "unoccupied", "confidence": 0.88}
-            }
-        }
-        
-        return dummy_layout
+        # Fetch the last 5 records from Supabase
+        try:
+            async with httpx.AsyncClient() as client:
+                resp = await client.get(
+                    f"{SUPABASE_URL}/rest/v1/push_requests",
+                    headers={
+                        "apikey": SUPABASE_KEY,
+                        "Authorization": f"Bearer {SUPABASE_KEY}"
+                    },
+                    params={
+                        "select": "id,created_at,json_data",
+                        "order": "id.desc",
+                        "limit": 5
+                    }
+                )
+
+                if resp.status_code != 200:
+                    logger.error(f"Supabase error: {resp.text}")
+                    # Fallback to cached data
+                    if latest_seating_layout:
+                        logger.info("⚠️ Falling back to cached layout")
+                        return latest_seating_layout
+                    raise HTTPException(status_code=500, detail="Could not fetch from Supabase")
+
+                rows = resp.json()
+                
+                if not rows:
+                    logger.warning("No records found in Supabase")
+                    # Return dummy data
+                    return {
+                        "row_1": {
+                            "column_one": {"class_id": 1, "coordinates": {"x": 30, "y": 25}},
+                            "column_two": {"class_id": 1, "coordinates": {"x": 30, "y": 80}}
+                        }
+                    }
+                
+                # Process each record to extract seating layouts
+                from seating_processor import process_seating_layout
+                layouts = []
+                
+                for r in rows:
+                    record_id = r["id"]
+                    json_data = r.get("json_data", {})
+                    
+                    # Try to get detection_results from nested structure
+                    detections = json_data.get("data", {}).get("detection_results", [])
+                    if not detections:
+                        detections = json_data.get("detection_results", [])
+                    
+                    if not detections:
+                        logger.warning(f"⚠️ Record {record_id} has no detection_results, skipping")
+                        continue
+                    
+                    # Process detections into layout
+                    processed = process_seating_layout(detections)
+                    if processed:
+                        layouts.append(processed)
+                        logger.info(f"✅ Processed record {record_id} - {len(processed)} rows")
+                
+                if not layouts:
+                    logger.error("❌ No valid layouts could be processed")
+                    if latest_seating_layout:
+                        return latest_seating_layout
+                    raise HTTPException(status_code=500, detail="No valid layouts available")
+                
+                # Perform majority voting on all layouts
+                logger.info(f"🗳️ Performing majority vote on {len(layouts)} layouts")
+                merged_layout = merge_seating_layouts(layouts)
+                
+                # Update cache
+                latest_seating_layout = merged_layout
+                last_updated = datetime.utcnow().isoformat()
+                
+                logger.info(f"✅ Serving merged layout with {len(merged_layout)} rows")
+                return merged_layout
+                
+        except Exception as e:
+            logger.error(f"Error fetching from Supabase: {e}")
+            # Fallback to cached data
+            if latest_seating_layout:
+                logger.info("⚠️ Error occurred, falling back to cached layout")
+                return latest_seating_layout
+            
+            # Last resort: try file
+            if os.path.exists("row_seating_layout.json"):
+                logger.info("⚠️ Falling back to file")
+                return FileResponse("row_seating_layout.json", media_type="application/json")
+            
+            raise HTTPException(status_code=500, detail=f"Error serving layout: {str(e)}")
         
     except Exception as e:
         logger.error(f"Error serving seating JSON: {e}")
-        raise HTTPException(status_code=404, detail="Seating layout not found")
+        raise HTTPException(status_code=500, detail="Seating layout not available")
 
 # Serve other JSON files that might be needed
 @app.get("/seat_mapping.json")
