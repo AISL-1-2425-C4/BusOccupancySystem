@@ -266,7 +266,7 @@ def find_side_pairs(seats, side_name, exclude_seats=None):
         print(f"{side_name} side: Not enough available seats for pairing (have {len(available_seats)}, need 2+)")
         return []
     pairs = []
-    y_threshold = 35  # Slightly increased threshold for right side
+    y_threshold = 60  # Slightly increased threshold for right side
     x_threshold = 50 if side_name.lower() == "left" else 30  # Stricter for left side
     if side_name.lower() == "left" or side_name.lower() == "right":
         # Sort from bottom to top (highest y to lowest y)
@@ -763,7 +763,7 @@ def organize_seats_by_rows(seats, side_name):
     
     # Group into rows by y proximity
     rows = []
-    row_threshold = 60
+    row_threshold = 70
     for pt in seats_sorted:
         placed = False
         for row in rows:

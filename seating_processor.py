@@ -37,7 +37,7 @@ def process_seating_layout(detections_input):
         midpoints.sort(key=lambda pt: pt[1])
 
         # Group midpoints into rows by y proximity
-        row_threshold = 60  # pixels, adjust if needed for your image
+        row_threshold = 70  # pixels, adjust if needed for your image
         rows = []
         for pt in midpoints:
             placed = False
@@ -100,7 +100,7 @@ def process_seating_layout(detections_input):
                 for right_pt in right_seats:
                     # Check if they're roughly at the same Y level (same row)
                     y_diff = abs(left_pt[1] - right_pt[1])
-                    if y_diff < 30:  # Same row threshold
+                    if y_diff < 60:  # Same row threshold - increased to match within-side pairing
                         distance = abs(left_pt[0] - right_pt[0])
                         if distance < min_distance:
                             min_distance = distance
@@ -143,7 +143,7 @@ def process_seating_layout(detections_input):
                 print(f"{side_name} side: Not enough available seats for pairing (have {len(available_seats)}, need 2+)")
                 return []
             pairs = []
-            y_threshold = 35  # Slightly increased threshold for right side
+            y_threshold = 60  # Increased threshold to allow pairing of seats with larger vertical separation
             x_threshold = 50 if side_name.lower() == "left" else 30  # Stricter for left side
             if side_name.lower() == "left" or side_name.lower() == "right":
                 # Sort from bottom to top (highest y to lowest y)
