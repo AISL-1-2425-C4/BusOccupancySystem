@@ -3,44 +3,39 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 import sys
-import matplotlib.cm as cm
 
 # Load detection results
 webhook_file = os.getenv('WEBHOOK_DETECTION_FILE')
 use_webhook = "--webhook" in sys.argv
 
 def load_detection_data(file_path):
-    """Load detection data from JSON file, support Supabase payload and older formats"""
+    """Load detection data from JSON file, handling both old and new formats"""
     try:
         with open(file_path, "r") as file:
             data = json.load(file)
-
-        detections = []
-
-        # ✅ Supabase style
-        if isinstance(data, dict) and "data" in data and isinstance(data["data"], dict) and "detection_results" in data["data"]:
-            detections = data["data"]["detection_results"]
-            print(f"Loaded {len(detections)} detections from Supabase payload")
-
-        # ✅ Top-level detection_results
-        elif isinstance(data, dict) and "detection_results" in data:
-            detections = data["detection_results"]
-            print(f"Loaded {len(detections)} detections from dict with 'detection_results'")
-
-        # ✅ Just a list
+        
+        # Handle new format with 'detections' key
+        if isinstance(data, dict) and 'detection_results' in data:
+            detections = data['detection_results']
+            print(f"Loaded {len(detections)} detections from new format (with 'detections' key)")
+            if 'inference_time_sec' in data:
+                print(f"Inference time: {data['inference_time_sec']} seconds")
+        # Handle old format (direct array)
         elif isinstance(data, list):
             detections = data
-            print(f"Loaded {len(detections)} detections from raw list")
-
+            print(f"Loaded {len(detections)} detections from old format (direct array)")
+        # Handle old format with 'detection_results' key
+        elif isinstance(data, dict) and 'detection_results' in data:
+            detections = data['detection_results']
+            print(f"Loaded {len(detections)} detections from old format (with 'detection_results' key)")
         else:
-            print("⚠️ Unrecognized JSON format, no detections found")
-
+            print("Error: Unrecognized JSON format")
+            detections = []
+            
         return detections
-
     except Exception as e:
         print(f"Error loading file {file_path}: {e}")
         return []
-
 
 if use_webhook and webhook_file and os.path.exists(webhook_file):
     print(f"Loading detection data from webhook file: {webhook_file}")
@@ -58,58 +53,21 @@ for detection in detections:
     y_center = (y_min + y_max) / 2
     midpoints.append((x_center, y_center))
 
-
-if midpoints:
-    ys = [y for _, y in midpoints]
-    median_y = np.median(ys)
-    mad = np.median([abs(y - median_y) for y in ys])
-    before = len(midpoints)
-    midpoints = [(x, y) for x, y in midpoints if abs(y - median_y) < 3 * mad]
-    print(f"[DEBUG] Outlier filter: kept {len(midpoints)} of {before} points")
-    
 # Sort midpoints by y (top to bottom)
 midpoints.sort(key=lambda pt: pt[1])
-print("[DEBUG] All midpoints Y sorted:", sorted([y for _, y in midpoints]))
 
 # Group midpoints into rows by y proximity
-def group_rows(midpoints, base_threshold=60):
-    """Group seats into rows adaptively by Y distance."""
-    ys = sorted([y for _, y in midpoints])
-    diffs = np.diff(ys)
-    median_spacing = np.median(diffs) if len(diffs) > 0 else base_threshold
-    threshold = min(base_threshold, median_spacing * 0.6)  # adapt threshold to data
-
-    rows = []
-    row_threshold = 40  # stricter
-    for pt in sorted(midpoints, key=lambda p: p[1]):
-        placed = False
-        for row in rows:
-            if abs(np.median([y for _, y in row]) - pt[1]) < row_threshold:
-                row.append(pt)
-                placed = True
-                break
-        if not placed:
-            rows.append([pt])
-    return rows
-
-# ---- use it ----
-rows = group_rows(midpoints)
-print(f"[DEBUG] Row count guess: {len(rows)}")
-for i, row in enumerate(rows):
-    print(f"  Row {i+1} has {len(row)} seats")
-
-# plt.figure()
-# colors = cm.rainbow(np.linspace(0, 1, len(rows)))
-# for color, row in zip(colors, rows):
-#     xs = [p[0] for p in row]
-#     ys = [p[1] for p in row]
-#     plt.scatter(xs, ys, color=color, label=f'Row {rows.index(row)+1}')
-# plt.gca().invert_yaxis()  # optional: so top of image is top
-# plt.title("DEBUG: Raw Row Clusters")
-# plt.xlabel("X")
-# plt.ylabel("Y")
-# plt.legend()
-# plt.show()
+row_threshold = 60  # pixels, adjust if needed for your image
+rows = []
+for pt in midpoints:
+    placed = False
+    for row in rows:
+        if abs(row[0][1] - pt[1]) < row_threshold:
+            row.append(pt)
+            placed = True
+            break
+    if not placed:
+        rows.append([pt])
 
 # Sort each row by x (left to right)
 for row in rows:
@@ -519,16 +477,12 @@ def pair_left_with_right_pairs(left_pairs, right_pairs):
         right_pair, right_y = right_pair_centers_sorted[i]
         
         y_diff = abs(left_y - right_y)
-        MAX_Y_GAP = 100
-        if y_diff < MAX_Y_GAP:
-            cross_aisle_pair_groups.append({
-                'left_pair': left_pair,
-                'right_pair': right_pair,
-                'y_difference': y_diff,
-                'total_chairs': 4  # 2 left + 2 right = 4 chairs
-            })
-        else:
-            print(f"[DEBUG] Skipped cross-aisle pair: Y gap {y_diff:.1f} > {MAX_Y_GAP}")
+        cross_aisle_pair_groups.append({
+            'left_pair': left_pair,
+            'right_pair': right_pair,
+            'y_difference': y_diff,
+            'total_chairs': 4  # 2 left + 2 right = 4 chairs
+        })
         
         print(f"  Pair {i + 1}: Left(Y={left_y:.1f}) <-> Right(Y={right_y:.1f}), Y-diff={y_diff:.1f}")
     
@@ -559,42 +513,72 @@ for i, group in enumerate(cross_aisle_pair_groups):
 # Handle the last row grouping - find the bottom-most pairs for special visualization
 print(f"\nCreating last row grouping visualization:")
 last_row_group = None
+def generate_virtual_pair_for(pair, side):
+    # Generate a virtual pair on the opposite side for the given pair
+    # For last row: generate a pair of class_id 2 seats on the opposite side, 100 and 150 pixels from the aisle, same y as the real pair
+    y1 = pair[0][1]
+    y2 = pair[1][1]
+    if side == 'left':
+        # Generate on right side
+        x1 = aisle_position + 100
+        x2 = aisle_position + 150
+    else:
+        # Generate on left side
+        x1 = aisle_position - 100
+        x2 = aisle_position - 150
+    return ((x1, y1), (x2, y2))
 
-if rows:  # we have rows already from earlier
-    # Pick the bottom-most row (largest median Y)
-    back_row = min(rows, key=lambda r: np.median([p[1] for p in r]))
-    print(f"[DEBUG] Using bottom row with {len(back_row)} detections")
+if left_side_pairs and right_side_pairs:
+    left_lowest_pair = min(left_side_pairs, key=lambda pair: (pair[0][1] + pair[1][1]) / 2)
+    right_lowest_pair = min(right_side_pairs, key=lambda pair: (pair[0][1] + pair[1][1]) / 2)
 
-    # Split into left and right for this row using the aisle
-    back_left = sorted([p for p in back_row if p[0] < aisle_position], key=lambda p: p[0])
-    back_right = sorted([p for p in back_row if p[0] >= aisle_position], key=lambda p: p[0])
+    # Determine last row group and cross-aisle pair (real or virtual)
+    if aisle_pair:
+        cross_aisle = aisle_pair
+        last_row_group = {
+            'bottom_left_pair': left_lowest_pair,
+            'cross_aisle_pair': cross_aisle,
+            'bottom_right_pair': right_lowest_pair,
+            'total_chairs': 6
+        }
+        print(f"Last row group created with 6 chairs (with cross-aisle pair):")
+    else:
+        left_y = (left_lowest_pair[0][1] + left_lowest_pair[1][1]) / 2
+        right_y = (right_lowest_pair[0][1] + right_lowest_pair[1][1]) / 2
+        if left_y > right_y:
+            # Left is lower, generate a virtual pair on the right for left_lowest_pair
+            cross_aisle = generate_virtual_pair_for(left_lowest_pair, 'left')
+            last_row_group = {
+                'bottom_left_pair': left_lowest_pair,
+                'cross_aisle_pair': cross_aisle,
+                'bottom_right_pair': right_lowest_pair,
+                'total_chairs': 6
+            }
+            print(f"Last row group created with 6 chairs (left pair with virtual cross-aisle pair):")
+        else:
+            # Right is lower, generate a virtual pair on the left for right_lowest_pair
+            cross_aisle = generate_virtual_pair_for(right_lowest_pair, 'right')
+            last_row_group = {
+                'bottom_left_pair': left_lowest_pair,
+                'cross_aisle_pair': cross_aisle,
+                'bottom_right_pair': right_lowest_pair,
+                'total_chairs': 6
+            }
+            print(f"Last row group created with 6 chairs (right pair with virtual cross-aisle pair):")
+    print(f"  Bottom left pair: 2 chairs")
+    print(f"  Cross-aisle pair: 2 chairs")
+    print(f"  Bottom right pair: 2 chairs")
 
-    def gen_placeholder(side='left'):
-        offset = 80 if side == 'left' else -80
-        return (aisle_position + offset, np.median([y for _, y in back_row]))
-
-    while len(back_left) < 2:
-        back_left.append(gen_placeholder('left'))
-    while len(back_right) < 2:
-        back_right.append(gen_placeholder('right'))
-
-    # Synthetic cross-aisle pair in the center
-    cross_pair = (
-        (aisle_position - 40, np.median([y for _, y in back_row])),
-        (aisle_position + 40, np.median([y for _, y in back_row]))
-    )
-
-    last_row_group = {
-        'bottom_left_pair': (back_left[0], back_left[1]),
-        'cross_aisle_pair': cross_pair,
-        'bottom_right_pair': (back_right[0], back_right[1]),
-        'total_chairs': 6
-    }
+    # Remove any cross-aisle pair group that matches the last row's left and right pairs
+    to_remove = []
+    for group in cross_aisle_pair_groups:
+        if (group['left_pair'] == left_lowest_pair and group['right_pair'] == right_lowest_pair):
+            to_remove.append(group)
+    for group in to_remove:
+        cross_aisle_pair_groups.remove(group)
 else:
     print("Not enough data to create last row group.")
     last_row_group = None
-
-
 
 # Plot seats with all pairings and groupings
 plt.figure(figsize=(canvas_width/400, canvas_height/400))
