@@ -556,43 +556,49 @@ for i, group in enumerate(cross_aisle_pair_groups):
     print(f"    Left seats: ({left_pair[0][0]:.1f},{left_pair[0][1]:.1f})-({left_pair[1][0]:.1f},{left_pair[1][1]:.1f})")
     print(f"    Right seats: ({right_pair[0][0]:.1f},{right_pair[0][1]:.1f})-({right_pair[1][0]:.1f},{right_pair[1][1]:.1f})")
 
-# Handle the last row grouping - find the bottom-most pairs for special visualization
-print(f"\nCreating last row grouping visualization:")
-last_row_group = None
+    # --- Robust Back Row Finder ---
+    print("\nCreating last row grouping visualization:")
 
-if rows:  # we have rows already from earlier
-    # Pick the bottom-most row (largest median Y)
-    back_row = min(rows, key=lambda r: np.median([p[1] for p in r]))
-    print(f"[DEBUG] Using bottom row with {len(back_row)} detections")
+    # Combine all points from every row
+    all_points = [(p[0], p[1]) for r in rows for p in r]
+    ys = np.array([p[1] for p in all_points])
 
-    # Split into left and right for this row using the aisle
-    back_left = sorted([p for p in back_row if p[0] < aisle_position], key=lambda p: p[0])
-    back_right = sorted([p for p in back_row if p[0] >= aisle_position], key=lambda p: p[0])
+    # Step 1: Find bottom 20% of Y values (lowest cluster)
+    percentile_cut = np.percentile(ys, 80)  # keep only bottom 20% (largest Y values)
+    bottom_points = [(x, y) for (x, y) in all_points if y >= percentile_cut]
 
-    def gen_placeholder(side='left'):
-        offset = 80 if side == 'left' else -80
-        return (aisle_position + offset, np.median([y for _, y in back_row]))
+    # Step 2: Cluster them into left/right halves around the aisle
+    left_back = [p for p in bottom_points if p[0] < aisle_position]
+    right_back = [p for p in bottom_points if p[0] > aisle_position]
 
-    while len(back_left) < 2:
-        back_left.append(gen_placeholder('left'))
-    while len(back_right) < 2:
-        back_right.append(gen_placeholder('right'))
+    # Step 3: Sort each side horizontally for visualization
+    left_back.sort(key=lambda p: p[0])
+    right_back.sort(key=lambda p: p[0])
 
-    # Synthetic cross-aisle pair in the center
-    cross_pair = (
-        (aisle_position - 40, np.median([y for _, y in back_row])),
-        (aisle_position + 40, np.median([y for _, y in back_row]))
+    # Step 4: Compute median Y to anchor line height
+    left_y = np.median([p[1] for p in left_back]) if left_back else 0
+    right_y = np.median([p[1] for p in right_back]) if right_back else 0
+    avg_y = (left_y + right_y) / 2
+
+    print(f"[DEBUG] Back row detection:")
+    print(f"  Left count={len(left_back)}, median Y={left_y:.1f}")
+    print(f"  Right count={len(right_back)}, median Y={right_y:.1f}")
+    print(f"  Avg Y={avg_y:.1f}")
+
+    # Step 5: Compute side centers
+    if left_back:
+        left_center = (np.mean([p[0] for p in left_back]), left_y)
+    if right_back:
+        right_center = (np.mean([p[0] for p in right_back]), right_y)
+
+    # Step 6: Draw the final gold "last row connection"
+    plt.plot(
+        [left_center[0], aisle_position, right_center[0]],
+        [left_center[1], avg_y, right_center[1]],
+        color="gold", linewidth=4, label="Last Row Connection (6 chairs)"
     )
 
-    last_row_group = {
-        'bottom_left_pair': (back_left[0], back_left[1]),
-        'cross_aisle_pair': cross_pair,
-        'bottom_right_pair': (back_right[0], back_right[1]),
-        'total_chairs': 6
-    }
-else:
-    print("Not enough data to create last row group.")
-    last_row_group = None
+
 
 
 
@@ -660,38 +666,38 @@ for group in cross_aisle_pair_groups:
 if len(cross_aisle_pair_groups) == 0:
     print("  WARNING: No cross-aisle pair groups to draw!")
 
-# Draw special last row connection (blue pair -> cross-aisle pair -> red pair)
-if last_row_group:
-    print(f"\nDrawing last row connection (6-chair group):")
+# # Draw special last row connection (blue pair -> cross-aisle pair -> red pair)
+# if last_row_group:
+#     print(f"\nDrawing last row connection (6-chair group):")
     
-    # Calculate centers
-    left_pair = last_row_group['bottom_left_pair']
-    cross_pair = last_row_group['cross_aisle_pair']
-    right_pair = last_row_group['bottom_right_pair']
+#     # Calculate centers
+#     left_pair = last_row_group['bottom_left_pair']
+#     cross_pair = last_row_group['cross_aisle_pair']
+#     right_pair = last_row_group['bottom_right_pair']
     
-    left_center_x = (left_pair[0][0] + left_pair[1][0]) / 2
-    left_center_y = (left_pair[0][1] + left_pair[1][1]) / 2
+#     left_center_x = (left_pair[0][0] + left_pair[1][0]) / 2
+#     left_center_y = (left_pair[0][1] + left_pair[1][1]) / 2
     
-    cross_center_x = (cross_pair[0][0] + cross_pair[1][0]) / 2
-    cross_center_y = (cross_pair[0][1] + cross_pair[1][1]) / 2
+#     cross_center_x = (cross_pair[0][0] + cross_pair[1][0]) / 2
+#     cross_center_y = (cross_pair[0][1] + cross_pair[1][1]) / 2
     
-    right_center_x = (right_pair[0][0] + right_pair[1][0]) / 2
-    right_center_y = (right_pair[0][1] + right_pair[1][1]) / 2
+#     right_center_x = (right_pair[0][0] + right_pair[1][0]) / 2
+#     right_center_y = (right_pair[0][1] + right_pair[1][1]) / 2
     
-    print(f"  Left pair center: ({left_center_x:.1f}, {left_center_y:.1f})")
-    print(f"  Cross-aisle center: ({cross_center_x:.1f}, {cross_center_y:.1f})")
-    print(f"  Right pair center: ({right_center_x:.1f}, {right_center_y:.1f})")
+#     print(f"  Left pair center: ({left_center_x:.1f}, {left_center_y:.1f})")
+#     print(f"  Cross-aisle center: ({cross_center_x:.1f}, {cross_center_y:.1f})")
+#     print(f"  Right pair center: ({right_center_x:.1f}, {right_center_y:.1f})")
     
-    # Draw connection lines for last row grouping
-    # Left pair -> Cross-aisle pair
-    plt.plot([left_center_x, cross_center_x], [left_center_y, cross_center_y], 
-             'gold', linewidth=4, alpha=0.9, linestyle='-')
+#     # Draw connection lines for last row grouping
+#     # Left pair -> Cross-aisle pair
+#     plt.plot([left_center_x, cross_center_x], [left_center_y, cross_center_y], 
+#              'gold', linewidth=4, alpha=0.9, linestyle='-')
     
-    # Cross-aisle pair -> Right pair  
-    plt.plot([cross_center_x, right_center_x], [cross_center_y, right_center_y], 
-             'gold', linewidth=4, alpha=0.9, linestyle='-')
+#     # Cross-aisle pair -> Right pair  
+#     plt.plot([cross_center_x, right_center_x], [cross_center_y, right_center_y], 
+#              'gold', linewidth=4, alpha=0.9, linestyle='-')
     
-    print(f"  Drew last row connection lines in gold")
+#     print(f"  Drew last row connection lines in gold")
 
 # Create custom legend
 from matplotlib.lines import Line2D
@@ -816,132 +822,132 @@ def find_class_id_by_coordinates(x, y, detections, tolerance=50):
     return None  # Not found
 
 # Create row-based JSON output with class_ids
-def create_row_json_output(cross_aisle_pair_groups, aisle_pair, detections, last_row_group):
-    """Create JSON output organized by rows (bottom to top) with class_ids"""
+# def create_row_json_output(cross_aisle_pair_groups, aisle_pair, detections, last_row_group):
+#     """Create JSON output organized by rows (bottom to top) with class_ids"""
     
-    # Sort cross-aisle pair groups by Y-coordinate (bottom to top - highest Y first)
-    sorted_groups = sorted(cross_aisle_pair_groups, 
-                          key=lambda group: ((group['left_pair'][0][1] + group['left_pair'][1][1]) / 2 + 
-                                           (group['right_pair'][0][1] + group['right_pair'][1][1]) / 2) / 2, 
-                          reverse=True)
+#     # Sort cross-aisle pair groups by Y-coordinate (bottom to top - highest Y first)
+#     sorted_groups = sorted(cross_aisle_pair_groups, 
+#                           key=lambda group: ((group['left_pair'][0][1] + group['left_pair'][1][1]) / 2 + 
+#                                            (group['right_pair'][0][1] + group['right_pair'][1][1]) / 2) / 2, 
+#                           reverse=True)
     
-    row_data = {}
+#     row_data = {}
     
-    # Find which group is part of the last row (connected with gold lines)
-    last_row_left_pair = None
-    last_row_right_pair = None
-    if last_row_group:
-        last_row_left_pair = last_row_group['bottom_left_pair']
-        last_row_right_pair = last_row_group['bottom_right_pair']
+#     # Find which group is part of the last row (connected with gold lines)
+#     last_row_left_pair = None
+#     last_row_right_pair = None
+#     if last_row_group:
+#         last_row_left_pair = last_row_group['bottom_left_pair']
+#         last_row_right_pair = last_row_group['bottom_right_pair']
     
-    # Process regular rows (excluding the one that's part of the last row)
-    regular_row_idx = 1
-    for group in sorted_groups:
-        # Skip if this group is part of the last row
-        if (last_row_left_pair and last_row_right_pair and 
-            group['left_pair'] == last_row_left_pair and group['right_pair'] == last_row_right_pair):
-            continue
+#     # Process regular rows (excluding the one that's part of the last row)
+#     regular_row_idx = 1
+#     for group in sorted_groups:
+#         # Skip if this group is part of the last row
+#         if (last_row_left_pair and last_row_right_pair and 
+#             group['left_pair'] == last_row_left_pair and group['right_pair'] == last_row_right_pair):
+#             continue
             
-        row_name = f"row_{regular_row_idx}"
+#         row_name = f"row_{regular_row_idx}"
         
-        # Get left pair seats
-        left_seat1 = group['left_pair'][0]
-        left_seat2 = group['left_pair'][1]
+#         # Get left pair seats
+#         left_seat1 = group['left_pair'][0]
+#         left_seat2 = group['left_pair'][1]
         
-        # Get right pair seats  
-        right_seat1 = group['right_pair'][0]
-        right_seat2 = group['right_pair'][1]
+#         # Get right pair seats  
+#         right_seat1 = group['right_pair'][0]
+#         right_seat2 = group['right_pair'][1]
         
-        # Sort left pair by X-coordinate (left to right)
-        left_seats_sorted = sorted([left_seat1, left_seat2], key=lambda seat: seat[0])
+#         # Sort left pair by X-coordinate (left to right)
+#         left_seats_sorted = sorted([left_seat1, left_seat2], key=lambda seat: seat[0])
         
-        # Sort right pair by X-coordinate (left to right)
-        right_seats_sorted = sorted([right_seat1, right_seat2], key=lambda seat: seat[0])
+#         # Sort right pair by X-coordinate (left to right)
+#         right_seats_sorted = sorted([right_seat1, right_seat2], key=lambda seat: seat[0])
         
-        # Find class_ids for each seat
-        left_class_id_1 = find_class_id_by_coordinates(left_seats_sorted[0][0], left_seats_sorted[0][1], detections)
-        left_class_id_2 = find_class_id_by_coordinates(left_seats_sorted[1][0], left_seats_sorted[1][1], detections)
-        right_class_id_1 = find_class_id_by_coordinates(right_seats_sorted[0][0], right_seats_sorted[0][1], detections)
-        right_class_id_2 = find_class_id_by_coordinates(right_seats_sorted[1][0], right_seats_sorted[1][1], detections)
+#         # Find class_ids for each seat
+#         left_class_id_1 = find_class_id_by_coordinates(left_seats_sorted[0][0], left_seats_sorted[0][1], detections)
+#         left_class_id_2 = find_class_id_by_coordinates(left_seats_sorted[1][0], left_seats_sorted[1][1], detections)
+#         right_class_id_1 = find_class_id_by_coordinates(right_seats_sorted[0][0], right_seats_sorted[0][1], detections)
+#         right_class_id_2 = find_class_id_by_coordinates(right_seats_sorted[1][0], right_seats_sorted[1][1], detections)
         
-        # Create row object
-        row_data[row_name] = {
-            "column_one": {
-                "class_id": left_class_id_1,
-                "coordinates": {"x": left_seats_sorted[0][0], "y": left_seats_sorted[0][1]}
-            },
-            "column_two": {
-                "class_id": left_class_id_2,
-                "coordinates": {"x": left_seats_sorted[1][0], "y": left_seats_sorted[1][1]}
-            },
-            "column_three": {
-                "class_id": right_class_id_1,
-                "coordinates": {"x": right_seats_sorted[0][0], "y": right_seats_sorted[0][1]}
-            },
-            "column_four": {
-                "class_id": right_class_id_2,
-                "coordinates": {"x": right_seats_sorted[1][0], "y": right_seats_sorted[1][1]}
-            }
-        }
+#         # Create row object
+#         row_data[row_name] = {
+#             "column_one": {
+#                 "class_id": left_class_id_1,
+#                 "coordinates": {"x": left_seats_sorted[0][0], "y": left_seats_sorted[0][1]}
+#             },
+#             "column_two": {
+#                 "class_id": left_class_id_2,
+#                 "coordinates": {"x": left_seats_sorted[1][0], "y": left_seats_sorted[1][1]}
+#             },
+#             "column_three": {
+#                 "class_id": right_class_id_1,
+#                 "coordinates": {"x": right_seats_sorted[0][0], "y": right_seats_sorted[0][1]}
+#             },
+#             "column_four": {
+#                 "class_id": right_class_id_2,
+#                 "coordinates": {"x": right_seats_sorted[1][0], "y": right_seats_sorted[1][1]}
+#             }
+#         }
         
-        print(f"Row {regular_row_idx}: Left({left_class_id_1},{left_class_id_2}) Right({right_class_id_1},{right_class_id_2})")
-        regular_row_idx += 1
+#         print(f"Row {regular_row_idx}: Left({left_class_id_1},{left_class_id_2}) Right({right_class_id_1},{right_class_id_2})")
+#         regular_row_idx += 1
     
-    # Create the special LAST ROW with 6 seats (connected by gold lines)
-    if last_row_group and aisle_pair:
-        # Get the three pairs that make up the last row
-        left_pair = last_row_group['bottom_left_pair']
-        cross_pair = last_row_group['cross_aisle_pair'] 
-        right_pair = last_row_group['bottom_right_pair']
+#     # Create the special LAST ROW with 6 seats (connected by gold lines)
+#     if last_row_group and aisle_pair:
+#         # Get the three pairs that make up the last row
+#         left_pair = last_row_group['bottom_left_pair']
+#         cross_pair = last_row_group['cross_aisle_pair'] 
+#         right_pair = last_row_group['bottom_right_pair']
         
-        # Sort each pair by X-coordinate
-        left_seats_sorted = sorted([left_pair[0], left_pair[1]], key=lambda seat: seat[0])
-        right_seats_sorted = sorted([right_pair[0], right_pair[1]], key=lambda seat: seat[0])
-        cross_seats_sorted = sorted([cross_pair[0], cross_pair[1]], key=lambda seat: seat[0])
+#         # Sort each pair by X-coordinate
+#         left_seats_sorted = sorted([left_pair[0], left_pair[1]], key=lambda seat: seat[0])
+#         right_seats_sorted = sorted([right_pair[0], right_pair[1]], key=lambda seat: seat[0])
+#         cross_seats_sorted = sorted([cross_pair[0], cross_pair[1]], key=lambda seat: seat[0])
         
-        # Find class_ids for all 6 seats
-        left_class_id_1 = find_class_id_by_coordinates(left_seats_sorted[0][0], left_seats_sorted[0][1], detections)
-        left_class_id_2 = find_class_id_by_coordinates(left_seats_sorted[1][0], left_seats_sorted[1][1], detections)
-        cross_class_id_1 = find_class_id_by_coordinates(cross_seats_sorted[0][0], cross_seats_sorted[0][1], detections)
-        cross_class_id_2 = find_class_id_by_coordinates(cross_seats_sorted[1][0], cross_seats_sorted[1][1], detections)
-        right_class_id_1 = find_class_id_by_coordinates(right_seats_sorted[0][0], right_seats_sorted[0][1], detections)
-        right_class_id_2 = find_class_id_by_coordinates(right_seats_sorted[1][0], right_seats_sorted[1][1], detections)
+#         # Find class_ids for all 6 seats
+#         left_class_id_1 = find_class_id_by_coordinates(left_seats_sorted[0][0], left_seats_sorted[0][1], detections)
+#         left_class_id_2 = find_class_id_by_coordinates(left_seats_sorted[1][0], left_seats_sorted[1][1], detections)
+#         cross_class_id_1 = find_class_id_by_coordinates(cross_seats_sorted[0][0], cross_seats_sorted[0][1], detections)
+#         cross_class_id_2 = find_class_id_by_coordinates(cross_seats_sorted[1][0], cross_seats_sorted[1][1], detections)
+#         right_class_id_1 = find_class_id_by_coordinates(right_seats_sorted[0][0], right_seats_sorted[0][1], detections)
+#         right_class_id_2 = find_class_id_by_coordinates(right_seats_sorted[1][0], right_seats_sorted[1][1], detections)
         
-        # Create the last row with 6 columns
-        row_data[f"row_{regular_row_idx}"] = {
-            "column_one": {
-                "class_id": left_class_id_1,
-                "coordinates": {"x": left_seats_sorted[0][0], "y": left_seats_sorted[0][1]}
-            },
-            "column_two": {
-                "class_id": left_class_id_2,
-                "coordinates": {"x": left_seats_sorted[1][0], "y": left_seats_sorted[1][1]}
-            },
-            "column_three": {
-                "class_id": cross_class_id_1,
-                "coordinates": {"x": cross_seats_sorted[0][0], "y": cross_seats_sorted[0][1]}
-            },
-            "column_four": {
-                "class_id": cross_class_id_2,
-                "coordinates": {"x": cross_seats_sorted[1][0], "y": cross_seats_sorted[1][1]}
-            },
-            "column_five": {
-                "class_id": right_class_id_1,
-                "coordinates": {"x": right_seats_sorted[0][0], "y": right_seats_sorted[0][1]}
-            },
-            "column_six": {
-                "class_id": right_class_id_2,
-                "coordinates": {"x": right_seats_sorted[1][0], "y": right_seats_sorted[1][1]}
-            }
-        }
+#         # Create the last row with 6 columns
+#         row_data[f"row_{regular_row_idx}"] = {
+#             "column_one": {
+#                 "class_id": left_class_id_1,
+#                 "coordinates": {"x": left_seats_sorted[0][0], "y": left_seats_sorted[0][1]}
+#             },
+#             "column_two": {
+#                 "class_id": left_class_id_2,
+#                 "coordinates": {"x": left_seats_sorted[1][0], "y": left_seats_sorted[1][1]}
+#             },
+#             "column_three": {
+#                 "class_id": cross_class_id_1,
+#                 "coordinates": {"x": cross_seats_sorted[0][0], "y": cross_seats_sorted[0][1]}
+#             },
+#             "column_four": {
+#                 "class_id": cross_class_id_2,
+#                 "coordinates": {"x": cross_seats_sorted[1][0], "y": cross_seats_sorted[1][1]}
+#             },
+#             "column_five": {
+#                 "class_id": right_class_id_1,
+#                 "coordinates": {"x": right_seats_sorted[0][0], "y": right_seats_sorted[0][1]}
+#             },
+#             "column_six": {
+#                 "class_id": right_class_id_2,
+#                 "coordinates": {"x": right_seats_sorted[1][0], "y": right_seats_sorted[1][1]}
+#             }
+#         }
         
-        print(f"LAST ROW {regular_row_idx} (6 seats): Left({left_class_id_1},{left_class_id_2}) Cross({cross_class_id_1},{cross_class_id_2}) Right({right_class_id_1},{right_class_id_2})")
+#         print(f"LAST ROW {regular_row_idx} (6 seats): Left({left_class_id_1},{left_class_id_2}) Cross({cross_class_id_1},{cross_class_id_2}) Right({right_class_id_1},{right_class_id_2})")
     
-    return row_data
+#     return row_data
 
-# Generate the row-based JSON output
-print(f"\nGenerating row-based JSON output:")
-row_json_data = create_row_json_output(cross_aisle_pair_groups, aisle_pair, detections, last_row_group)
+# # Generate the row-based JSON output
+# print(f"\nGenerating row-based JSON output:")
+# row_json_data = create_row_json_output(cross_aisle_pair_groups, aisle_pair, detections, last_row_group)
 
 
 # Save row-based JSON with dynamic filename for debugging
