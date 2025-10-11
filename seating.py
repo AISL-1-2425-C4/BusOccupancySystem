@@ -475,6 +475,7 @@ def pair_pairs_by_y(pairs, side_name):
 def pair_left_with_right_pairs(left_pairs, right_pairs):
     """Pair left side pairs with right side pairs based on Y-coordinate proximity, bottom to top"""
     if not left_pairs or not right_pairs:
+        print('pumasok dito')
         return []
     
     # Calculate center Y-coordinate for each pair
@@ -559,57 +560,69 @@ for i, group in enumerate(cross_aisle_pair_groups):
     # --- Robust Back Row Finder ---
     print("\nCreating last row grouping visualization:")
 
-    # Combine all points from every row
+    # --- Robust Back Row Finder ---
+    print("\nCreating last row grouping visualization:")
+
     all_points = [(p[0], p[1]) for r in rows for p in r]
     ys = np.array([p[1] for p in all_points])
 
-    # Step 1: Find bottom 20% of Y values (lowest cluster)
-    percentile_cut = np.percentile(ys, 80)  # keep only bottom 20% (largest Y values)
-    bottom_points = [(x, y) for (x, y) in all_points if y >= percentile_cut]
+    # --- Step 1: Pick only the actual rear-most detections ---
+    max_y = np.max(ys)
+    threshold = max_y - 40  # tighten range (was 100)
+    bottom_points = [(x, y) for (x, y) in all_points if y >= threshold]
 
-    # Step 2: Cluster them into left/right halves around the aisle
+    # --- Step 2: Split by aisle ---
     left_back = [p for p in bottom_points if p[0] < aisle_position]
     right_back = [p for p in bottom_points if p[0] > aisle_position]
-
-    # Step 3: Sort each side horizontally for visualization
     left_back.sort(key=lambda p: p[0])
     right_back.sort(key=lambda p: p[0])
 
-    # Step 4: Compute median Y to anchor line height
-    left_y = np.median([p[1] for p in left_back]) if left_back else 0
-    right_y = np.median([p[1] for p in right_back]) if right_back else 0
-    avg_y = (left_y + right_y) / 2
+    # --- Step 3: Fix height to be perfectly straight across ---
+    rear_y = max_y  # flat line at the very back
 
-    print(f"[DEBUG] Back row detection:")
-    print(f"  Left count={len(left_back)}, median Y={left_y:.1f}")
-    print(f"  Right count={len(right_back)}, median Y={right_y:.1f}")
-    print(f"  Avg Y={avg_y:.1f}")
-
-    # Step 5: Compute side centers
+    # --- Step 4: Compute mean X positions per side ---
     if left_back:
-        left_center = (np.mean([p[0] for p in left_back]), left_y)
+        left_center = (np.mean([p[0] for p in left_back]), rear_y)
     if right_back:
-        right_center = (np.mean([p[0] for p in right_back]), right_y)
+        right_center = (np.mean([p[0] for p in right_back]), rear_y)
 
-    # Step 6: Draw the final gold "last row connection"
-    plt.plot(
-        [left_center[0], aisle_position, right_center[0]],
-        [left_center[1], avg_y, right_center[1]],
-        color="gold", linewidth=4, label="Last Row Connection (6 chairs)"
-    )
+    # --- Step 5: Draw the last-row connector ---
+    if left_back and right_back:
+        plt.plot(
+            [left_center[0], aisle_position, right_center[0]],
+            [rear_y, rear_y, rear_y],  # perfectly horizontal
+            color="gold",
+            linewidth=4,
+            label="Last Row Connection (6 chairs)"
+        )
+
+    print(f"[DEBUG] Rear row: {len(bottom_points)} detections, Y≈{rear_y:.1f}")
+
+
 
 
 
 
 
 # Plot seats with all pairings and groupings
-plt.figure(figsize=(canvas_width/400, canvas_height/400))
+# --- START OF VISUALIZATION (run once) ---
+# --- SINGLE FIGURE SETUP ---
+plt.close('all')
+plt.figure(1, figsize=(10, 8))  # larger, clearer figure
+plt.clf()
+
 plt.xlim(0, canvas_width)
 plt.ylim(canvas_height, 0)
 plt.gca().set_aspect('equal', adjustable='box')
+
 plt.title("Bus Seats: Pairs + Pair-of-Pairs + Last Row (6 chairs)")
 plt.xlabel("X")
 plt.ylabel("Y")
+plt.grid(True, linestyle=':', alpha=0.3)
+
+
+# Then continue plotting everything on this same figure
+
 
 # Plot left side seats in blue
 for pt in left_seats:
@@ -639,7 +652,7 @@ for pt1, pt2 in right_side_pairs:
              'orange', linewidth=1, alpha=0.5)
 
 # Draw cross-aisle pair group connections (thick lines connecting left pairs to right pairs)
-colors = ['darkblue', 'darkred', 'darkgreen', 'darkorange', 'darkviolet', 'darkmagenta', 'darkcyan']
+colors = ['darkblue', 'darkred', 'darkgreen', 'darkorange', 'darkviolet', 'darkmagenta', 'darkcyan', 'blue', 'green']
 color_idx = 0
 
 print(f"\nDEBUG: Drawing {len(cross_aisle_pair_groups)} cross-aisle pair group lines:")
@@ -659,9 +672,18 @@ for group in cross_aisle_pair_groups:
     print(f"  Drawing line from ({left_center_x:.1f},{left_center_y:.1f}) to ({right_center_x:.1f},{right_center_y:.1f})")
     
     # Draw connection between left pair center and right pair center
-    plt.plot([left_center_x, right_center_x], [left_center_y, right_center_y], 
+    if abs(left_center_y - right_center_y) > 15:
+    # if False:
+        print(f"({left_center_x:.2f}, {left_center_y:.2f}) pair off by >15 y-units ({right_center_x:.2f}, {right_center_y:.2f})")
+        plt.plot([left_center_x, right_center_x], [left_center_y, right_center_y], 
+             'pink', linewidth=3, alpha=0.8)
+    else:
+        plt.plot([left_center_x, right_center_x], [left_center_y, right_center_y], 
              colors[color_idx % len(colors)], linewidth=3, alpha=0.8)
     color_idx += 1
+
+img = plt.imread('merged_with_detections_3eb9b4b7-0b72-473a-b1d8-be9f2847c144_2025-10-08 17-44-33.760376.jpg')
+plt.imshow(img)
 
 if len(cross_aisle_pair_groups) == 0:
     print("  WARNING: No cross-aisle pair groups to draw!")
