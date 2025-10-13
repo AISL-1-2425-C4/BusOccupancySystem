@@ -460,16 +460,22 @@
         container.style.height = `${containerHeight}px`;
         busImage.style.width = `${containerWidth}px`;
         busImage.style.height = `${containerHeight}px`;
-        
+
         // Apply mobile scaling if needed (after dimensions are set)
-        console.log(`📱 Responsive scaling: screen=${screenWidth}px, scale=${scaleFactor.toFixed(2)}, seatSize=${seatSize.toFixed(1)}px`);
-        if (isMobile && containerWidth > screenWidth * 0.95) {
-          const mobileScale = (screenWidth * 0.9) / containerWidth; // Scale to fit
+        console.log(`📱 Responsive scaling: screen=${screenWidth}px, scale=${scaleFactor.toFixed(2)}, seatSize=${seatSize.toFixed(1)}px, containerWidth=${containerWidth}px`);
+        
+        // Dynamically scale for mobile if container is too wide
+        const maxWidth = screenWidth * 0.9; // use 90% of screen width
+        
+        if (isMobile && containerWidth > maxWidth) {
+          const mobileScale = maxWidth / containerWidth;
           container.style.transform = `scale(${mobileScale})`;
           container.style.transformOrigin = 'top center';
-          console.log(`📱 Mobile scale transform applied: ${mobileScale.toFixed(2)}`);
+          container.style.margin = '0 auto';
+          console.log(`📱 Mobile scale transform applied: ${mobileScale.toFixed(2)} (${containerWidth}px → ${(containerWidth * mobileScale).toFixed(0)}px)`);
         } else {
           container.style.transform = 'none';
+          console.log(`✅ No scaling needed - container fits screen`);
         }
 
         // Add aisle divider lines for visual appeal
