@@ -440,17 +440,7 @@
         // Calculate dynamic container dimensions with driver area
         const driverAreaWidth = Math.max(40, 60 * scaleFactor); // Scaled driver area
         
-        console.log(`📱 Responsive scaling: screen=${screenWidth}px, scale=${scaleFactor.toFixed(2)}, seatSize=${seatSize.toFixed(1)}px`);
-        // After computing containerWidth:
-        if (isMobile && containerWidth > screenWidth * 0.95) {
-          const mobileScale = (screenWidth * 0.9) / containerWidth; // Scale to fit
-          container.style.transform = `scale(${mobileScale})`;
-          container.style.transformOrigin = 'top center';
-          console.log(`📱 Mobile scale applied: ${mobileScale.toFixed(2)}`);
-        } else {
-          container.style.transform = 'none';
-        }
-
+        // Calculate container dimensions FIRST
         const containerWidth =
           totalRows * (seatSize + seatSpacing) +
           edgeMargin * 2 +
@@ -470,6 +460,17 @@
         container.style.height = `${containerHeight}px`;
         busImage.style.width = `${containerWidth}px`;
         busImage.style.height = `${containerHeight}px`;
+        
+        // Apply mobile scaling if needed (after dimensions are set)
+        console.log(`📱 Responsive scaling: screen=${screenWidth}px, scale=${scaleFactor.toFixed(2)}, seatSize=${seatSize.toFixed(1)}px`);
+        if (isMobile && containerWidth > screenWidth * 0.95) {
+          const mobileScale = (screenWidth * 0.9) / containerWidth; // Scale to fit
+          container.style.transform = `scale(${mobileScale})`;
+          container.style.transformOrigin = 'top center';
+          console.log(`📱 Mobile scale transform applied: ${mobileScale.toFixed(2)}`);
+        } else {
+          container.style.transform = 'none';
+        }
 
         // Add aisle divider lines for visual appeal
         addAisleDividers(container, containerHeight, has4SeatRows);
