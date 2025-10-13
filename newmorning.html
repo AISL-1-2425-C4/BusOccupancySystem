@@ -313,6 +313,12 @@
 
     <div id="loading" class="loading">Loading dynamic seat layout...</div>
     <div id="error" class="error" style="display: none"></div>
+    
+    <!-- Debug panel for mobile -->
+    <div id="debugPanel" style="background: #f0f0f0; border: 2px solid #333; padding: 10px; margin: 10px auto; max-width: 95%; font-size: 12px; font-family: monospace; display: none;">
+      <strong>🐛 Debug Info:</strong>
+      <div id="debugContent"></div>
+    </div>
 
     <div class="image-container" id="busContainer" style="display: none">
       <img src="images/bus.jpg" alt="Bus Image" id="busImage" />
@@ -328,6 +334,20 @@
     </p>
 
     <script>
+      // Debug logging for mobile
+      function debugLog(message) {
+        const debugPanel = document.getElementById("debugPanel");
+        const debugContent = document.getElementById("debugContent");
+        if (debugPanel && debugContent) {
+          debugPanel.style.display = "block";
+          const timestamp = new Date().toLocaleTimeString();
+          debugContent.innerHTML += `<div>[${timestamp}] ${message}</div>`;
+          console.log(message);
+        } else {
+          console.log(message);
+        }
+      }
+      
       function updateTimestamp() {
         const now = new Date();
         document.getElementById("lastUpdated").textContent =
@@ -336,27 +356,33 @@
 
       // Call it once on page load
       document.addEventListener("DOMContentLoaded", () => {
+        debugLog("🚀 Page loaded, starting initialization...");
         updateTimestamp();
         setInterval(updateTimestamp, 5000);
       });
 
       async function loadDynamicSeats() {
+        debugLog("📡 Fetching seat layout...");
         try {
-          // 👇 cache-busting: add timestamp so browser doesn’t reuse old JSON
-          const response = await fetch(
-            "row_seating_layout.json?nocache=" + Date.now()
-          );
-          if (!response.ok)
-            throw new Error(`HTTP error! status: ${response.status}`);
+          // 👇 cache-busting: add timestamp so browser doesn't reuse old JSON
+          const url = "row_seating_layout.json?nocache=" + Date.now();
+          const response = await fetch(url);
+          
+          debugLog(`📡 Response: ${response.status} ${response.statusText}`);
+          
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+          }
 
           const newLayout = await response.json();
-          console.log("Loaded seat layout:", newLayout);
+          debugLog(`✅ Got data with ${Object.keys(newLayout).length} rows`);
 
           // ✅ Only update if layout is not empty AND different from current
           if (
             newLayout &&
             JSON.stringify(newLayout) !== JSON.stringify(seatLayoutData)
           ) {
+            debugLog("🎨 Generating seats...");
             seatLayoutData = newLayout;
             document.getElementById("loading").style.display = "none";
             document.getElementById("busContainer").style.display = "inline-block";
@@ -364,11 +390,12 @@
             generateSeats(seatLayoutData);
             updateTimestamp();
             
-            console.log("✅ Seats generated, container should be visible");
+            debugLog("✅ Seats should now be visible!");
           } else {
-            console.log("No changes detected — keeping existing seats");
+            debugLog("⚠️ No changes or no data");
             // If this is first load and we have no data, still show container
             if (!seatLayoutData && newLayout) {
+              debugLog("🎨 First load - generating seats...");
               seatLayoutData = newLayout;
               document.getElementById("loading").style.display = "none";
               document.getElementById("busContainer").style.display = "inline-block";
@@ -377,7 +404,7 @@
             }
           }
         } catch (error) {
-          console.error("Error loading seat layout:", error);
+          debugLog(`❌ ERROR: ${error.message}`);
           document.getElementById("loading").style.display = "none";
           const errorDiv = document.getElementById("error");
           errorDiv.style.display = "block";
@@ -594,21 +621,17 @@
           });
         });
 
-        console.log(
-          `Generated ${seatCounter} seats total in ${totalRows} rows`
-        );
-        console.log(
-          `Container dimensions: ${containerWidth}x${containerHeight}px`
-        );
+        debugLog(`🪑 Generated ${seatCounter} seats in ${totalRows} rows`);
+        debugLog(`📐 Container: ${containerWidth}x${containerHeight}px`);
         
         // Ensure container is visible after generating seats
         if (seatCounter > 0) {
           container.style.display = "inline-block";
           container.style.visibility = "visible";
           container.style.opacity = "1";
-          console.log("✅ Container made visible with", seatCounter, "seats");
+          debugLog(`✅ Container visible with ${seatCounter} seats`);
         } else {
-          console.warn("⚠️ No seats were generated!");
+          debugLog("⚠️ WARNING: No seats generated!");
         }
       };
 
