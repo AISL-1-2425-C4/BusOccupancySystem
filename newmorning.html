@@ -313,12 +313,6 @@
 
     <div id="loading" class="loading">Loading dynamic seat layout...</div>
     <div id="error" class="error" style="display: none"></div>
-    
-    <!-- Debug panel for mobile -->
-    <div id="debugPanel" style="background: #f0f0f0; border: 2px solid #333; padding: 10px; margin: 10px auto; max-width: 95%; font-size: 12px; font-family: monospace; display: none;">
-      <strong>🐛 Debug Info:</strong>
-      <div id="debugContent"></div>
-    </div>
 
     <div class="image-container" id="busContainer" style="display: none">
       <img src="images/bus.jpg" alt="Bus Image" id="busImage" />
@@ -334,20 +328,6 @@
     </p>
 
     <script>
-      // Debug logging for mobile
-      function debugLog(message) {
-        const debugPanel = document.getElementById("debugPanel");
-        const debugContent = document.getElementById("debugContent");
-        if (debugPanel && debugContent) {
-          debugPanel.style.display = "block";
-          const timestamp = new Date().toLocaleTimeString();
-          debugContent.innerHTML += `<div>[${timestamp}] ${message}</div>`;
-          console.log(message);
-        } else {
-          console.log(message);
-        }
-      }
-      
       function updateTimestamp() {
         const now = new Date();
         document.getElementById("lastUpdated").textContent =
@@ -356,46 +336,35 @@
 
       // Call it once on page load
       document.addEventListener("DOMContentLoaded", () => {
-        debugLog("🚀 Page loaded, starting initialization...");
         updateTimestamp();
         setInterval(updateTimestamp, 5000);
       });
 
       async function loadDynamicSeats() {
-        debugLog("📡 Fetching seat layout...");
         try {
-          // 👇 cache-busting: add timestamp so browser doesn't reuse old JSON
           const url = "row_seating_layout.json?nocache=" + Date.now();
           const response = await fetch(url);
-          
-          debugLog(`📡 Response: ${response.status} ${response.statusText}`);
           
           if (!response.ok) {
             throw new Error(`HTTP ${response.status}: ${response.statusText}`);
           }
 
           const newLayout = await response.json();
-          debugLog(`✅ Got data with ${Object.keys(newLayout).length} rows`);
 
           // ✅ Only update if layout is not empty AND different from current
           if (
             newLayout &&
             JSON.stringify(newLayout) !== JSON.stringify(seatLayoutData)
           ) {
-            debugLog("🎨 Generating seats...");
             seatLayoutData = newLayout;
             document.getElementById("loading").style.display = "none";
             document.getElementById("busContainer").style.display = "inline-block";
 
             generateSeats(seatLayoutData);
             updateTimestamp();
-            
-            debugLog("✅ Seats should now be visible!");
           } else {
-            debugLog("⚠️ No changes or no data");
             // If this is first load and we have no data, still show container
             if (!seatLayoutData && newLayout) {
-              debugLog("🎨 First load - generating seats...");
               seatLayoutData = newLayout;
               document.getElementById("loading").style.display = "none";
               document.getElementById("busContainer").style.display = "inline-block";
@@ -404,7 +373,7 @@
             }
           }
         } catch (error) {
-          debugLog(`❌ ERROR: ${error.message}`);
+          console.error("Error loading seat layout:", error);
           document.getElementById("loading").style.display = "none";
           const errorDiv = document.getElementById("error");
           errorDiv.style.display = "block";
@@ -451,20 +420,21 @@
         const isMobile = screenWidth < 768;
         const isTablet = screenWidth >= 768 && screenWidth < 1024;
         
-        // Scale factor based on screen size - INCREASED for better mobile visibility
+        // Scale factor based on screen size - optimized to fit screen
         let scaleFactor = 1;
         if (isMobile) {
-          scaleFactor = 1.2; // LARGER on mobile for visibility
+          // Calculate scale to fit screen width perfectly
+          const availableWidth = screenWidth * 0.90; // Use 90% of screen
+          const baseWidth = totalRows * 55; // Approximate width with default sizing
+          scaleFactor = Math.min(1.5, availableWidth / baseWidth); // Max 1.5x, but scale down if needed
         } else if (isTablet) {
-          scaleFactor = 1.0; // Normal on tablet
+          scaleFactor = 1.0;
         }
         
-        const seatSize = Math.max(30, 30 * scaleFactor); // Minimum 30px for visibility
-        const seatSpacing = Math.max(20, 25 * scaleFactor);
+        const seatSize = Math.max(25, 30 * scaleFactor);
+        const seatSpacing = Math.max(18, 25 * scaleFactor);
         const aisleWidth = seatSpacing;
-        const edgeMargin = Math.max(15, 25 * scaleFactor);
-        
-        debugLog(`📏 Mobile=${isMobile}, scale=${scaleFactor}, seatSize=${seatSize}px`);
+        const edgeMargin = Math.max(12, 25 * scaleFactor);
 
         // Calculate dynamic container dimensions with driver area
         const driverAreaWidth = Math.max(40, 60 * scaleFactor); // Scaled driver area
@@ -490,21 +460,16 @@
         busImage.style.width = `${containerWidth}px`;
         busImage.style.height = `${containerHeight}px`;
 
-        // Apply mobile scaling if needed (after dimensions are set)
-        debugLog(`📱 Screen=${screenWidth}px, Container=${containerWidth}px`);
-        
-        // Dynamically scale for mobile if container is still too wide
-        const maxWidth = screenWidth * 0.95; // use 95% of screen width
+        // Apply CSS transform scaling if container is still too wide for mobile
+        const maxWidth = screenWidth * 0.96; // use 96% of screen width
         
         if (isMobile && containerWidth > maxWidth) {
           const mobileScale = maxWidth / containerWidth;
           container.style.transform = `scale(${mobileScale})`;
           container.style.transformOrigin = 'top center';
           container.style.margin = '0 auto';
-          debugLog(`🔍 Applied scale: ${mobileScale.toFixed(2)}x (${containerWidth}→${(containerWidth * mobileScale).toFixed(0)}px)`);
         } else {
           container.style.transform = 'none';
-          debugLog(`✅ No extra scaling needed`);
         }
 
         // Add aisle divider lines for visual appeal
@@ -623,17 +588,14 @@
           });
         });
 
-        debugLog(`🪑 Generated ${seatCounter} seats in ${totalRows} rows`);
-        debugLog(`📐 Container: ${containerWidth}x${containerHeight}px`);
-        
         // Ensure container is visible after generating seats
         if (seatCounter > 0) {
           container.style.display = "inline-block";
           container.style.visibility = "visible";
           container.style.opacity = "1";
-          debugLog(`✅ Container visible with ${seatCounter} seats`);
+          console.log(`✅ Generated ${seatCounter} seats in ${totalRows} rows`);
         } else {
-          debugLog("⚠️ WARNING: No seats generated!");
+          console.warn("⚠️ No seats were generated");
         }
       };
 
