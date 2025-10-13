@@ -27,9 +27,11 @@
         box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08),
           0 3px 8px rgba(0, 0, 0, 0.06);
         padding: 15px;
-        max-width: 95vw; /* Responsive: never wider than viewport */
+        max-width: 98vw; /* Responsive: use more screen space */
         overflow-x: auto; /* Allow horizontal scroll on very small screens */
+        overflow-y: visible;
         min-height: 200px; /* Ensure container has minimum height */
+        -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
       }
       
       /* Make sure container is visible when populated */
@@ -420,21 +422,34 @@
         const isMobile = screenWidth < 768;
         const isTablet = screenWidth >= 768 && screenWidth < 1024;
         
-        // Scale factor based on screen size - optimized to fit screen
+        // Scale factor based on screen size - BIGGER seats, LESS spacing on mobile
         let scaleFactor = 1;
+        let seatSize, seatSpacing, aisleWidth, edgeMargin;
+        
         if (isMobile) {
-          // Calculate scale to fit screen width perfectly
-          const availableWidth = screenWidth * 0.90; // Use 90% of screen
-          const baseWidth = totalRows * 55; // Approximate width with default sizing
-          scaleFactor = Math.min(1.5, availableWidth / baseWidth); // Max 1.5x, but scale down if needed
+          // Mobile: Bigger seats, compact spacing
+          const availableWidth = screenWidth * 0.92; // Use more screen space
+          const baseWidth = totalRows * 45; // Tighter base calculation
+          scaleFactor = Math.min(2.0, availableWidth / baseWidth); // Allow up to 2x size!
+          
+          seatSize = Math.max(35, 40 * scaleFactor); // BIGGER seats (min 35px)
+          seatSpacing = Math.max(8, 15 * scaleFactor); // LESS spacing (min 8px)
+          aisleWidth = seatSpacing;
+          edgeMargin = Math.max(8, 15 * scaleFactor); // Smaller margins
         } else if (isTablet) {
           scaleFactor = 1.0;
+          seatSize = 30;
+          seatSpacing = 25;
+          aisleWidth = seatSpacing;
+          edgeMargin = 25;
+        } else {
+          // Desktop
+          scaleFactor = 1.0;
+          seatSize = 30;
+          seatSpacing = 25;
+          aisleWidth = seatSpacing;
+          edgeMargin = 25;
         }
-        
-        const seatSize = Math.max(25, 30 * scaleFactor);
-        const seatSpacing = Math.max(18, 25 * scaleFactor);
-        const aisleWidth = seatSpacing;
-        const edgeMargin = Math.max(12, 25 * scaleFactor);
 
         // Calculate dynamic container dimensions with driver area
         const driverAreaWidth = Math.max(40, 60 * scaleFactor); // Scaled driver area
@@ -461,10 +476,11 @@
         busImage.style.height = `${containerHeight}px`;
 
         // Apply CSS transform scaling if container is still too wide for mobile
-        const maxWidth = screenWidth * 0.96; // use 96% of screen width
+        // But prefer to keep seats big rather than scaling down too much
+        const maxWidth = screenWidth * 0.98; // use 98% of screen width
         
         if (isMobile && containerWidth > maxWidth) {
-          const mobileScale = maxWidth / containerWidth;
+          const mobileScale = Math.max(0.85, maxWidth / containerWidth); // Don't scale below 85%
           container.style.transform = `scale(${mobileScale})`;
           container.style.transformOrigin = 'top center';
           container.style.margin = '0 auto';
