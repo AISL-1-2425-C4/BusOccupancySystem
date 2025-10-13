@@ -177,17 +177,41 @@
         padding: 20px;
         font-size: 18px;
         color: #666;
+        background: #f0f0f0;
+        border-radius: 8px;
+        margin: 20px auto;
+        max-width: 90%;
+      }
+      
+      .loading::after {
+        content: "...";
+        animation: dots 1.5s steps(4, end) infinite;
+      }
+      
+      @keyframes dots {
+        0%, 20% { content: "."; }
+        40% { content: ".."; }
+        60%, 100% { content: "..."; }
       }
 
       .error {
         text-align: center;
         padding: 20px;
-        font-size: 18px;
-        color: red;
-        background-color: #ffe6e6;
-        border-radius: 5px;
+        font-size: 16px;
+        color: #d32f2f;
+        background-color: #ffebee;
+        border: 2px solid #ef5350;
+        border-radius: 8px;
         margin: 20px auto;
-        max-width: 600px;
+        max-width: 90%;
+        font-weight: 500;
+      }
+      
+      @media (max-width: 768px) {
+        .loading, .error {
+          font-size: 14px;
+          padding: 15px;
+        }
       }
 
       /* JSON output styling removed for cleaner frontend */
@@ -555,6 +579,16 @@
         console.log(
           `Container dimensions: ${containerWidth}x${containerHeight}px`
         );
+        
+        // Ensure container is visible after generating seats
+        if (seatCounter > 0) {
+          container.style.display = "inline-block";
+          container.style.visibility = "visible";
+          container.style.opacity = "1";
+          console.log("✅ Container made visible with", seatCounter, "seats");
+        } else {
+          console.warn("⚠️ No seats were generated!");
+        }
       };
 
       // Add aisle divider lines
