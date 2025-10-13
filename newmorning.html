@@ -441,6 +441,16 @@
         const driverAreaWidth = Math.max(40, 60 * scaleFactor); // Scaled driver area
         
         console.log(`📱 Responsive scaling: screen=${screenWidth}px, scale=${scaleFactor.toFixed(2)}, seatSize=${seatSize.toFixed(1)}px`);
+        // After computing containerWidth:
+        if (isMobile && containerWidth > screenWidth * 0.95) {
+          const mobileScale = (screenWidth * 0.9) / containerWidth; // Scale to fit
+          container.style.transform = `scale(${mobileScale})`;
+          container.style.transformOrigin = 'top center';
+          console.log(`📱 Mobile scale applied: ${mobileScale.toFixed(2)}`);
+        } else {
+          container.style.transform = 'none';
+        }
+
         const containerWidth =
           totalRows * (seatSize + seatSpacing) +
           edgeMargin * 2 +
