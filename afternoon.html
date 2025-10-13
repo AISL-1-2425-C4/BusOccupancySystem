@@ -1,905 +1,1042 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TEST</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
-        body { font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: white;
-            text-align: center;
-        }
-        .image-container {
-            position: relative; 
-            width: auto;
-            height: auto; /* Adjust as needed */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap");
+      body {
+        font-family: "Poppins", sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: white;
+        text-align: center;
+      }
+      .image-container {
+        position: relative;
+        width: auto;
+        height: auto; /* Adjust as needed */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
 
-        img {
-            max-width: 100%;
-            height: auto;
-        }
+      img {
+        max-width: 100%;
+        height: auto;
+      }
 
-        h2 {
-            font-family: 'Karla', sans-serif;
-        }
+      h2 {
+        font-family: "Karla", sans-serif;
+      }
 
-        .custom-image11 {
-            position: absolute;
-            top: auto; /* Moves it 33% down from the container’s top */
-            left: auto; /* Moves it 50% from the left */
-            transform: translate(-50%, -50%); /* Centers the element */
-            width: 25px;
-            margin-top: -105px; /* Move seat down */
-            margin-left: -300px; 
-        }
+      .custom-image11 {
+        position: absolute;
+        top: auto; /* Moves it 33% down from the container’s top */
+        left: auto; /* Moves it 50% from the left */
+        transform: translate(-50%, -50%); /* Centers the element */
+        width: 25px;
+        margin-top: -105px; /* Move seat down */
+        margin-left: -300px;
+      }
 
-        .custom-image12 {
-            position: absolute;
-            top: auto; /* Moves it 33% down from the container’s top */
-            left: auto; /* Moves it 50% from the left */
-            transform: translate(-50%, -50%); /* Centers the element */
-            width: 25px;
-            margin-top: -47px; /* Move seat down */
-            margin-left: -300px; 
-            
-        }
-        .custom-image13 {
-            position: absolute;
-            top: auto; /* Moves it 33% down from the container’s top */
-            left: auto; /* Moves it 50% from the left */
-            transform: translate(-50%, -50%); /* Centers the element */
-            width: 25px;
-            margin-top: 85px; /* Move seat down */
-            margin-left: -300px; 
-            
-        }
-        .custom-image14 {
-            position: absolute;
-            top: auto; /* Moves it 33% down from the container’s top */
-            left: auto; /* Moves it 50% from the left */
-            transform: translate(-50%, -50%); /* Centers the element */
-            width: 25px;
-            margin-top: 143px; /* Move seat down */
-            margin-left: -300px; 
-            
-            
-        }
+      .custom-image12 {
+        position: absolute;
+        top: auto; /* Moves it 33% down from the container’s top */
+        left: auto; /* Moves it 50% from the left */
+        transform: translate(-50%, -50%); /* Centers the element */
+        width: 25px;
+        margin-top: -47px; /* Move seat down */
+        margin-left: -300px;
+      }
+      .custom-image13 {
+        position: absolute;
+        top: auto; /* Moves it 33% down from the container’s top */
+        left: auto; /* Moves it 50% from the left */
+        transform: translate(-50%, -50%); /* Centers the element */
+        width: 25px;
+        margin-top: 85px; /* Move seat down */
+        margin-left: -300px;
+      }
+      .custom-image14 {
+        position: absolute;
+        top: auto; /* Moves it 33% down from the container’s top */
+        left: auto; /* Moves it 50% from the left */
+        transform: translate(-50%, -50%); /* Centers the element */
+        width: 25px;
+        margin-top: 143px; /* Move seat down */
+        margin-left: -300px;
+      }
 
-        .custom-image21 {
-            position: absolute;
-            top: auto; /* Moves it 33% down from the container’s top */
-            left: auto; /* Moves it 50% from the left */
-            transform: translate(-50%, -50%); /* Centers the element */
-            width: 25px;
-            margin-top: -105px; /* Move seat down */
-            margin-left: -195px;
-            
-        }
-        .custom-image22 {
-            position: absolute;
-            top: auto; /* Moves it 33% down from the container’s top */
-            left: auto; /* Moves it 50% from the left */
-            transform: translate(-50%, -50%); /* Centers the element */
-            width: 25px;
-            margin-top: -47px; /* Move seat down */
-            margin-left: -195px; 
-            
-        }
-        .custom-image23 {
-            position: absolute;
-            top: auto; /* Moves it 33% down from the container’s top */
-            left: auto; /* Moves it 50% from the left */
-            transform: translate(-50%, -50%); /* Centers the element */
-            width: 25px;
-            margin-top: 85px; /* Move seat down */
-            margin-left: -195px; 
-            
-        }
-        .custom-image24 {
-            position: absolute;
-            top: auto; /* Moves it 33% down from the container’s top */
-            left: auto; /* Moves it 50% from the left */
-            transform: translate(-50%, -50%); /* Centers the element */
-            width: 25px;
-            margin-top: 143px; /* Move seat down */
-            margin-left: -195px; 
-            
-        }
+      .custom-image21 {
+        position: absolute;
+        top: auto; /* Moves it 33% down from the container’s top */
+        left: auto; /* Moves it 50% from the left */
+        transform: translate(-50%, -50%); /* Centers the element */
+        width: 25px;
+        margin-top: -105px; /* Move seat down */
+        margin-left: -195px;
+      }
+      .custom-image22 {
+        position: absolute;
+        top: auto; /* Moves it 33% down from the container’s top */
+        left: auto; /* Moves it 50% from the left */
+        transform: translate(-50%, -50%); /* Centers the element */
+        width: 25px;
+        margin-top: -47px; /* Move seat down */
+        margin-left: -195px;
+      }
+      .custom-image23 {
+        position: absolute;
+        top: auto; /* Moves it 33% down from the container’s top */
+        left: auto; /* Moves it 50% from the left */
+        transform: translate(-50%, -50%); /* Centers the element */
+        width: 25px;
+        margin-top: 85px; /* Move seat down */
+        margin-left: -195px;
+      }
+      .custom-image24 {
+        position: absolute;
+        top: auto; /* Moves it 33% down from the container’s top */
+        left: auto; /* Moves it 50% from the left */
+        transform: translate(-50%, -50%); /* Centers the element */
+        width: 25px;
+        margin-top: 143px; /* Move seat down */
+        margin-left: -195px;
+      }
 
-        .custom-image31 {
-            position: absolute;
-            top: auto; /* Moves it 33% down from the container’s top */
-            left: auto; /* Moves it 50% from the left */
-            transform: translate(-50%, -50%); /* Centers the element */
-            width: 25px;
-            margin-top: -105px; /* Move seat down */
-            margin-left: -100px;
-            
-        }
-        .custom-image32 {
-            position: absolute;
-            top: auto; /* Moves it 33% down from the container’s top */
-            left: auto; /* Moves it 50% from the left */
-            transform: translate(-50%, -50%); /* Centers the element */
-            width: 25px;
-            margin-top: -47px; /* Move seat down */
-            margin-left: -100px;
-            
-        }
-        .custom-image33 {
-            position: absolute;
-            top: auto; /* Moves it 33% down from the container’s top */
-            left: auto; /* Moves it 50% from the left */
-            transform: translate(-50%, -50%); /* Centers the element */
-            width: 25px;
-            margin-top: 85px; /* Move seat down */
-            margin-left: -100px; 
-            
-        }
-        .custom-image34 {
-            position: absolute;
-            top: auto; /* Moves it 33% down from the container’s top */
-            left: auto; /* Moves it 50% from the left */
-            transform: translate(-50%, -50%); /* Centers the element */
-            width: 25px;
-            margin-top: 143px; /* Move seat down */
-            margin-left: -100px; 
-            
-        }
+      .custom-image31 {
+        position: absolute;
+        top: auto; /* Moves it 33% down from the container’s top */
+        left: auto; /* Moves it 50% from the left */
+        transform: translate(-50%, -50%); /* Centers the element */
+        width: 25px;
+        margin-top: -105px; /* Move seat down */
+        margin-left: -100px;
+      }
+      .custom-image32 {
+        position: absolute;
+        top: auto; /* Moves it 33% down from the container’s top */
+        left: auto; /* Moves it 50% from the left */
+        transform: translate(-50%, -50%); /* Centers the element */
+        width: 25px;
+        margin-top: -47px; /* Move seat down */
+        margin-left: -100px;
+      }
+      .custom-image33 {
+        position: absolute;
+        top: auto; /* Moves it 33% down from the container’s top */
+        left: auto; /* Moves it 50% from the left */
+        transform: translate(-50%, -50%); /* Centers the element */
+        width: 25px;
+        margin-top: 85px; /* Move seat down */
+        margin-left: -100px;
+      }
+      .custom-image34 {
+        position: absolute;
+        top: auto; /* Moves it 33% down from the container’s top */
+        left: auto; /* Moves it 50% from the left */
+        transform: translate(-50%, -50%); /* Centers the element */
+        width: 25px;
+        margin-top: 143px; /* Move seat down */
+        margin-left: -100px;
+      }
 
-        .custom-image41 {
-            position: absolute;
-            top: auto; /* Moves it 33% down from the container’s top */
-            left: auto; /* Moves it 50% from the left */
-            transform: translate(-50%, -50%); /* Centers the element */
-            width: 25px;
-            margin-top: -105px; /* Move seat down */
-            margin-left: -15px;
-            
-        }
-        .custom-image42 {
-            position: absolute;
-            top: auto; /* Moves it 33% down from the container’s top */
-            left: auto; /* Moves it 50% from the left */
-            transform: translate(-50%, -50%); /* Centers the element */
-            width: 25px;
-            margin-top: -47px; /* Move seat down */
-            margin-left: -15px;
-            
-        }
-        .custom-image43 {
-            position: absolute;
-            top: auto; /* Moves it 33% down from the container’s top */
-            left: auto; /* Moves it 50% from the left */
-            transform: translate(-50%, -50%); /* Centers the element */
-            width: 25px;
-            margin-top: 85px; /* Move seat down */
-            margin-left: -15px; 
-            
-        }
-        .custom-image44 {
-            position: absolute;
-            top: auto; /* Moves it 33% down from the container’s top */
-            left: auto; /* Moves it 50% from the left */
-            transform: translate(-50%, -50%); /* Centers the element */
-            width: 25px;
-            margin-top: 143px; /* Move seat down */
-            margin-left: -15px;
-            
-        }
+      .custom-image41 {
+        position: absolute;
+        top: auto; /* Moves it 33% down from the container’s top */
+        left: auto; /* Moves it 50% from the left */
+        transform: translate(-50%, -50%); /* Centers the element */
+        width: 25px;
+        margin-top: -105px; /* Move seat down */
+        margin-left: -15px;
+      }
+      .custom-image42 {
+        position: absolute;
+        top: auto; /* Moves it 33% down from the container’s top */
+        left: auto; /* Moves it 50% from the left */
+        transform: translate(-50%, -50%); /* Centers the element */
+        width: 25px;
+        margin-top: -47px; /* Move seat down */
+        margin-left: -15px;
+      }
+      .custom-image43 {
+        position: absolute;
+        top: auto; /* Moves it 33% down from the container’s top */
+        left: auto; /* Moves it 50% from the left */
+        transform: translate(-50%, -50%); /* Centers the element */
+        width: 25px;
+        margin-top: 85px; /* Move seat down */
+        margin-left: -15px;
+      }
+      .custom-image44 {
+        position: absolute;
+        top: auto; /* Moves it 33% down from the container’s top */
+        left: auto; /* Moves it 50% from the left */
+        transform: translate(-50%, -50%); /* Centers the element */
+        width: 25px;
+        margin-top: 143px; /* Move seat down */
+        margin-left: -15px;
+      }
 
-        .custom-image51 {
-            position: absolute;
-            top: auto; /* Moves it 33% down from the container’s top */
-            left: auto; /* Moves it 50% from the left */
-            transform: translate(-50%, -50%); /* Centers the element */
-            width: 25px;
-            margin-top: -105px; /* Move seat down */
-            margin-left: 70px;
-            
-        }
-        .custom-image52 {
-            position: absolute;
-            top: auto; /* Moves it 33% down from the container’s top */
-            left: auto; /* Moves it 50% from the left */
-            transform: translate(-50%, -50%); /* Centers the element */
-            width: 25px;
-            margin-top: -47px; /* Move seat down */
-            margin-left: 70px;
-            
-        }
-        .custom-image53 {
-            position: absolute;
-            top: auto; /* Moves it 33% down from the container’s top */
-            left: auto; /* Moves it 50% from the left */
-            transform: translate(-50%, -50%); /* Centers the element */
-            width: 25px;
-            margin-top: 85px; /* Move seat down */
-            margin-left: 70px;
-            
-        }
-        .custom-image54 {
-            position: absolute;
-            top: auto; /* Moves it 33% down from the container’s top */
-            left: auto; /* Moves it 50% from the left */
-            transform: translate(-50%, -50%); /* Centers the element */
-            width: 25px;
-            margin-top: 143px; /* Move seat down */
-            margin-left: 70px;
-            
-        }
+      .custom-image51 {
+        position: absolute;
+        top: auto; /* Moves it 33% down from the container’s top */
+        left: auto; /* Moves it 50% from the left */
+        transform: translate(-50%, -50%); /* Centers the element */
+        width: 25px;
+        margin-top: -105px; /* Move seat down */
+        margin-left: 70px;
+      }
+      .custom-image52 {
+        position: absolute;
+        top: auto; /* Moves it 33% down from the container’s top */
+        left: auto; /* Moves it 50% from the left */
+        transform: translate(-50%, -50%); /* Centers the element */
+        width: 25px;
+        margin-top: -47px; /* Move seat down */
+        margin-left: 70px;
+      }
+      .custom-image53 {
+        position: absolute;
+        top: auto; /* Moves it 33% down from the container’s top */
+        left: auto; /* Moves it 50% from the left */
+        transform: translate(-50%, -50%); /* Centers the element */
+        width: 25px;
+        margin-top: 85px; /* Move seat down */
+        margin-left: 70px;
+      }
+      .custom-image54 {
+        position: absolute;
+        top: auto; /* Moves it 33% down from the container’s top */
+        left: auto; /* Moves it 50% from the left */
+        transform: translate(-50%, -50%); /* Centers the element */
+        width: 25px;
+        margin-top: 143px; /* Move seat down */
+        margin-left: 70px;
+      }
 
+      .custom-image61 {
+        position: absolute;
+        top: auto; /* Moves it 33% down from the container’s top */
+        left: auto; /* Moves it 50% from the left */
+        transform: translate(-50%, -50%); /* Centers the element */
+        width: 25px;
+        margin-top: -105px; /* Move seat down */
+        margin-left: 155px;
+      }
+      .custom-image62 {
+        position: absolute;
+        top: auto; /* Moves it 33% down from the container’s top */
+        left: auto; /* Moves it 50% from the left */
+        transform: translate(-50%, -50%); /* Centers the element */
+        width: 25px;
+        margin-top: -47px; /* Move seat down */
+        margin-left: 155px;
+      }
+      .custom-image63 {
+        position: absolute;
+        top: auto; /* Moves it 33% down from the container’s top */
+        left: auto; /* Moves it 50% from the left */
+        transform: translate(-50%, -50%); /* Centers the element */
+        width: 25px;
+        margin-top: 85px; /* Move seat down */
+        margin-left: 155px;
+      }
+      .custom-image64 {
+        position: absolute;
+        top: auto; /* Moves it 33% down from the container’s top */
+        left: auto; /* Moves it 50% from the left */
+        transform: translate(-50%, -50%); /* Centers the element */
+        width: 25px;
+        margin-top: 143px; /* Move seat down */
+        margin-left: 155px;
+      }
 
-        .custom-image61 {
-            position: absolute;
-            top: auto; /* Moves it 33% down from the container’s top */
-            left: auto; /* Moves it 50% from the left */
-            transform: translate(-50%, -50%); /* Centers the element */
-            width: 25px;
-            margin-top: -105px; /* Move seat down */
-            margin-left: 155px;
-            
-        }
-        .custom-image62 {
-            position: absolute;
-            top: auto; /* Moves it 33% down from the container’s top */
-            left: auto; /* Moves it 50% from the left */
-            transform: translate(-50%, -50%); /* Centers the element */
-            width: 25px;
-            margin-top: -47px; /* Move seat down */
-            margin-left: 155px;
-            
-        }
-        .custom-image63 {
-            position: absolute;
-            top: auto; /* Moves it 33% down from the container’s top */
-            left: auto; /* Moves it 50% from the left */
-            transform: translate(-50%, -50%); /* Centers the element */
-            width: 25px;
-            margin-top: 85px; /* Move seat down */
-            margin-left: 155px;
-            
-        }
-        .custom-image64 {
-            position: absolute;
-            top: auto; /* Moves it 33% down from the container’s top */
-            left: auto; /* Moves it 50% from the left */
-            transform: translate(-50%, -50%); /* Centers the element */
-            width: 25px;
-            margin-top: 143px; /* Move seat down */
-            margin-left: 155px;
-            
-        }
+      .custom-image71 {
+        position: absolute;
+        top: auto; /* Moves it 33% down from the container’s top */
+        left: auto; /* Moves it 50% from the left */
+        transform: translate(-50%, -50%); /* Centers the element */
+        width: 25px;
+        margin-top: -105px; /* Move seat down */
+        margin-left: 240px;
+      }
+      .custom-image72 {
+        position: absolute;
+        top: auto; /* Moves it 33% down from the container’s top */
+        left: auto; /* Moves it 50% from the left */
+        transform: translate(-50%, -50%); /* Centers the element */
+        width: 25px;
+        margin-top: -47px; /* Move seat down */
+        margin-left: 240px;
+      }
+      .custom-image73 {
+        position: absolute;
+        top: auto; /* Moves it 33% down from the container’s top */
+        left: auto; /* Moves it 50% from the left */
+        transform: translate(-50%, -50%); /* Centers the element */
+        width: 25px;
+        margin-top: 85px; /* Move seat down */
+        margin-left: 240px;
+      }
+      .custom-image74 {
+        position: absolute;
+        top: auto; /* Moves it 33% down from the container’s top */
+        left: auto; /* Moves it 50% from the left */
+        transform: translate(-50%, -50%); /* Centers the element */
+        width: 25px;
+        margin-top: 143px; /* Move seat down */
+        margin-left: 240px;
+      }
 
-        .custom-image71 {
-            position: absolute;
-            top: auto; /* Moves it 33% down from the container’s top */
-            left: auto; /* Moves it 50% from the left */
-            transform: translate(-50%, -50%); /* Centers the element */
-            width: 25px;
-            margin-top: -105px; /* Move seat down */
-            margin-left: 240px;
-            
-        }
-        .custom-image72 {
-            position: absolute;
-            top: auto; /* Moves it 33% down from the container’s top */
-            left: auto; /* Moves it 50% from the left */
-            transform: translate(-50%, -50%); /* Centers the element */
-            width: 25px;
-            margin-top: -47px; /* Move seat down */
-            margin-left: 240px;
-            
-        }
-        .custom-image73 {
-            position: absolute;
-            top: auto; /* Moves it 33% down from the container’s top */
-            left: auto; /* Moves it 50% from the left */
-            transform: translate(-50%, -50%); /* Centers the element */
-            width: 25px;
-            margin-top: 85px; /* Move seat down */
-            margin-left: 240px;
-            
-        }
-        .custom-image74 {
-            position: absolute;
-            top: auto; /* Moves it 33% down from the container’s top */
-            left: auto; /* Moves it 50% from the left */
-            transform: translate(-50%, -50%); /* Centers the element */
-            width: 25px;
-            margin-top: 143px; /* Move seat down */
-            margin-left: 240px;
-            
-        }
+      .custom-image81 {
+        position: absolute;
+        top: auto; /* Moves it 33% down from the container’s top */
+        left: auto; /* Moves it 50% from the left */
+        transform: translate(-50%, -50%); /* Centers the element */
+        width: 25px;
+        margin-top: -105px; /* Move seat down */
+        margin-left: 325px;
+      }
+      .custom-image82 {
+        position: absolute;
+        top: auto; /* Moves it 33% down from the container’s top */
+        left: auto; /* Moves it 50% from the left */
+        transform: translate(-50%, -50%); /* Centers the element */
+        width: 25px;
+        margin-top: -47px; /* Move seat down */
+        margin-left: 325px;
+      }
+      .custom-image83 {
+        position: absolute;
+        top: auto; /* Moves it 33% down from the container’s top */
+        left: auto; /* Moves it 50% from the left */
+        transform: translate(-50%, -50%); /* Centers the element */
+        width: 25px;
+        margin-top: 85px; /* Move seat down */
+        margin-left: 325px;
+      }
+      .custom-image84 {
+        position: absolute;
+        top: auto; /* Moves it 33% down from the container’s top */
+        left: auto; /* Moves it 50% from the left */
+        transform: translate(-50%, -50%); /* Centers the element */
+        width: 25px;
+        margin-top: 143px; /* Move seat down */
+        margin-left: 325px;
+      }
 
-        .custom-image81 {
-            position: absolute;
-            top: auto; /* Moves it 33% down from the container’s top */
-            left: auto; /* Moves it 50% from the left */
-            transform: translate(-50%, -50%); /* Centers the element */
-            width: 25px;
-            margin-top: -105px; /* Move seat down */
-            margin-left: 325px;
-            
-        }
-        .custom-image82 {
-            position: absolute;
-            top: auto; /* Moves it 33% down from the container’s top */
-            left: auto; /* Moves it 50% from the left */
-            transform: translate(-50%, -50%); /* Centers the element */
-            width: 25px;
-            margin-top: -47px; /* Move seat down */
-            margin-left: 325px;
-            
-        }
-        .custom-image83 {
-            position: absolute;
-            top: auto; /* Moves it 33% down from the container’s top */
-            left: auto; /* Moves it 50% from the left */
-            transform: translate(-50%, -50%); /* Centers the element */
-            width: 25px;
-            margin-top: 85px; /* Move seat down */
-            margin-left: 325px;
-            
-        }
-        .custom-image84 {
-            position: absolute;
-            top: auto; /* Moves it 33% down from the container’s top */
-            left: auto; /* Moves it 50% from the left */
-            transform: translate(-50%, -50%); /* Centers the element */
-            width: 25px;
-            margin-top: 143px; /* Move seat down */
-            margin-left: 325px;
-            
-        }
+      .custom-image91 {
+        position: absolute;
+        top: auto; /* Moves it 33% down from the container’s top */
+        left: auto; /* Moves it 50% from the left */
+        transform: translate(-50%, -50%); /* Centers the element */
+        width: 25px;
+        margin-top: -105px; /* Move seat down */
+        margin-left: 410px;
+      }
+      .custom-image92 {
+        position: absolute;
+        top: auto; /* Moves it 33% down from the container’s top */
+        left: auto; /* Moves it 50% from the left */
+        transform: translate(-50%, -50%); /* Centers the element */
+        width: 25px;
+        margin-top: -47px; /* Move seat down */
+        margin-left: 410px;
+      }
+      .custom-image93 {
+        position: absolute;
+        top: auto; /* Moves it 33% down from the container’s top */
+        left: auto; /* Moves it 50% from the left */
+        transform: translate(-50%, -50%); /* Centers the element */
+        width: 25px;
+        margin-top: 85px; /* Move seat down */
+        margin-left: 410px;
+      }
+      .custom-image94 {
+        position: absolute;
+        top: auto; /* Moves it 33% down from the container’s top */
+        left: auto; /* Moves it 50% from the left */
+        transform: translate(-50%, -50%); /* Centers the element */
+        width: 25px;
+        margin-top: 143px; /* Move seat down */
+        margin-left: 410px;
+      }
 
-        .custom-image91 {
-            position: absolute;
-            top: auto; /* Moves it 33% down from the container’s top */
-            left: auto; /* Moves it 50% from the left */
-            transform: translate(-50%, -50%); /* Centers the element */
-            width: 25px;
-            margin-top: -105px; /* Move seat down */
-            margin-left: 410px;
-            
-        }
-        .custom-image92 {
-            position: absolute;
-            top: auto; /* Moves it 33% down from the container’s top */
-            left: auto; /* Moves it 50% from the left */
-            transform: translate(-50%, -50%); /* Centers the element */
-            width: 25px;
-            margin-top: -47px; /* Move seat down */
-            margin-left: 410px;
-            
-        }
-        .custom-image93 {
-            position: absolute;
-            top: auto; /* Moves it 33% down from the container’s top */
-            left: auto; /* Moves it 50% from the left */
-            transform: translate(-50%, -50%); /* Centers the element */
-            width: 25px;
-            margin-top: 85px; /* Move seat down */
-            margin-left: 410px;
-            
-        }
-        .custom-image94 {
-            position: absolute;
-            top: auto; /* Moves it 33% down from the container’s top */
-            left: auto; /* Moves it 50% from the left */
-            transform: translate(-50%, -50%); /* Centers the element */
-            width: 25px;
-            margin-top: 143px; /* Move seat down */
-            margin-left: 410px;
-            
-        }
+      .custom-image101 {
+        position: absolute;
+        top: auto; /* Moves it 33% down from the container’s top */
+        left: auto; /* Moves it 50% from the left */
+        transform: translate(-50%, -50%); /* Centers the element */
+        width: 25px;
+        margin-top: -105px; /* Move seat down */
+        margin-left: 620px;
+      }
+      .custom-image102 {
+        position: absolute;
+        top: auto; /* Moves it 33% down from the container’s top */
+        left: auto; /* Moves it 50% from the left */
+        transform: translate(-50%, -50%); /* Centers the element */
+        width: 25px;
+        margin-top: -47px; /* Move seat down */
+        margin-left: 620px;
+      }
+      .custom-image103 {
+        position: absolute;
+        top: auto; /* Moves it 33% down from the container’s top */
+        left: auto; /* Moves it 50% from the left */
+        transform: translate(-50%, -50%); /* Centers the element */
+        width: 25px;
+        margin-top: 85px; /* Move seat down */
+        margin-left: 620px;
+      }
+      .custom-image104 {
+        position: absolute;
+        top: auto; /* Moves it 33% down from the container’s top */
+        left: auto; /* Moves it 50% from the left */
+        transform: translate(-50%, -50%); /* Centers the element */
+        width: 25px;
+        margin-top: 143px; /* Move seat down */
+        margin-left: 620px;
+      }
 
-        .custom-image101 {
-            position: absolute;
-            top: auto; /* Moves it 33% down from the container’s top */
-            left: auto; /* Moves it 50% from the left */
-            transform: translate(-50%, -50%); /* Centers the element */
-            width: 25px;
-            margin-top: -105px; /* Move seat down */
-            margin-left: 620px;
-            
-        }
-        .custom-image102 {
-            position: absolute;
-            top: auto; /* Moves it 33% down from the container’s top */
-            left: auto; /* Moves it 50% from the left */
-            transform: translate(-50%, -50%); /* Centers the element */
-            width: 25px;
-            margin-top: -47px; /* Move seat down */
-            margin-left: 620px;
-            
-        }
-        .custom-image103 {
-            position: absolute;
-            top: auto; /* Moves it 33% down from the container’s top */
-            left: auto; /* Moves it 50% from the left */
-            transform: translate(-50%, -50%); /* Centers the element */
-            width: 25px;
-            margin-top: 85px; /* Move seat down */
-            margin-left: 620px;
-            
-        }
-        .custom-image104 {
-            position: absolute;
-            top: auto; /* Moves it 33% down from the container’s top */
-            left: auto; /* Moves it 50% from the left */
-            transform: translate(-50%, -50%); /* Centers the element */
-            width: 25px;
-            margin-top: 143px; /* Move seat down */
-            margin-left: 620px;
-            
-        }
+      .custom-image105 {
+        position: absolute;
+        top: auto; /* Moves it 33% down from the container’s top */
+        left: auto; /* Moves it 50% from the left */
+        transform: translate(-50%, -50%); /* Centers the element */
+        width: 25px;
+        margin-top: 20.5px; /* Move seat down */
+        margin-left: 620px;
+      }
 
-        .custom-image105 {
-            position: absolute;
-            top: auto; /* Moves it 33% down from the container’s top */
-            left: auto; /* Moves it 50% from the left */
-            transform: translate(-50%, -50%); /* Centers the element */
-            width: 25px;
-            margin-top: 20.5px; /* Move seat down */
-            margin-left: 620px;
-            
-        }
-
-        .custom-image111 {
-            position: absolute;
-            top: auto; /* Moves it 33% down from the container’s top */
-            left: auto; /* Moves it 50% from the left */
-            transform: translate(-50%, -50%); /* Centers the element */
-            width: 25px;
-            margin-top: -105px; /* Move seat down */
-            margin-left: 620px;
-            
-        }
-        .custom-image112 {
-            position: absolute;
-            top: auto; /* Moves it 33% down from the container’s top */
-            left: auto; /* Moves it 50% from the left */
-            transform: translate(-50%, -50%); /* Centers the element */
-            width: 25px;
-            margin-top: -47px; /* Move seat down */
-            margin-left: 620px;
-            
-        }
-        .custom-image113 {
-            position: absolute;
-            top: auto; /* Moves it 33% down from the container’s top */
-            left: auto; /* Moves it 50% from the left */
-            transform: translate(-50%, -50%); /* Centers the element */
-            width: 25px;
-            margin-top: 85px; /* Move seat down */
-            margin-left: 620px;
-            
-        }
-        .custom-image114 {
-            position: absolute;
-            top: auto; /* Moves it 33% down from the container’s top */
-            left: auto; /* Moves it 50% from the left */
-            transform: translate(-50%, -50%); /* Centers the element */
-            width: 25px;
-            margin-top: 143px; /* Move seat down */
-            margin-left: 620px;
-            
-        }
-        .custom-image115 {
-            position: absolute;
-            top: auto; /* Moves it 33% down from the container’s top */
-            left: auto; /* Moves it 50% from the left */
-            transform: translate(-50%, -50%); /* Centers the element */
-            width: 25px;
-            margin-top: 20.5px; /* Move seat down */
-            margin-left: 620px;
-            
-        }
-        .topnav {
-            overflow: hidden;
-            background-color: #333;
-            font-family: 'Karla', sans-serif;
-            display: flex;
-            align-items: center;
-            padding: 10px;
-        }
-        .topnav img {
-            height: 70px;
-            width: 100px;
-            margin-right: 15px;
-        }
-        .topnav a {
-            color: #f2f2f2;
-            text-align: center;
-            padding: 14px 16px;
-            text-decoration: none;
-            font-size: 17px;
-        }
-        .topnav a:hover {
-            background-color: #ddd;
-            color: black;
-        }
-        .topnav a.split {
-            margin-left: auto;
-            background-color: #04AA6D;
-            color: white;
-        }
+      .custom-image111 {
+        position: absolute;
+        top: auto; /* Moves it 33% down from the container’s top */
+        left: auto; /* Moves it 50% from the left */
+        transform: translate(-50%, -50%); /* Centers the element */
+        width: 25px;
+        margin-top: -105px; /* Move seat down */
+        margin-left: 620px;
+      }
+      .custom-image112 {
+        position: absolute;
+        top: auto; /* Moves it 33% down from the container’s top */
+        left: auto; /* Moves it 50% from the left */
+        transform: translate(-50%, -50%); /* Centers the element */
+        width: 25px;
+        margin-top: -47px; /* Move seat down */
+        margin-left: 620px;
+      }
+      .custom-image113 {
+        position: absolute;
+        top: auto; /* Moves it 33% down from the container’s top */
+        left: auto; /* Moves it 50% from the left */
+        transform: translate(-50%, -50%); /* Centers the element */
+        width: 25px;
+        margin-top: 85px; /* Move seat down */
+        margin-left: 620px;
+      }
+      .custom-image114 {
+        position: absolute;
+        top: auto; /* Moves it 33% down from the container’s top */
+        left: auto; /* Moves it 50% from the left */
+        transform: translate(-50%, -50%); /* Centers the element */
+        width: 25px;
+        margin-top: 143px; /* Move seat down */
+        margin-left: 620px;
+      }
+      .custom-image115 {
+        position: absolute;
+        top: auto; /* Moves it 33% down from the container’s top */
+        left: auto; /* Moves it 50% from the left */
+        transform: translate(-50%, -50%); /* Centers the element */
+        width: 25px;
+        margin-top: 20.5px; /* Move seat down */
+        margin-left: 620px;
+      }
+      .topnav {
+        overflow: hidden;
+        background-color: #333;
+        font-family: "Karla", sans-serif;
+        display: flex;
+        align-items: center;
+        padding: 10px;
+      }
+      .topnav img {
+        height: 70px;
+        width: 100px;
+        margin-right: 15px;
+      }
+      .topnav a {
+        color: #f2f2f2;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        font-size: 17px;
+      }
+      .topnav a:hover {
+        background-color: #ddd;
+        color: black;
+      }
+      .topnav a.split {
+        margin-left: auto;
+        background-color: #04aa6d;
+        color: white;
+      }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Karla:wght@400;700&display=swap" rel="stylesheet">
-
-</head>
-<body>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Karla:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
     <div class="topnav">
-        <img src="images/logo.png" alt="Logo">
+      <img src="images/logo.png" alt="Logo" />
 
-        <a href="index.html">Home</a>
-        <a href="aboutus.html">About Us</a>
-        <a href="prob.html" class="split">Contact Us</a>
-      </div>
-    
-    <br>
-    <br>
-    <br>
-    
+      <a href="index.html">Home</a>
+      <a href="aboutus.html">About Us</a>
+      <a href="prob.html" class="split">Contact Us</a>
+    </div>
+
+    <br />
+    <br />
+    <br />
+
     <div class="image-container">
-        <img src="images/bus.jpg" alt="Bus Image">
-        <img id="11" src="images/CHAIRB.jpg" class="custom-image11" alt="Seat Image">
-        <img id="12" src="images/CHAIRB.jpg" class="custom-image12" alt="Seat Image">
-        <img id="13" src="images/CHAIRB.jpg" class="custom-image13" alt="Seat Image">
-        <img id="14" src="images/CHAIRB.jpg" class="custom-image14" alt="Seat Image">
+      <img src="images/bus.jpg" alt="Bus Image" />
+      <img
+        id="11"
+        src="images/CHAIRB.jpg"
+        class="custom-image11"
+        alt="Seat Image"
+      />
+      <img
+        id="12"
+        src="images/CHAIRB.jpg"
+        class="custom-image12"
+        alt="Seat Image"
+      />
+      <img
+        id="13"
+        src="images/CHAIRB.jpg"
+        class="custom-image13"
+        alt="Seat Image"
+      />
+      <img
+        id="14"
+        src="images/CHAIRB.jpg"
+        class="custom-image14"
+        alt="Seat Image"
+      />
 
-        <img id="21" src="images/CHAIRB.jpg" class="custom-image21" alt="Seat Image">
-        <img id="22" src="images/CHAIRB.jpg" class="custom-image22" alt="Seat Image">
-        <img id="23" src="images/CHAIRB.jpg" class="custom-image23" alt="Seat Image">
-        <img id="24" src="images/CHAIRB.jpg" class="custom-image24" alt="Seat Image">
+      <img
+        id="21"
+        src="images/CHAIRB.jpg"
+        class="custom-image21"
+        alt="Seat Image"
+      />
+      <img
+        id="22"
+        src="images/CHAIRB.jpg"
+        class="custom-image22"
+        alt="Seat Image"
+      />
+      <img
+        id="23"
+        src="images/CHAIRB.jpg"
+        class="custom-image23"
+        alt="Seat Image"
+      />
+      <img
+        id="24"
+        src="images/CHAIRB.jpg"
+        class="custom-image24"
+        alt="Seat Image"
+      />
 
-        <img id="31" src="images/CHAIRB.jpg" class="custom-image31" alt="Seat Image">
-        <img id="32" src="images/CHAIRB.jpg" class="custom-image32" alt="Seat Image">
-        <img id="33" src="images/CHAIRB.jpg" class="custom-image33" alt="Seat Image">
-        <img id="34" src="images/CHAIRB.jpg" class="custom-image34" alt="Seat Image">
+      <img
+        id="31"
+        src="images/CHAIRB.jpg"
+        class="custom-image31"
+        alt="Seat Image"
+      />
+      <img
+        id="32"
+        src="images/CHAIRB.jpg"
+        class="custom-image32"
+        alt="Seat Image"
+      />
+      <img
+        id="33"
+        src="images/CHAIRB.jpg"
+        class="custom-image33"
+        alt="Seat Image"
+      />
+      <img
+        id="34"
+        src="images/CHAIRB.jpg"
+        class="custom-image34"
+        alt="Seat Image"
+      />
 
-        <img id="41" src="images/CHAIRB.jpg" class="custom-image41" alt="Seat Image">
-        <img id="42" src="images/CHAIRB.jpg" class="custom-image42" alt="Seat Image">
-        <img id="43" src="images/CHAIRB.jpg" class="custom-image43" alt="Seat Image">
-        <img id="44" src="images/CHAIRB.jpg" class="custom-image44" alt="Seat Image">
+      <img
+        id="41"
+        src="images/CHAIRB.jpg"
+        class="custom-image41"
+        alt="Seat Image"
+      />
+      <img
+        id="42"
+        src="images/CHAIRB.jpg"
+        class="custom-image42"
+        alt="Seat Image"
+      />
+      <img
+        id="43"
+        src="images/CHAIRB.jpg"
+        class="custom-image43"
+        alt="Seat Image"
+      />
+      <img
+        id="44"
+        src="images/CHAIRB.jpg"
+        class="custom-image44"
+        alt="Seat Image"
+      />
 
-        <img id="51" src="images/CHAIRB.jpg" class="custom-image51" alt="Seat Image">
-        <img id="52" src="images/CHAIRB.jpg" class="custom-image52" alt="Seat Image">
-        <img id="53" src="images/CHAIRB.jpg" class="custom-image53" alt="Seat Image">
-        <img id="54" src="images/CHAIRB.jpg" class="custom-image54" alt="Seat Image">
+      <img
+        id="51"
+        src="images/CHAIRB.jpg"
+        class="custom-image51"
+        alt="Seat Image"
+      />
+      <img
+        id="52"
+        src="images/CHAIRB.jpg"
+        class="custom-image52"
+        alt="Seat Image"
+      />
+      <img
+        id="53"
+        src="images/CHAIRB.jpg"
+        class="custom-image53"
+        alt="Seat Image"
+      />
+      <img
+        id="54"
+        src="images/CHAIRB.jpg"
+        class="custom-image54"
+        alt="Seat Image"
+      />
 
-        <img id="61" src="images/CHAIRB.jpg" class="custom-image61" alt="Seat Image">
-        <img id="62" src="images/CHAIRB.jpg" class="custom-image62" alt="Seat Image">
-        <img id="63" src="images/CHAIRB.jpg" class="custom-image63" alt="Seat Image">
-        <img id="64" src="images/CHAIRB.jpg" class="custom-image64" alt="Seat Image">
+      <img
+        id="61"
+        src="images/CHAIRB.jpg"
+        class="custom-image61"
+        alt="Seat Image"
+      />
+      <img
+        id="62"
+        src="images/CHAIRB.jpg"
+        class="custom-image62"
+        alt="Seat Image"
+      />
+      <img
+        id="63"
+        src="images/CHAIRB.jpg"
+        class="custom-image63"
+        alt="Seat Image"
+      />
+      <img
+        id="64"
+        src="images/CHAIRB.jpg"
+        class="custom-image64"
+        alt="Seat Image"
+      />
 
-        <img id="71" src="images/CHAIRB.jpg" class="custom-image71" alt="Seat Image">
-        <img id="72" src="images/CHAIRB.jpg" class="custom-image72" alt="Seat Image">
-        <img id="73" src="images/CHAIRB.jpg" class="custom-image73" alt="Seat Image">
-        <img id="74" src="images/CHAIRB.jpg" class="custom-image74" alt="Seat Image">
+      <img
+        id="71"
+        src="images/CHAIRB.jpg"
+        class="custom-image71"
+        alt="Seat Image"
+      />
+      <img
+        id="72"
+        src="images/CHAIRB.jpg"
+        class="custom-image72"
+        alt="Seat Image"
+      />
+      <img
+        id="73"
+        src="images/CHAIRB.jpg"
+        class="custom-image73"
+        alt="Seat Image"
+      />
+      <img
+        id="74"
+        src="images/CHAIRB.jpg"
+        class="custom-image74"
+        alt="Seat Image"
+      />
 
-        <img id="81" src="images/CHAIRB.jpg" class="custom-image81" alt="Seat Image">
-        <img id="82" src="images/CHAIRB.jpg" class="custom-image82" alt="Seat Image">
-        <img id="83" src="images/CHAIRB.jpg" class="custom-image83" alt="Seat Image">
-        <img id="84" src="images/CHAIRB.jpg" class="custom-image84" alt="Seat Image">
+      <img
+        id="81"
+        src="images/CHAIRB.jpg"
+        class="custom-image81"
+        alt="Seat Image"
+      />
+      <img
+        id="82"
+        src="images/CHAIRB.jpg"
+        class="custom-image82"
+        alt="Seat Image"
+      />
+      <img
+        id="83"
+        src="images/CHAIRB.jpg"
+        class="custom-image83"
+        alt="Seat Image"
+      />
+      <img
+        id="84"
+        src="images/CHAIRB.jpg"
+        class="custom-image84"
+        alt="Seat Image"
+      />
 
-        <img id="91" src="images/CHAIRB.jpg" class="custom-image91" alt="Seat Image">
-        <img id="92" src="images/CHAIRB.jpg" class="custom-image92" alt="Seat Image">
-        
+      <img
+        id="91"
+        src="images/CHAIRB.jpg"
+        class="custom-image91"
+        alt="Seat Image"
+      />
+      <img
+        id="92"
+        src="images/CHAIRB.jpg"
+        class="custom-image92"
+        alt="Seat Image"
+      />
 
-        <img id="101" src="images/CHAIRB.jpg" class="custom-image101" alt="Seat Image">
-        <img id="102" src="images/CHAIRB.jpg" class="custom-image102" alt="Seat Image">
-        <img id="103" src="images/CHAIRB.jpg" class="custom-image103" alt="Seat Image">
-        <img id="104" src="images/CHAIRB.jpg" class="custom-image104" alt="Seat Image">
-        <img id="105" src="images/CHAIRB.jpg" class="custom-image105" alt="Seat Image">
-
-       
+      <img
+        id="101"
+        src="images/CHAIRB.jpg"
+        class="custom-image101"
+        alt="Seat Image"
+      />
+      <img
+        id="102"
+        src="images/CHAIRB.jpg"
+        class="custom-image102"
+        alt="Seat Image"
+      />
+      <img
+        id="103"
+        src="images/CHAIRB.jpg"
+        class="custom-image103"
+        alt="Seat Image"
+      />
+      <img
+        id="104"
+        src="images/CHAIRB.jpg"
+        class="custom-image104"
+        alt="Seat Image"
+      />
+      <img
+        id="105"
+        src="images/CHAIRB.jpg"
+        class="custom-image105"
+        alt="Seat Image"
+      />
     </div>
 
     <h1>Afternoon Bus</h1>
-    <pre id="output"></pre>  <!-- This is where JSON will be displayed -->
-
+    <pre id="output"></pre>
+    <!-- This is where JSON will be displayed -->
 
     <script>
-        
+      main();
 
-       
-        main();
+      async function getData() {
+        try {
+          const res = await fetch("seat_positions.json");
+          const data = await res.json();
+          return data;
+        } catch (error) {
+          console.error("Error fetching data:", error);
+          return { error: "Failed to load seat positions." };
+        }
+      }
 
-        async function getData() {
-            try {
-                const res = await fetch("seat_positions.json");
-                const data = await res.json();
-                return data;
-            } catch (error) {
-                console.error("Error fetching data:", error);
-                return { error: "Failed to load seat positions." };
-            }
+      async function main() {
+        const seat = await getData();
+        console.log(seat);
+
+        if (seat.oneone == 0) {
+          document.getElementById("11").src = "images/CHAIRR.JPG";
+        } else {
+          document.getElementById("11").src = "images/CHAIRG.JPG";
         }
 
-        async function main() {
-            const seat = await getData();
-            console.log(seat);
-
-
-            if (seat.oneone == 0){
-                document.getElementById("11").src = "images/CHAIRR.JPG";
-            } else{
-                document.getElementById("11").src = "images/CHAIRG.JPG";
-            }
-
-            if (seat.onetwo == 0){
-                document.getElementById("12").src = "images/CHAIRR.JPG";
-            } else{
-                document.getElementById("12").src = "images/CHAIRG.JPG";
-            }
-
-            if (seat.onethree == 0){
-                document.getElementById("13").src = "images/CHAIRR.JPG";
-            } else{
-                document.getElementById("13").src = "images/CHAIRG.JPG";
-            }
-
-            if (seat.onefour == 0){
-                document.getElementById("14").src = "images/CHAIRR.JPG";
-            } else{
-                document.getElementById("14").src = "images/CHAIRG.JPG";
-            }
-
-            if (seat.twoone == 0){
-                document.getElementById("21").src = "images/CHAIRR.JPG";
-            } else{
-                document.getElementById("21").src = "images/CHAIRG.JPG";
-            }
-
-            if (seat.twotwo == 0){
-                document.getElementById("22").src = "images/CHAIRR.JPG";
-            } else{
-                document.getElementById("22").src = "images/CHAIRG.JPG";
-            }
-
-            if (seat.twothree == 0){
-                document.getElementById("23").src = "images/CHAIRR.JPG";
-            } else{
-                document.getElementById("23").src = "images/CHAIRG.JPG";
-            }
-
-            if (seat.twofour == 0){
-                document.getElementById("24").src = "images/CHAIRR.JPG";
-            } else{
-                document.getElementById("24").src = "images/CHAIRG.JPG";
-            }
-
-
-            if (seat.threeone == 0){
-                document.getElementById("31").src = "images/CHAIRR.JPG";
-            } else{
-                document.getElementById("31").src = "images/CHAIRG.JPG";
-            }
-
-            if (seat.threetwo == 0){
-                document.getElementById("32").src = "images/CHAIRR.JPG";
-            } else{
-                document.getElementById("32").src = "images/CHAIRG.JPG";
-            }
-
-            if (seat.threethree == 0){
-                document.getElementById("33").src = "images/CHAIRR.JPG";
-            } else{
-                document.getElementById("33").src = "images/CHAIRG.JPG";
-            }
-
-            if (seat.threefour == 0){
-                document.getElementById("34").src = "images/CHAIRR.JPG";
-            } else{
-                document.getElementById("34").src = "images/CHAIRG.JPG";
-            }
-            
-
-            if (seat.fourone == 0){
-                document.getElementById("41").src = "images/CHAIRR.JPG";
-            } else{
-                document.getElementById("41").src = "images/CHAIRG.JPG";
-            }
-
-            if (seat.fourtwo == 0){
-                document.getElementById("42").src = "images/CHAIRR.JPG";
-            } else{
-                document.getElementById("42").src = "images/CHAIRG.JPG";
-            }
-
-            if (seat.fourthree == 0){
-                document.getElementById("43").src = "images/CHAIRR.JPG";
-            } else{
-                document.getElementById("43").src = "images/CHAIRG.JPG";
-            }
-
-            if (seat.fourfour == 0){
-                document.getElementById("44").src = "images/CHAIRR.JPG";
-            } else{
-                document.getElementById("44").src = "images/CHAIRG.JPG";
-            }
-
-
-            if (seat.fiveone == 0){
-                document.getElementById("51").src = "images/CHAIRR.JPG";
-            } else{
-                document.getElementById("51").src = "images/CHAIRG.JPG";
-            }
-
-            if (seat.fivetwo == 0){
-                document.getElementById("52").src = "images/CHAIRR.JPG";
-            } else{
-                document.getElementById("52").src = "images/CHAIRG.JPG";
-            }
-
-            if (seat.fivethree == 0){
-                document.getElementById("53").src = "images/CHAIRR.JPG";
-            } else{
-                document.getElementById("53").src = "images/CHAIRG.JPG";
-            }
-
-            if (seat.fivefour == 0){
-                document.getElementById("54").src = "images/CHAIRR.JPG";
-            } else{
-                document.getElementById("54").src = "images/CHAIRG.JPG";
-            }
-
-
-            if (seat.sixone == 0){
-                document.getElementById("61").src = "images/CHAIRR.JPG";
-            } else{
-                document.getElementById("61").src = "images/CHAIRG.JPG";
-            }
-
-            if (seat.sixtwo == 0){
-                document.getElementById("62").src = "images/CHAIRR.JPG";
-            } else{
-                document.getElementById("62").src = "images/CHAIRG.JPG";
-            }
-
-            if (seat.sixthree == 0){
-                document.getElementById("63").src = "images/CHAIRR.JPG";
-            } else{
-                document.getElementById("63").src = "images/CHAIRG.JPG";
-            }
-
-            if (seat.sixfour == 0){
-                document.getElementById("64").src = "images/CHAIRR.JPG";
-            } else{
-                document.getElementById("64").src = "images/CHAIRG.JPG";
-            }
-
-
-            if (seat.sevenone == 0){
-                document.getElementById("71").src = "images/CHAIRR.JPG";
-            } else{
-                document.getElementById("71").src = "images/CHAIRG.JPG";
-            }
-
-            if (seat.seventwo == 0){
-                document.getElementById("72").src = "images/CHAIRR.JPG";
-            } else{
-                document.getElementById("72").src = "images/CHAIRG.JPG";
-            }
-
-            if (seat.seventhree == 0){
-                document.getElementById("73").src = "images/CHAIRR.JPG";
-            } else{
-                document.getElementById("73").src = "images/CHAIRG.JPG";
-            }
-
-            if (seat.sevenfour == 0){
-                document.getElementById("74").src = "images/CHAIRR.JPG";
-            } else{
-                document.getElementById("74").src = "images/CHAIRG.JPG";
-            }
-
-
-            if (seat.eightone == 0){
-                document.getElementById("81").src = "images/CHAIRR.JPG";
-            } else{
-                document.getElementById("81").src = "images/CHAIRG.JPG";
-            }
-
-            if (seat.eighttwo == 0){
-                document.getElementById("82").src = "images/CHAIRR.JPG";
-            } else{
-                document.getElementById("82").src = "images/CHAIRG.JPG";
-            }
-
-            if (seat.eightthree == 0){
-                document.getElementById("83").src = "images/CHAIRR.JPG";
-            } else{
-                document.getElementById("83").src = "images/CHAIRG.JPG";
-            }
-
-            if (seat.eightfour == 0){
-                document.getElementById("84").src = "images/CHAIRR.JPG";
-            } else{
-                document.getElementById("84").src = "images/CHAIRG.JPG";
-            }
-
-
-            if (seat.nineone == 0){
-                document.getElementById("91").src = "images/CHAIRR.JPG";
-            } else{
-                document.getElementById("91").src = "images/CHAIRG.JPG";
-            }
-
-            if (seat.ninetwo == 0){
-                document.getElementById("92").src = "images/CHAIRR.JPG";
-            } else{
-                document.getElementById("92").src = "images/CHAIRG.JPG";
-            }
-
-            if (seat.tenone == 0){
-                document.getElementById("101").src = "images/CHAIRR.JPG";
-            } else{
-                document.getElementById("101").src = "images/CHAIRG.JPG";
-            }
-
-            if (seat.tentwo == 0){
-                document.getElementById("102").src = "images/CHAIRR.JPG";
-            } else{
-                document.getElementById("102").src = "images/CHAIRG.JPG";
-            }
-
-            if (seat.tenthree == 0){
-                document.getElementById("103").src = "images/CHAIRR.JPG";
-            } else{
-                document.getElementById("103").src = "images/CHAIRG.JPG";
-            }
-
-            if (seat.tenfour == 0){
-                document.getElementById("104").src = "images/CHAIRR.JPG";
-            } else{
-                document.getElementById("104").src = "images/CHAIRG.JPG";
-            }
-
-            if (seat.tenfive == 0){
-                document.getElementById("105").src = "images/CHAIRR.JPG";
-            } else{
-                document.getElementById("105").src = "images/CHAIRG.JPG";
-            }
-
-            
-        
-            // Display JSON data on the webpage
+        if (seat.onetwo == 0) {
+          document.getElementById("12").src = "images/CHAIRR.JPG";
+        } else {
+          document.getElementById("12").src = "images/CHAIRG.JPG";
         }
+
+        if (seat.onethree == 0) {
+          document.getElementById("13").src = "images/CHAIRR.JPG";
+        } else {
+          document.getElementById("13").src = "images/CHAIRG.JPG";
+        }
+
+        if (seat.onefour == 0) {
+          document.getElementById("14").src = "images/CHAIRR.JPG";
+        } else {
+          document.getElementById("14").src = "images/CHAIRG.JPG";
+        }
+
+        if (seat.twoone == 0) {
+          document.getElementById("21").src = "images/CHAIRR.JPG";
+        } else {
+          document.getElementById("21").src = "images/CHAIRG.JPG";
+        }
+
+        if (seat.twotwo == 0) {
+          document.getElementById("22").src = "images/CHAIRR.JPG";
+        } else {
+          document.getElementById("22").src = "images/CHAIRG.JPG";
+        }
+
+        if (seat.twothree == 0) {
+          document.getElementById("23").src = "images/CHAIRR.JPG";
+        } else {
+          document.getElementById("23").src = "images/CHAIRG.JPG";
+        }
+
+        if (seat.twofour == 0) {
+          document.getElementById("24").src = "images/CHAIRR.JPG";
+        } else {
+          document.getElementById("24").src = "images/CHAIRG.JPG";
+        }
+
+        if (seat.threeone == 0) {
+          document.getElementById("31").src = "images/CHAIRR.JPG";
+        } else {
+          document.getElementById("31").src = "images/CHAIRG.JPG";
+        }
+
+        if (seat.threetwo == 0) {
+          document.getElementById("32").src = "images/CHAIRR.JPG";
+        } else {
+          document.getElementById("32").src = "images/CHAIRG.JPG";
+        }
+
+        if (seat.threethree == 0) {
+          document.getElementById("33").src = "images/CHAIRR.JPG";
+        } else {
+          document.getElementById("33").src = "images/CHAIRG.JPG";
+        }
+
+        if (seat.threefour == 0) {
+          document.getElementById("34").src = "images/CHAIRR.JPG";
+        } else {
+          document.getElementById("34").src = "images/CHAIRG.JPG";
+        }
+
+        if (seat.fourone == 0) {
+          document.getElementById("41").src = "images/CHAIRR.JPG";
+        } else {
+          document.getElementById("41").src = "images/CHAIRG.JPG";
+        }
+
+        if (seat.fourtwo == 0) {
+          document.getElementById("42").src = "images/CHAIRR.JPG";
+        } else {
+          document.getElementById("42").src = "images/CHAIRG.JPG";
+        }
+
+        if (seat.fourthree == 0) {
+          document.getElementById("43").src = "images/CHAIRR.JPG";
+        } else {
+          document.getElementById("43").src = "images/CHAIRG.JPG";
+        }
+
+        if (seat.fourfour == 0) {
+          document.getElementById("44").src = "images/CHAIRR.JPG";
+        } else {
+          document.getElementById("44").src = "images/CHAIRG.JPG";
+        }
+
+        if (seat.fiveone == 0) {
+          document.getElementById("51").src = "images/CHAIRR.JPG";
+        } else {
+          document.getElementById("51").src = "images/CHAIRG.JPG";
+        }
+
+        if (seat.fivetwo == 0) {
+          document.getElementById("52").src = "images/CHAIRR.JPG";
+        } else {
+          document.getElementById("52").src = "images/CHAIRG.JPG";
+        }
+
+        if (seat.fivethree == 0) {
+          document.getElementById("53").src = "images/CHAIRR.JPG";
+        } else {
+          document.getElementById("53").src = "images/CHAIRG.JPG";
+        }
+
+        if (seat.fivefour == 0) {
+          document.getElementById("54").src = "images/CHAIRR.JPG";
+        } else {
+          document.getElementById("54").src = "images/CHAIRG.JPG";
+        }
+
+        if (seat.sixone == 0) {
+          document.getElementById("61").src = "images/CHAIRR.JPG";
+        } else {
+          document.getElementById("61").src = "images/CHAIRG.JPG";
+        }
+
+        if (seat.sixtwo == 0) {
+          document.getElementById("62").src = "images/CHAIRR.JPG";
+        } else {
+          document.getElementById("62").src = "images/CHAIRG.JPG";
+        }
+
+        if (seat.sixthree == 0) {
+          document.getElementById("63").src = "images/CHAIRR.JPG";
+        } else {
+          document.getElementById("63").src = "images/CHAIRG.JPG";
+        }
+
+        if (seat.sixfour == 0) {
+          document.getElementById("64").src = "images/CHAIRR.JPG";
+        } else {
+          document.getElementById("64").src = "images/CHAIRG.JPG";
+        }
+
+        if (seat.sevenone == 0) {
+          document.getElementById("71").src = "images/CHAIRR.JPG";
+        } else {
+          document.getElementById("71").src = "images/CHAIRG.JPG";
+        }
+
+        if (seat.seventwo == 0) {
+          document.getElementById("72").src = "images/CHAIRR.JPG";
+        } else {
+          document.getElementById("72").src = "images/CHAIRG.JPG";
+        }
+
+        if (seat.seventhree == 0) {
+          document.getElementById("73").src = "images/CHAIRR.JPG";
+        } else {
+          document.getElementById("73").src = "images/CHAIRG.JPG";
+        }
+
+        if (seat.sevenfour == 0) {
+          document.getElementById("74").src = "images/CHAIRR.JPG";
+        } else {
+          document.getElementById("74").src = "images/CHAIRG.JPG";
+        }
+
+        if (seat.eightone == 0) {
+          document.getElementById("81").src = "images/CHAIRR.JPG";
+        } else {
+          document.getElementById("81").src = "images/CHAIRG.JPG";
+        }
+
+        if (seat.eighttwo == 0) {
+          document.getElementById("82").src = "images/CHAIRR.JPG";
+        } else {
+          document.getElementById("82").src = "images/CHAIRG.JPG";
+        }
+
+        if (seat.eightthree == 0) {
+          document.getElementById("83").src = "images/CHAIRR.JPG";
+        } else {
+          document.getElementById("83").src = "images/CHAIRG.JPG";
+        }
+
+        if (seat.eightfour == 0) {
+          document.getElementById("84").src = "images/CHAIRR.JPG";
+        } else {
+          document.getElementById("84").src = "images/CHAIRG.JPG";
+        }
+
+        if (seat.nineone == 0) {
+          document.getElementById("91").src = "images/CHAIRR.JPG";
+        } else {
+          document.getElementById("91").src = "images/CHAIRG.JPG";
+        }
+
+        if (seat.ninetwo == 0) {
+          document.getElementById("92").src = "images/CHAIRR.JPG";
+        } else {
+          document.getElementById("92").src = "images/CHAIRG.JPG";
+        }
+
+        if (seat.tenone == 0) {
+          document.getElementById("101").src = "images/CHAIRR.JPG";
+        } else {
+          document.getElementById("101").src = "images/CHAIRG.JPG";
+        }
+
+        if (seat.tentwo == 0) {
+          document.getElementById("102").src = "images/CHAIRR.JPG";
+        } else {
+          document.getElementById("102").src = "images/CHAIRG.JPG";
+        }
+
+        if (seat.tenthree == 0) {
+          document.getElementById("103").src = "images/CHAIRR.JPG";
+        } else {
+          document.getElementById("103").src = "images/CHAIRG.JPG";
+        }
+
+        if (seat.tenfour == 0) {
+          document.getElementById("104").src = "images/CHAIRR.JPG";
+        } else {
+          document.getElementById("104").src = "images/CHAIRG.JPG";
+        }
+
+        if (seat.tenfive == 0) {
+          document.getElementById("105").src = "images/CHAIRR.JPG";
+        } else {
+          document.getElementById("105").src = "images/CHAIRG.JPG";
+        }
+
+        // Display JSON data on the webpage
+      }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
     <script>
-        async function fetchSeatData() {
-            try {
-                const response = await fetch("http://localhost:5000/get-seat-positions");
-                const seatData = await response.json();
-                
-                console.log("Fetched seat data:", seatData); // Debugging
+      async function fetchSeatData() {
+        try {
+          const response = await fetch(
+            "http://localhost:5000/get-seat-positions"
+          );
+          const seatData = await response.json();
 
-                seatData.forEach(seat => {
-                    let seatElement = document.getElementById(seat.seat_number);
-                    if (seatElement) {
-                        seatElement.src = seat.status ? "images/CHAIRR.JPG" : "images/CHAIRG.JPG";
-                    }
-                });
-            } catch (error) {
-                console.error("Error fetching seat data:", error);
+          console.log("Fetched seat data:", seatData); // Debugging
+
+          seatData.forEach((seat) => {
+            let seatElement = document.getElementById(seat.seat_number);
+            if (seatElement) {
+              seatElement.src = seat.status
+                ? "images/CHAIRR.JPG"
+                : "images/CHAIRG.JPG";
             }
+          });
+        } catch (error) {
+          console.error("Error fetching seat data:", error);
         }
+      }
 
-        // Fetch seat data on page load
-        document.addEventListener("DOMContentLoaded", fetchSeatData);
-
+      // Fetch seat data on page load
+      document.addEventListener("DOMContentLoaded", fetchSeatData);
     </script>
-
-</body>
+  </body>
 </html>
