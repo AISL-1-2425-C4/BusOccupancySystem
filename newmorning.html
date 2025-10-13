@@ -27,9 +27,11 @@
         box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08),
           0 3px 8px rgba(0, 0, 0, 0.06);
         padding: 15px;
-        max-width: 95vw; /* Responsive: never wider than viewport */
+        max-width: 98vw; /* Responsive: use more screen space */
         overflow-x: auto; /* Allow horizontal scroll on very small screens */
+        overflow-y: visible;
         min-height: 200px; /* Ensure container has minimum height */
+        -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
       }
       
       /* Make sure container is visible when populated */
@@ -342,15 +344,14 @@
 
       async function loadDynamicSeats() {
         try {
-          // 👇 cache-busting: add timestamp so browser doesn’t reuse old JSON
-          const response = await fetch(
-            "row_seating_layout.json?nocache=" + Date.now()
-          );
-          if (!response.ok)
-            throw new Error(`HTTP error! status: ${response.status}`);
+          const url = "row_seating_layout.json?nocache=" + Date.now();
+          const response = await fetch(url);
+          
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+          }
 
           const newLayout = await response.json();
-          console.log("Loaded seat layout:", newLayout);
 
           // ✅ Only update if layout is not empty AND different from current
           if (
@@ -363,10 +364,7 @@
 
             generateSeats(seatLayoutData);
             updateTimestamp();
-            
-            console.log("✅ Seats generated, container should be visible");
           } else {
-            console.log("No changes detected — keeping existing seats");
             // If this is first load and we have no data, still show container
             if (!seatLayoutData && newLayout) {
               seatLayoutData = newLayout;
@@ -424,23 +422,39 @@
         const isMobile = screenWidth < 768;
         const isTablet = screenWidth >= 768 && screenWidth < 1024;
         
-        // Scale factor based on screen size
+        // Scale factor based on screen size - BIGGER seats, LESS spacing on mobile
         let scaleFactor = 1;
-        if (isMobile) {
-          scaleFactor = Math.min(0.6, screenWidth / 600); // Smaller on mobile
-        } else if (isTablet) {
-          scaleFactor = 0.8; // Medium on tablet
-        }
+        let seatSize, seatSpacing, aisleWidth, edgeMargin;
         
-        const seatSize = Math.max(20, 30 * scaleFactor); // Minimum 20px for touch
-        const seatSpacing = Math.max(15, 25 * scaleFactor);
-        const aisleWidth = seatSpacing;
-        const edgeMargin = Math.max(10, 25 * scaleFactor);
+        if (isMobile) {
+          // Mobile: Bigger seats, compact spacing
+          const availableWidth = screenWidth * 0.92; // Use more screen space
+          const baseWidth = totalRows * 45; // Tighter base calculation
+          scaleFactor = Math.min(2.0, availableWidth / baseWidth); // Allow up to 2x size!
+          
+          seatSize = Math.max(35, 40 * scaleFactor); // BIGGER seats (min 35px)
+          seatSpacing = Math.max(8, 15 * scaleFactor); // LESS spacing (min 8px)
+          aisleWidth = seatSpacing;
+          edgeMargin = Math.max(8, 15 * scaleFactor); // Smaller margins
+        } else if (isTablet) {
+          scaleFactor = 1.0;
+          seatSize = 30;
+          seatSpacing = 25;
+          aisleWidth = seatSpacing;
+          edgeMargin = 25;
+        } else {
+          // Desktop
+          scaleFactor = 1.0;
+          seatSize = 30;
+          seatSpacing = 25;
+          aisleWidth = seatSpacing;
+          edgeMargin = 25;
+        }
 
         // Calculate dynamic container dimensions with driver area
         const driverAreaWidth = Math.max(40, 60 * scaleFactor); // Scaled driver area
         
-        console.log(`📱 Responsive scaling: screen=${screenWidth}px, scale=${scaleFactor.toFixed(2)}, seatSize=${seatSize.toFixed(1)}px`);
+        // Calculate container dimensions FIRST
         const containerWidth =
           totalRows * (seatSize + seatSpacing) +
           edgeMargin * 2 +
@@ -460,6 +474,19 @@
         container.style.height = `${containerHeight}px`;
         busImage.style.width = `${containerWidth}px`;
         busImage.style.height = `${containerHeight}px`;
+
+        // Apply CSS transform scaling if container is still too wide for mobile
+        // But prefer to keep seats big rather than scaling down too much
+        const maxWidth = screenWidth * 0.98; // use 98% of screen width
+        
+        if (isMobile && containerWidth > maxWidth) {
+          const mobileScale = Math.max(0.85, maxWidth / containerWidth); // Don't scale below 85%
+          container.style.transform = `scale(${mobileScale})`;
+          container.style.transformOrigin = 'top center';
+          container.style.margin = '0 auto';
+        } else {
+          container.style.transform = 'none';
+        }
 
         // Add aisle divider lines for visual appeal
         addAisleDividers(container, containerHeight, has4SeatRows);
@@ -577,21 +604,14 @@
           });
         });
 
-        console.log(
-          `Generated ${seatCounter} seats total in ${totalRows} rows`
-        );
-        console.log(
-          `Container dimensions: ${containerWidth}x${containerHeight}px`
-        );
-        
         // Ensure container is visible after generating seats
         if (seatCounter > 0) {
           container.style.display = "inline-block";
           container.style.visibility = "visible";
           container.style.opacity = "1";
-          console.log("✅ Container made visible with", seatCounter, "seats");
+          console.log(`✅ Generated ${seatCounter} seats in ${totalRows} rows`);
         } else {
-          console.warn("⚠️ No seats were generated!");
+          console.warn("⚠️ No seats were generated");
         }
       };
 
