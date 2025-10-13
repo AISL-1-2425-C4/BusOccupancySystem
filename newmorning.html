@@ -451,18 +451,20 @@
         const isMobile = screenWidth < 768;
         const isTablet = screenWidth >= 768 && screenWidth < 1024;
         
-        // Scale factor based on screen size
+        // Scale factor based on screen size - INCREASED for better mobile visibility
         let scaleFactor = 1;
         if (isMobile) {
-          scaleFactor = Math.min(0.6, screenWidth / 600); // Smaller on mobile
+          scaleFactor = 1.2; // LARGER on mobile for visibility
         } else if (isTablet) {
-          scaleFactor = 0.8; // Medium on tablet
+          scaleFactor = 1.0; // Normal on tablet
         }
         
-        const seatSize = Math.max(20, 30 * scaleFactor); // Minimum 20px for touch
-        const seatSpacing = Math.max(15, 25 * scaleFactor);
+        const seatSize = Math.max(30, 30 * scaleFactor); // Minimum 30px for visibility
+        const seatSpacing = Math.max(20, 25 * scaleFactor);
         const aisleWidth = seatSpacing;
-        const edgeMargin = Math.max(10, 25 * scaleFactor);
+        const edgeMargin = Math.max(15, 25 * scaleFactor);
+        
+        debugLog(`📏 Mobile=${isMobile}, scale=${scaleFactor}, seatSize=${seatSize}px`);
 
         // Calculate dynamic container dimensions with driver area
         const driverAreaWidth = Math.max(40, 60 * scaleFactor); // Scaled driver area
@@ -489,20 +491,20 @@
         busImage.style.height = `${containerHeight}px`;
 
         // Apply mobile scaling if needed (after dimensions are set)
-        console.log(`📱 Responsive scaling: screen=${screenWidth}px, scale=${scaleFactor.toFixed(2)}, seatSize=${seatSize.toFixed(1)}px, containerWidth=${containerWidth}px`);
+        debugLog(`📱 Screen=${screenWidth}px, Container=${containerWidth}px`);
         
-        // Dynamically scale for mobile if container is too wide
-        const maxWidth = screenWidth * 0.9; // use 90% of screen width
+        // Dynamically scale for mobile if container is still too wide
+        const maxWidth = screenWidth * 0.95; // use 95% of screen width
         
         if (isMobile && containerWidth > maxWidth) {
           const mobileScale = maxWidth / containerWidth;
           container.style.transform = `scale(${mobileScale})`;
           container.style.transformOrigin = 'top center';
           container.style.margin = '0 auto';
-          console.log(`📱 Mobile scale transform applied: ${mobileScale.toFixed(2)} (${containerWidth}px → ${(containerWidth * mobileScale).toFixed(0)}px)`);
+          debugLog(`🔍 Applied scale: ${mobileScale.toFixed(2)}x (${containerWidth}→${(containerWidth * mobileScale).toFixed(0)}px)`);
         } else {
           container.style.transform = 'none';
-          console.log(`✅ No scaling needed - container fits screen`);
+          debugLog(`✅ No extra scaling needed`);
         }
 
         // Add aisle divider lines for visual appeal
