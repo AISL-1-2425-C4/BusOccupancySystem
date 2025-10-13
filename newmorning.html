@@ -25,6 +25,12 @@
         padding: 15px;
         max-width: 95vw; /* Responsive: never wider than viewport */
         overflow-x: auto; /* Allow horizontal scroll on very small screens */
+        min-height: 200px; /* Ensure container has minimum height */
+      }
+      
+      /* Make sure container is visible when populated */
+      .image-container:not([style*="display: none"]) {
+        display: inline-block !important;
       }
       
       /* Mobile responsiveness */
@@ -33,6 +39,7 @@
           margin: 10px auto;
           padding: 10px;
           max-width: 98vw;
+          min-height: 150px;
         }
       }
 
@@ -324,12 +331,22 @@
           ) {
             seatLayoutData = newLayout;
             document.getElementById("loading").style.display = "none";
-            document.getElementById("busContainer").style.display = "flex";
+            document.getElementById("busContainer").style.display = "inline-block";
 
             generateSeats(seatLayoutData);
             updateTimestamp();
+            
+            console.log("✅ Seats generated, container should be visible");
           } else {
             console.log("No changes detected — keeping existing seats");
+            // If this is first load and we have no data, still show container
+            if (!seatLayoutData && newLayout) {
+              seatLayoutData = newLayout;
+              document.getElementById("loading").style.display = "none";
+              document.getElementById("busContainer").style.display = "inline-block";
+              generateSeats(seatLayoutData);
+              updateTimestamp();
+            }
           }
         } catch (error) {
           console.error("Error loading seat layout:", error);
