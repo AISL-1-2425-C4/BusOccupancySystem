@@ -26,7 +26,7 @@
         border-radius: 12px;
         box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08),
           0 3px 8px rgba(0, 0, 0, 0.06);
-        padding: 22px; /* Adequate padding for seats */
+        padding: 25px; /* Adequate padding for seats */
         max-width: 98vw; /* Responsive: use more screen space */
         overflow: visible; /* Show everything */
         min-height: 200px; /* Ensure container has minimum height */
@@ -74,11 +74,12 @@
           position: relative !important;
           display: inline-block !important; /* inline-block for proper sizing */
           margin: 20px auto 0 auto !important; /* Center horizontally with auto margins */
-          padding: 22px !important; /* Adequate padding */
-          width: auto !important; /* Auto width to fit content */
-          height: auto !important; /* Auto height to fit content */
+          padding: 25px !important; /* Adequate padding */
+          width: 420px !important; /* Hardcoded width for mobile */
+          height: 280px !important; /* Hardcoded height for mobile */
           max-width: none !important;
-          overflow: visible !important; /* Show all content */
+          overflow: hidden !important; /* Hide overflow */
+          box-sizing: border-box !important;
           /* Container will be rotated by JS, centered below legend */
         }
         
@@ -682,10 +683,13 @@
 
               // Calculate grid position with aisle separation
               // X position: front to back (row becomes visual column) - offset by driver area
+              // Add extra offset to shift seats to the right
+              const rightOffset = isMobile ? 15 : 0; // Shift 15px right on mobile
               const gridX =
                 edgeMargin +
                 driverAreaWidth +
-                rowIndex * (seatSize + seatSpacing);
+                rowIndex * (seatSize + seatSpacing) +
+                rightOffset;
 
               // Y position: top to bottom with alignment to 6-seat row
               let gridY;
