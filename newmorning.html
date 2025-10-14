@@ -69,18 +69,18 @@
           padding: 5px !important;
         }
         
-        /* Redefine container for mobile - centered below legend */
+        /* Redefine container for mobile - same methodology as desktop */
         .image-container {
           position: relative !important;
-          display: block !important;
-          margin: 80px auto 0 auto !important; /* Adjust top margin as needed */
-          padding: 15px !important;
-          width: 90% !important; /* Responsive width instead of hardcoded 700px */
-          max-width: 400px !important; /* Keep it from being too large */
+          display: inline-block !important;
+          margin: 20px auto 0 auto !important;
+          padding: 25px !important;
+          width: auto !important;
           height: auto !important;
-          overflow: visible !important; /* Let content flow naturally */
+          max-width: 95vw !important;
+          overflow: visible !important;
           box-sizing: border-box !important;
-          background-color: transparent !important; /* Remove white box if any */
+          /* No rotation - seats will be positioned differently */
         }
       
         /* Center the bus container wrapper */
@@ -150,7 +150,13 @@
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15),
           inset 0 1px 2px rgba(255, 255, 255, 0.2);
         z-index: 10;
-        transform: rotate(-90deg); /* Rotate counter-clockwise for mobile view */
+      }
+      
+      /* Rotate steering wheel on desktop only */
+      @media (min-width: 769px) {
+        .steering-wheel {
+          transform: rotate(-90deg);
+        }
       }
 
       .steering-wheel::before {
@@ -551,22 +557,39 @@
         }
 
         // Calculate dynamic container dimensions with driver area
-        const driverAreaWidth = Math.max(45, 65 * scaleFactor); // Scaled driver area (slightly larger for larger seats)
+        const driverAreaWidth = Math.max(45, 65 * scaleFactor); // Scaled driver area
         
-        // Calculate container dimensions FIRST
-        const containerWidth =
-          totalRows * (seatSize + seatSpacing) +
-          edgeMargin * 2 +
-          driverAreaWidth;
-
-        // Height calculation: check if we have any 4-seat rows that need aisle gap
+        // Check if we have any 4-seat rows that need aisle gap
         const has4SeatRows = rowKeys.some(
           (rowKey) => Object.keys(layoutData[rowKey]).length <= 4
         );
-        const containerHeight =
-          maxColumnsInAnyRow * (seatSize + seatSpacing) +
-          (has4SeatRows ? aisleWidth : 0) +
-          edgeMargin * 2;
+        
+        // Calculate container dimensions - different for mobile vs desktop
+        let containerWidth, containerHeight;
+        
+        if (isMobile) {
+          // MOBILE: width is based on columns (vertical), height is based on rows (horizontal)
+          containerWidth =
+            maxColumnsInAnyRow * (seatSize + seatSpacing) +
+            (has4SeatRows ? aisleWidth : 0) +
+            edgeMargin * 2 +
+            driverAreaWidth;
+          
+          containerHeight =
+            totalRows * (seatSize + seatSpacing) +
+            edgeMargin * 2;
+        } else {
+          // DESKTOP: width is based on rows (horizontal), height is based on columns (vertical)
+          containerWidth =
+            totalRows * (seatSize + seatSpacing) +
+            edgeMargin * 2 +
+            driverAreaWidth;
+
+          containerHeight =
+            maxColumnsInAnyRow * (seatSize + seatSpacing) +
+            (has4SeatRows ? aisleWidth : 0) +
+            edgeMargin * 2;
+        }
 
         // Update container and bus image size
         // Set container dimensions explicitly
@@ -578,37 +601,9 @@
         
         console.log(`📦 Container dimensions set: ${containerWidth}×${containerHeight}px`);
 
-        // Apply rotation and scaling for mobile devices
-        if (isMobile) {
-          // Calculate container scale to fit screen (ONCE)
-          if (!cachedMobileSizes.containerScale) {
-            const availableWidth = screenWidth * 0.95; // 95% of screen width
-            const availableHeight = window.innerHeight - 140; // Minus header/legend
-            
-            // After rotation: containerWidth becomes visual height, containerHeight becomes visual width
-            const scaleForWidth = availableWidth / containerHeight; // height becomes width after rotation
-            const scaleForHeight = availableHeight / containerWidth; // width becomes height after rotation
-            const containerScale = Math.min(scaleForWidth, scaleForHeight, 1.0);
-            
-            // Cache the container scale
-            cachedMobileSizes.containerScale = containerScale;
-            
-            console.log(`📱 Mobile: Calculated container scale ONCE: ${containerScale.toFixed(2)}`);
-          }
-          
-          // Apply rotation with cached scale
-          const scale = cachedMobileSizes.containerScale;
-          container.style.transform = `rotate(90deg) scale(${scale})`;
-          container.style.transformOrigin = 'center center';
-          
-          // Let container size naturally, just ensure it respects content
-          // Don't force dimensions - let CSS handle it
-          
-          console.log(`📱 Mobile: Rotating 90° with scale ${scale.toFixed(2)}, Container: ${containerWidth}×${containerHeight}px`);
-        } else {
-          // Desktop: no rotation
-          container.style.transform = 'none';
-        }
+        // No rotation needed - seats are positioned differently for mobile
+        // Container just needs to fit the content
+        console.log(`📦 Container: ${containerWidth}×${containerHeight}px, Mobile: ${isMobile}`);
 
         // Add aisle divider lines for visual appeal
         addAisleDividers(container, containerHeight, has4SeatRows, seatSize, seatSpacing, edgeMargin);
@@ -681,31 +676,52 @@
                 seatImg.src = "images/CHAIRG.JPG"; // Default to green
               }
 
-              // Calculate grid position with aisle separation
-              // X position: front to back (row becomes visual column) - offset by driver area
-              // Add extra offset to shift seats to the right
-              const rightOffset = isMobile ? 15 : 0; // Shift 15px right on mobile
-              const gridX =
-                edgeMargin +
-                driverAreaWidth +
-                rowIndex * (seatSize + seatSpacing) +
-                rightOffset;
-
-              // Y position: top to bottom with alignment to 6-seat row
-              let gridY;
-              if (currentRowColumns.length <= 4) {
-                // Regular 4-seat rows: align with 6-seat row positions
-                if (columnIndex < 2) {
-                  // Top side (column_one, column_two) - align with positions 0,1 of 6-seat row
-                  gridY = edgeMargin + columnIndex * (seatSize + seatSpacing);
+              // Calculate grid position - different logic for mobile vs desktop
+              let gridX, gridY;
+              
+              if (isMobile) {
+                // MOBILE: columns are up-down (vertical), rows are left-right (horizontal)
+                // Y position becomes the row progression (left to right)
+                gridY = edgeMargin + rowIndex * (seatSize + seatSpacing);
+                
+                // X position becomes the column progression (top to bottom)
+                if (currentRowColumns.length <= 4) {
+                  // Regular 4-seat rows: align with 6-seat row positions
+                  if (columnIndex < 2) {
+                    // Left side (column_one, column_two) - align with positions 0,1
+                    gridX = edgeMargin + driverAreaWidth + columnIndex * (seatSize + seatSpacing);
+                  } else {
+                    // Right side (column_three, column_four) - align with positions 4,5
+                    const alignedIndex = columnIndex + 2;
+                    gridX = edgeMargin + driverAreaWidth + alignedIndex * (seatSize + seatSpacing);
+                  }
                 } else {
-                  // Bottom side (column_three, column_four) - align with positions 4,5 of 6-seat row
-                  const alignedIndex = columnIndex + 2; // Skip positions 2,3 to align with 4,5
-                  gridY = edgeMargin + alignedIndex * (seatSize + seatSpacing);
+                  // 6-seat row: all seats together
+                  gridX = edgeMargin + driverAreaWidth + columnIndex * (seatSize + seatSpacing);
                 }
               } else {
-                // 6-seat row: all seats together, no gaps
-                gridY = edgeMargin + columnIndex * (seatSize + seatSpacing);
+                // DESKTOP: rows are left-right (horizontal), columns are top-bottom (vertical)
+                // X position: front to back (row becomes visual column) - offset by driver area
+                gridX =
+                  edgeMargin +
+                  driverAreaWidth +
+                  rowIndex * (seatSize + seatSpacing);
+
+                // Y position: top to bottom with alignment to 6-seat row
+                if (currentRowColumns.length <= 4) {
+                  // Regular 4-seat rows: align with 6-seat row positions
+                  if (columnIndex < 2) {
+                    // Top side (column_one, column_two) - align with positions 0,1 of 6-seat row
+                    gridY = edgeMargin + columnIndex * (seatSize + seatSpacing);
+                  } else {
+                    // Bottom side (column_three, column_four) - align with positions 4,5 of 6-seat row
+                    const alignedIndex = columnIndex + 2; // Skip positions 2,3 to align with 4,5
+                    gridY = edgeMargin + alignedIndex * (seatSize + seatSpacing);
+                  }
+                } else {
+                  // 6-seat row: all seats together, no gaps
+                  gridY = edgeMargin + columnIndex * (seatSize + seatSpacing);
+                }
               }
 
               // Position absolutely within the container
@@ -785,18 +801,29 @@
         if (existingWheel) existingWheel.remove();
         if (existingLabel) existingLabel.remove();
 
-        // Calculate position on the left side, centered vertically
+        // Calculate position based on device
         const seatSize = 30;
         const seatSpacing = 25;
         const edgeMargin = 25;
         const driverAreaWidth = 60;
+        const screenWidth = window.innerWidth;
+        const isMobile = screenWidth < 768;
         
-        // Get container height to center vertically
+        // Get container dimensions
+        const containerWidth = parseFloat(container.style.width) || 400;
         const containerHeight = parseFloat(container.style.height) || 400;
 
-        // Position steering wheel on the left side, centered vertically
-        const wheelX = edgeMargin + driverAreaWidth / 3 - 12.5; // More to the left (25px wheel / 2)
-        const wheelY = containerHeight / 2; // Center vertically
+        let wheelX, wheelY;
+        
+        if (isMobile) {
+          // MOBILE: steering wheel at top-left
+          wheelX = edgeMargin + driverAreaWidth / 3 - 12.5;
+          wheelY = edgeMargin + 15; // Near the top
+        } else {
+          // DESKTOP: steering wheel on the left side, centered vertically
+          wheelX = edgeMargin + driverAreaWidth / 3 - 12.5;
+          wheelY = containerHeight / 2; // Center vertically
+        }
 
         // Create steering wheel
         const steeringWheel = document.createElement("div");
@@ -806,15 +833,20 @@
         steeringWheel.style.top = `${wheelY}px`;
         container.appendChild(steeringWheel);
 
-        // Create driver label - positioned next to steering wheel on left
+        // Create driver label - positioned next to steering wheel
         const driverLabel = document.createElement("div");
         driverLabel.className = "driver-label";
         driverLabel.textContent = "Driver";
         driverLabel.style.left = `${wheelX - 10}px`;
-        driverLabel.style.top = `${wheelY + 24}px`; // Positioned below steering wheel (smaller offset for smaller wheel)
+        driverLabel.style.top = `${wheelY + 24}px`; // Positioned below steering wheel
         driverLabel.style.width = "55px";
-        driverLabel.style.transform = "rotate(-90deg)"; // Rotate text for mobile view
-        driverLabel.style.transformOrigin = "center center";
+        
+        // Only rotate text on desktop
+        if (!isMobile) {
+          driverLabel.style.transform = "rotate(-90deg)";
+          driverLabel.style.transformOrigin = "center center";
+        }
+        
         container.appendChild(driverLabel);
 
         console.log(
