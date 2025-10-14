@@ -304,6 +304,48 @@
       .virtual {
         background-color: black;
       }
+            /* ===== Fix white space above the bus container ===== */
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      h1 {
+        margin-top: 8px !important;
+        margin-bottom: 8px !important;
+      }
+
+      .legend {
+        margin-top: 5px !important;
+        margin-bottom: 5px !important;
+      }
+
+      #loading {
+        margin: 5px auto !important;
+        padding: 5px !important;
+      }
+
+      .image-container {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+        display: block !important;
+        text-align: center;
+      }
+
+      #busContainer {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+      }
+
+      @media (max-width: 768px) {
+        body {
+          padding-top: 0 !important;
+        }
+        .image-container {
+          margin-top: 0 !important;
+        }
+      }
+
     </style>
     <link
       href="https://fonts.googleapis.com/css2?family=Karla:wght@400;700&display=swap"
