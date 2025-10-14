@@ -118,6 +118,10 @@
         #lastUpdated {
           display: none !important;
         }
+        
+        #uuidDisplay {
+          display: none !important;
+        }
       }
 
       /* Hide the bus image completely */
@@ -427,6 +431,11 @@
     >
       Last Updated: --
     </p>
+    <p
+      id="uuidDisplay"
+      style="text-align: center; margin-top: 5px; font-size: 12px; color: #888; font-family: monospace"
+    >
+    </p>
 
     <script>
       function updateTimestamp() {
@@ -441,7 +450,7 @@
         setInterval(updateTimestamp, 5000);
       });
 
-      async function loadDynamicSeats() {
+      async function loadDynamicSeats(uuid = null) {
         try {
           const url = "row_seating_layout.json?nocache=" + Date.now();
           const response = await fetch(url);
@@ -463,6 +472,11 @@
 
             generateSeats(seatLayoutData);
             updateTimestamp();
+            
+            // Update UUID display if provided
+            if (uuid) {
+              updateUUID(uuid);
+            }
           } else {
             // If this is first load and we have no data, still show container
             if (!seatLayoutData && newLayout) {
@@ -471,6 +485,11 @@
               document.getElementById("busContainer").style.display = "inline-block";
               generateSeats(seatLayoutData);
               updateTimestamp();
+              
+              // Update UUID display if provided
+              if (uuid) {
+                updateUUID(uuid);
+              }
             }
           }
         } catch (error) {
@@ -481,9 +500,40 @@
           errorDiv.textContent = `Error loading seat layout: ${error.message}`;
         }
       }
+      
+      function updateUUID(uuid) {
+        const uuidDisplay = document.getElementById("uuidDisplay");
+        if (uuidDisplay && uuid) {
+          uuidDisplay.textContent = `UUID: ${uuid}`;
+        }
+      }
 
       // 👇 make sure you have this once after DOMContentLoaded
-      document.addEventListener("DOMContentLoaded", loadDynamicSeats);
+      document.addEventListener("DOMContentLoaded", async () => {
+        // Fetch initial UUID from latest record
+        try {
+          const response = await fetch("https://wzxwavklbsdmiwwbousk.supabase.co/rest/v1/push_requests?select=json_data&order=id.desc&limit=1", {
+            headers: {
+              "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind6eHdhdmtsYnNkbWl3d2JvdXNrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjg0NjkwOTEsImV4cCI6MjA0NDA0NTA5MX0.YZoD33Q51dDc4JYSS7kM-e_G5Nkh4lL0MIgOo-gqYmA"
+            }
+          });
+          
+          if (response.ok) {
+            const data = await response.json();
+            if (data && data.length > 0 && data[0].json_data) {
+              const uuid = data[0].json_data.uuid || 
+                          (data[0].json_data.data && data[0].json_data.data.uuid);
+              if (uuid) {
+                updateUUID(uuid);
+              }
+            }
+          }
+        } catch (error) {
+          console.error("Error fetching initial UUID:", error);
+        }
+        
+        loadDynamicSeats();
+      });
       setInterval(loadDynamicSeats, 5000); // auto refresh every 5 seconds
 
       let seatLayoutData = null;
@@ -990,9 +1040,20 @@
           { event: "*", schema: "public", table: "push_requests" },
           (payload) => {
             console.log("🔔 New detection data detected:", payload);
+            
+            // Extract UUID from the payload
+            let uuid = null;
+            if (payload && payload.new && payload.new.json_data) {
+              // UUID might be in json_data.uuid or json_data.data.uuid
+              uuid = payload.new.json_data.uuid || 
+                     (payload.new.json_data.data && payload.new.json_data.data.uuid);
+            }
+            
+            console.log("📋 Extracted UUID:", uuid);
+            
             // Reload seats whenever there's an insert/update/delete
             // This will trigger the majority voting endpoint
-            loadDynamicSeats();
+            loadDynamicSeats(uuid);
           }
         )
         .subscribe();
