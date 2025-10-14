@@ -86,11 +86,11 @@
       </p>
       <p>
         You can also evaluate our website using this
-        <a href="https://bit.ly/4ok3PPg" target="_blank">link</a> or scan the QR
+        <a href="https://bit.ly/4hbgMXw" target="_blank">link</a> or scan the QR
         code below.
       </p>
       <img
-        src="images/qrcode.png"
+        src="images/qr.png"
         alt="QR Code"
         style="display: block; margin: 20px auto; width: 150px"
       />
@@ -102,11 +102,19 @@
         If you have any questions, feel free to send us an email using the form
         below.
       </p>
+      
+      <div id="statusMessage" style="display: none; padding: 10px; margin: 10px 0; border-radius: 4px;"></div>
+      
       <form
-        action="mailto:anton_boquer@dlsu.edu.ph"
-        method="post"
-        enctype="text/plain"
+        action="https://formsubmit.co/sitsitbusoccupancy@gmail.com"
+        method="POST"
       >
+        <!-- FormSubmit Configuration -->
+        <input type="hidden" name="_subject" value="New Contact Form Submission - Bus Occupancy System">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_template" value="table">
+        <input type="text" name="_honey" style="display:none">
+        
         <label for="name">Your Name:</label>
         <input type="text" id="name" name="name" required />
 
