@@ -444,6 +444,8 @@
       setInterval(loadDynamicSeats, 5000); // auto refresh every 5 seconds
 
       let seatLayoutData = null;
+      let mobileLayoutCalculated = false; // Flag to track if mobile layout was calculated once
+      let cachedMobileSizes = null; // Store calculated sizes for mobile (calculate once)
 
       // Generate seat elements dynamically with grid layout and aisle separation
       // Make this function globally accessible for auto-refresh
@@ -478,6 +480,13 @@
         const isMobile = screenWidth < 768;
         const isTablet = screenWidth >= 768 && screenWidth < 1024;
         
+        // On mobile, if layout was already calculated, skip recalculation
+        if (isMobile && mobileLayoutCalculated) {
+          console.log(`📱 Mobile layout already calculated - skipping size recalculation`);
+          // Just update seat colors without regenerating entire layout
+          // This will be handled by the existing seat update logic
+        }
+        
         console.log(`🔍 Screen width: ${screenWidth}px, isMobile: ${isMobile}, isTablet: ${isTablet}`);
         
         // Scale factor based on screen size - BIGGER seats, LESS spacing on mobile
@@ -485,18 +494,37 @@
         let seatSize, seatSpacing, aisleWidth, edgeMargin;
         
         if (isMobile) {
-          // Mobile: Optimized seat sizing to fit screen
-          // Calculate to fit the screen height (which becomes width after rotation)
-          const availableHeight = window.innerHeight - 170; 
-          const baseHeight = maxColumnsInAnyRow * 40; // Base calculation
-          scaleFactor = Math.max(0.9, Math.min(1.3, availableHeight / baseHeight)); // Moderate scale
-          
-          seatSize = Math.max(30, 35 * scaleFactor); // Reasonable seat size (min 30px)
-          seatSpacing = Math.max(10, 12 * scaleFactor); // Compact spacing
-          aisleWidth = seatSpacing * 1.1;
-          edgeMargin = Math.max(10, 12 * scaleFactor);
-          
-          console.log(`📏 Mobile sizing: seatSize=${seatSize.toFixed(1)}px, spacing=${seatSpacing.toFixed(1)}px, scale=${scaleFactor.toFixed(2)}, availableHeight=${availableHeight}px`);
+          // Check if we already calculated sizes for mobile
+          if (cachedMobileSizes) {
+            // Use cached values - don't recalculate
+            ({ seatSize, seatSpacing, aisleWidth, edgeMargin, scaleFactor } = cachedMobileSizes);
+            console.log(`📱 Using cached mobile sizes: seatSize=${seatSize.toFixed(1)}px`);
+          } else {
+            // Mobile: Calculate sizing ONCE to fit screen perfectly
+            const availableWidth = screenWidth * 0.95; // Available width after rotation
+            const availableHeight = window.innerHeight - 140; // Available height
+            
+            // Calculate how much space we have for all rows (becomes height after rotation)
+            const totalRowsWidth = totalRows * 50; // Rough estimate
+            const rowScale = availableHeight / totalRowsWidth;
+            
+            // Calculate how much space we have for columns (becomes width after rotation)
+            const totalColsHeight = maxColumnsInAnyRow * 40; // Rough estimate
+            const colScale = availableWidth / totalColsHeight;
+            
+            // Use the smaller scale to ensure everything fits
+            scaleFactor = Math.min(rowScale, colScale, 1.0);
+            
+            seatSize = Math.max(22, 28 * scaleFactor); // Smaller seats (min 22px)
+            seatSpacing = Math.max(8, 10 * scaleFactor); // Tight spacing
+            aisleWidth = seatSpacing * 1.1;
+            edgeMargin = Math.max(8, 10 * scaleFactor);
+            
+            // Cache these values for future use
+            cachedMobileSizes = { seatSize, seatSpacing, aisleWidth, edgeMargin, scaleFactor };
+            
+            console.log(`📏 Mobile sizing (CALCULATED ONCE): seatSize=${seatSize.toFixed(1)}px, spacing=${seatSpacing.toFixed(1)}px, scale=${scaleFactor.toFixed(2)}, screen=${screenWidth}×${window.innerHeight}`);
+          }
         } else if (isTablet) {
           scaleFactor = 1.0;
           seatSize = 35;
@@ -671,6 +699,12 @@
           container.style.visibility = "visible";
           container.style.opacity = "1";
           console.log(`✅ Generated ${seatCounter} seats in ${totalRows} rows`);
+          
+          // Mark mobile layout as calculated (so it won't recalculate on updates)
+          if (isMobile && !mobileLayoutCalculated) {
+            mobileLayoutCalculated = true;
+            console.log(`📱 Mobile layout locked - will not recalculate sizes`);
+          }
         } else {
           console.warn("⚠️ No seats were generated");
         }
@@ -777,17 +811,24 @@
       // Load seats when page loads
       document.addEventListener("DOMContentLoaded", loadDynamicSeats);
       
-      // Handle window resize for responsive layout
-      let resizeTimer;
-      window.addEventListener('resize', function() {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(function() {
-          console.log('🔄 Window resized, regenerating seat layout...');
-          if (seatLayoutData) {
-            generateSeats(seatLayoutData);
-          }
-        }, 250); // Debounce resize events
-      });
+      // Handle window resize ONLY on desktop (not mobile - mobile calculates once)
+      const isMobileDevice = window.innerWidth < 768;
+      
+      if (!isMobileDevice) {
+        let resizeTimer;
+        window.addEventListener('resize', function() {
+          clearTimeout(resizeTimer);
+          resizeTimer = setTimeout(function() {
+            console.log('🔄 Window resized, regenerating seat layout...');
+            if (seatLayoutData) {
+              generateSeats(seatLayoutData);
+            }
+          }, 250); // Debounce resize events
+        });
+        console.log('✅ Resize listener enabled for desktop');
+      } else {
+        console.log('📱 Mobile detected - resize listener disabled (calculate once)');
+      }
     </script>
 
     <!-- Auto-refresh removed per user request -->
