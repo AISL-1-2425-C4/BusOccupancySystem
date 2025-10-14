@@ -26,9 +26,9 @@
         border-radius: 12px;
         box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08),
           0 3px 8px rgba(0, 0, 0, 0.06);
-        padding: 20px; /* Increased padding to fit larger seats */
+        padding: 22px; /* Adequate padding for seats */
         max-width: 98vw; /* Responsive: use more screen space */
-        overflow: visible; /* No scrolling - show everything */
+        overflow: visible; /* Show everything */
         min-height: 200px; /* Ensure container has minimum height */
       }
       
@@ -74,12 +74,11 @@
           position: relative !important;
           display: inline-block !important; /* inline-block for proper sizing */
           margin: 20px auto 0 auto !important; /* Center horizontally with auto margins */
-          padding: 20px 25px !important; /* More generous padding: vertical 20px, horizontal 25px */
+          padding: 22px !important; /* Adequate padding */
           width: auto !important; /* Auto width to fit content */
           height: auto !important; /* Auto height to fit content */
           max-width: none !important;
-          overflow: hidden !important; /* Hide overflow instead of visible */
-          box-sizing: border-box !important;
+          overflow: visible !important; /* Show all content */
           /* Container will be rotated by JS, centered below legend */
         }
         
@@ -466,6 +465,9 @@
       let seatLayoutData = null;
       let mobileLayoutCalculated = false; // Flag to track if mobile layout was calculated once
       let cachedMobileSizes = null; // Store calculated sizes for mobile (calculate once)
+      
+      // Clear cache on page load to ensure fresh render
+      console.log('🔄 Initializing fresh - cache cleared');
 
       // Generate seat elements dynamically with grid layout and aisle separation
       // Make this function globally accessible for auto-refresh
@@ -566,10 +568,14 @@
           edgeMargin * 2;
 
         // Update container and bus image size
+        // Set container dimensions explicitly
         container.style.width = `${containerWidth}px`;
         container.style.height = `${containerHeight}px`;
+        container.style.position = 'relative';
         busImage.style.width = `${containerWidth}px`;
         busImage.style.height = `${containerHeight}px`;
+        
+        console.log(`📦 Container dimensions set: ${containerWidth}×${containerHeight}px`);
 
         // Apply rotation and scaling for mobile devices
         if (isMobile) {
@@ -703,6 +709,7 @@
               seatImg.style.left = `${gridX}px`;
               seatImg.style.top = `${gridY}px`;
               seatImg.style.transform = "none"; // Remove the centering transform
+              seatImg.style.zIndex = "5"; // Ensure seats are visible
 
               // Add click event for seat info
               seatImg.addEventListener("click", () => {
