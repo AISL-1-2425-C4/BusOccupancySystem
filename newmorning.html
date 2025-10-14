@@ -46,6 +46,12 @@
           padding: 10px;
           max-width: 98vw;
           min-height: 150px;
+          /* Rotate bus 90 degrees for vertical orientation on mobile */
+          transform: rotate(90deg) !important;
+          transform-origin: center center;
+          /* Adjust margins to accommodate rotation */
+          margin-top: 50px;
+          margin-bottom: 50px;
         }
       }
 
@@ -481,9 +487,15 @@
         
         if (isMobile && containerWidth > maxWidth) {
           const mobileScale = Math.max(0.85, maxWidth / containerWidth); // Don't scale below 85%
-          container.style.transform = `scale(${mobileScale})`;
-          container.style.transformOrigin = 'top center';
-          container.style.margin = '0 auto';
+          // Combine rotation with scaling for mobile
+          container.style.transform = `rotate(90deg) scale(${mobileScale})`;
+          container.style.transformOrigin = 'center center';
+          container.style.margin = '50px auto';
+        } else if (isMobile) {
+          // Just rotate on mobile without additional scaling
+          container.style.transform = 'rotate(90deg)';
+          container.style.transformOrigin = 'center center';
+          container.style.margin = '50px auto';
         } else {
           container.style.transform = 'none';
         }
