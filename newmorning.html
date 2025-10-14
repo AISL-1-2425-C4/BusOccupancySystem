@@ -72,21 +72,27 @@
         /* Redefine container for mobile - centered below legend */
         .image-container {
           position: relative !important;
-          display: block !important; /* Change to block for better centering */
+          display: inline-block !important; /* inline-block for proper sizing */
           margin: 20px auto 0 auto !important; /* Center horizontally with auto margins */
-          padding: 15px !important; /* Adequate padding for larger seats */
-          width: fit-content !important; /* Only as wide as content */
+          padding: 18px !important; /* Adequate padding for larger seats */
+          width: auto !important; /* Auto width to fit content */
+          height: auto !important; /* Auto height to fit content */
           max-width: none !important;
           overflow: visible !important;
-          left: 0 !important;
-          right: 0 !important;
           /* Container will be rotated by JS, centered below legend */
         }
         
         /* Center the bus container wrapper */
         #busContainer {
-          display: block !important;
+          display: inline-block !important;
           margin: 0 auto !important;
+          position: relative !important;
+          text-align: center !important;
+        }
+        
+        /* Ensure body centers the content properly */
+        body > * {
+          text-align: center !important;
         }
         
         /* Hide bottom section on mobile to maximize bus view */
@@ -582,10 +588,18 @@
             console.log(`📱 Mobile: Calculated container scale ONCE: ${containerScale.toFixed(2)}`);
           }
           
-          // Apply rotation with cached scale
+          // Apply rotation with cached scale - ensure proper positioning
           const scale = cachedMobileSizes.containerScale;
           container.style.transform = `rotate(90deg) scale(${scale})`;
           container.style.transformOrigin = 'center center';
+          
+          // Ensure container dimensions account for all content with extra buffer
+          const bufferSpace = 30; // Extra space to ensure all seats are covered
+          container.style.minWidth = `${containerWidth + bufferSpace}px`;
+          container.style.minHeight = `${containerHeight + bufferSpace}px`;
+          
+          // Force container to respect dimensions
+          container.style.boxSizing = 'border-box';
           
           console.log(`📱 Mobile: Rotating 90° with scale ${scale.toFixed(2)}, Container: ${containerWidth}×${containerHeight}px`);
         } else {
