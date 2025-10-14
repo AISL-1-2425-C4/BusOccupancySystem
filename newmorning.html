@@ -39,26 +39,50 @@
       
       /* Mobile responsiveness */
       @media (max-width: 768px) {
-        .image-container {
-          margin: 5px auto !important; /* Static margin - no dynamic changes */
-          padding: 8px;
-          max-width: 100vw;
-          min-height: 150px;
-          overflow: visible; /* No scrolling on mobile */
-        }
-        
         body {
-          padding-top: 0;
-          margin-top: 0;
+          padding: 0 !important;
+          margin: 0 !important;
         }
         
         h1 {
-          margin-top: 5px !important;
-          margin-bottom: 5px !important;
+          font-size: 1.3rem;
+          margin: 3px 0 !important;
+          padding: 0 !important;
         }
         
         .legend {
-          margin: 5px 0 !important;
+          margin: 3px auto 5px auto !important;
+          padding: 0 !important;
+        }
+        
+        #loading {
+          margin: 0 auto !important;
+          padding: 5px !important;
+        }
+        
+        #error {
+          margin: 0 auto !important;
+          padding: 5px !important;
+        }
+        
+        /* Redefine container for mobile - fixed position, no movement */
+        .image-container {
+          position: relative !important;
+          display: inline-block !important;
+          margin: 0 auto !important;
+          padding: 8px !important;
+          max-width: none !important;
+          overflow: visible !important;
+          /* Container will be rotated by JS, positioned at top */
+        }
+        
+        /* Hide bottom section on mobile to maximize bus view */
+        h2 {
+          display: none !important;
+        }
+        
+        #lastUpdated {
+          display: none !important;
         }
       }
 
@@ -304,48 +328,6 @@
       .virtual {
         background-color: black;
       }
-            /* ===== Fix white space above the bus container ===== */
-      body {
-        margin: 0;
-        padding: 0;
-      }
-
-      h1 {
-        margin-top: 8px !important;
-        margin-bottom: 8px !important;
-      }
-
-      .legend {
-        margin-top: 5px !important;
-        margin-bottom: 5px !important;
-      }
-
-      #loading {
-        margin: 5px auto !important;
-        padding: 5px !important;
-      }
-
-      .image-container {
-        margin-top: 0 !important;
-        padding-top: 0 !important;
-        display: block !important;
-        text-align: center;
-      }
-
-      #busContainer {
-        margin-top: 0 !important;
-        padding-top: 0 !important;
-      }
-
-      @media (max-width: 768px) {
-        body {
-          padding-top: 0 !important;
-        }
-        .image-container {
-          margin-top: 0 !important;
-        }
-      }
-
     </style>
     <link
       href="https://fonts.googleapis.com/css2?family=Karla:wght@400;700&display=swap"
@@ -557,27 +539,12 @@
 
         // Apply rotation and scaling for mobile devices
         if (isMobile) {
-          // After rotation, containerWidth becomes visual height, containerHeight becomes visual width
-          const availableWidth = screenWidth * 0.98; // 98% of screen width
-          const availableHeight = window.innerHeight - 170; // Account for header/legend (reduced space)
-          
-          // Calculate scale to fit both dimensions after rotation
-          const scaleForWidth = availableWidth / containerHeight; // height becomes width after rotation
-          const scaleForHeight = availableHeight / containerWidth; // width becomes height after rotation
-          const finalScale = Math.min(scaleForWidth, scaleForHeight, 1.0); // Don't scale up, only down if needed
-          
-          if (finalScale < 1.0) {
-            container.style.transform = `rotate(90deg) scale(${finalScale})`;
-            console.log(`📱 Mobile: Rotating 90° and scaling by ${finalScale.toFixed(2)}`);
-          } else {
-            container.style.transform = 'rotate(90deg)';
-            console.log(`📱 Mobile: Rotating 90° (no scaling needed)`);
-          }
-          
+          // Simply rotate - CSS handles positioning
+          container.style.transform = 'rotate(90deg)';
           container.style.transformOrigin = 'center center';
-          // Static margin - don't override CSS
+          // Don't set any margins - let CSS handle it
           
-          console.log(`📐 Container: ${containerWidth}×${containerHeight}px, After rotation fits in: ${availableWidth}×${availableHeight}px`);
+          console.log(`📱 Mobile: Rotating 90°, Container: ${containerWidth}×${containerHeight}px`);
         } else {
           // Desktop: no rotation
           container.style.transform = 'none';
@@ -748,15 +715,18 @@
         if (existingWheel) existingWheel.remove();
         if (existingLabel) existingLabel.remove();
 
-        // Calculate position in front of bottom-left seat
+        // Calculate position on the left side, centered vertically
         const seatSize = 30;
         const seatSpacing = 25;
         const edgeMargin = 25;
         const driverAreaWidth = 60;
+        
+        // Get container height to center vertically
+        const containerHeight = parseFloat(container.style.height) || 400;
 
-        // Position steering wheel in the driver area, aligned with bottom-left seat
-        const wheelX = edgeMargin + driverAreaWidth / 2 - 22.5; // Center in driver area (45px wheel / 2)
-        const wheelY = edgeMargin + 4 * (seatSize + seatSpacing) + 10; // Align with bottom seats
+        // Position steering wheel on the left side, centered vertically
+        const wheelX = edgeMargin + driverAreaWidth / 2 - 22.5; // Left side in driver area (45px wheel / 2)
+        const wheelY = containerHeight / 2; // Center vertically
 
         // Create steering wheel
         const steeringWheel = document.createElement("div");
@@ -766,14 +736,14 @@
         steeringWheel.style.top = `${wheelY}px`;
         container.appendChild(steeringWheel);
 
-        // Create driver label - positioned at bottom for mobile (rotated view)
+        // Create driver label - positioned next to steering wheel on left
         const driverLabel = document.createElement("div");
         driverLabel.className = "driver-label";
         driverLabel.textContent = "Driver";
         driverLabel.style.left = `${wheelX - 10}px`;
-        driverLabel.style.top = `${wheelY + 42}px`; // Positioned below steering wheel
+        driverLabel.style.top = `${wheelY + 35}px`; // Positioned below steering wheel
         driverLabel.style.width = "55px";
-        driverLabel.style.transform = "rotate(-90deg)"; // Also rotate text for mobile view
+        driverLabel.style.transform = "rotate(-90deg)"; // Rotate text for mobile view
         driverLabel.style.transformOrigin = "center center";
         container.appendChild(driverLabel);
 
