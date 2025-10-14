@@ -26,7 +26,7 @@
         border-radius: 12px;
         box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08),
           0 3px 8px rgba(0, 0, 0, 0.06);
-        padding: 15px;
+        padding: 20px; /* Increased padding to fit larger seats */
         max-width: 98vw; /* Responsive: use more screen space */
         overflow: visible; /* No scrolling - show everything */
         min-height: 200px; /* Ensure container has minimum height */
@@ -74,7 +74,7 @@
           position: relative !important;
           display: block !important; /* Change to block for better centering */
           margin: 20px auto 0 auto !important; /* Center horizontally with auto margins */
-          padding: 8px !important;
+          padding: 15px !important; /* Adequate padding for larger seats */
           width: fit-content !important; /* Only as wide as content */
           max-width: none !important;
           overflow: visible !important;
@@ -132,15 +132,15 @@
       /* Driver's steering wheel */
       .steering-wheel {
         position: absolute;
-        width: 30px;
-        height: 30px;
-        border: 3px solid #495057;
+        width: 25px;
+        height: 25px;
+        border: 2px solid #495057;
         border-radius: 50%;
         background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15),
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15),
           inset 0 1px 2px rgba(255, 255, 255, 0.2);
         z-index: 10;
         transform: rotate(-90deg); /* Rotate counter-clockwise for mobile view */
@@ -148,8 +148,8 @@
 
       .steering-wheel::before {
         content: "";
-        width: 6px;
-        height: 6px;
+        width: 5px;
+        height: 5px;
         background: #343a40;
         border-radius: 50%;
         box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
@@ -158,11 +158,11 @@
       .steering-wheel::after {
         content: "";
         position: absolute;
-        width: 18px;
+        width: 15px;
         height: 2px;
         background: #495057;
         border-radius: 1px;
-        box-shadow: 0 7px 0 #495057, 7px 0 0 #495057, -7px 0 0 #495057;
+        box-shadow: 0 6px 0 #495057, 6px 0 0 #495057, -6px 0 0 #495057;
       }
 
       /* Driver area label */
@@ -514,10 +514,10 @@
             console.log(`📱 Using cached mobile sizes: seatSize=${seatSize.toFixed(1)}px`);
           } else {
             // Mobile: Use fixed sizes to fit screen
-            seatSize = 32; // Increased seat size for better visibility
-            seatSpacing = 10; // Moderate spacing
-            aisleWidth = 11;
-            edgeMargin = 10;
+            seatSize = 38; // Larger seat size for better visibility
+            seatSpacing = 12; // Moderate spacing
+            aisleWidth = 13;
+            edgeMargin = 12;
             scaleFactor = 1.0;
             
             // Cache these values for future use
@@ -541,7 +541,7 @@
         }
 
         // Calculate dynamic container dimensions with driver area
-        const driverAreaWidth = Math.max(40, 60 * scaleFactor); // Scaled driver area
+        const driverAreaWidth = Math.max(45, 65 * scaleFactor); // Scaled driver area (slightly larger for larger seats)
         
         // Calculate container dimensions FIRST
         const containerWidth =
@@ -774,7 +774,7 @@
         const containerHeight = parseFloat(container.style.height) || 400;
 
         // Position steering wheel on the left side, centered vertically
-        const wheelX = edgeMargin + driverAreaWidth / 2 - 15; // Left side in driver area (30px wheel / 2)
+        const wheelX = edgeMargin + driverAreaWidth / 3 - 12.5; // More to the left (25px wheel / 2)
         const wheelY = containerHeight / 2; // Center vertically
 
         // Create steering wheel
@@ -790,7 +790,7 @@
         driverLabel.className = "driver-label";
         driverLabel.textContent = "Driver";
         driverLabel.style.left = `${wheelX - 10}px`;
-        driverLabel.style.top = `${wheelY + 28}px`; // Positioned below steering wheel (smaller offset)
+        driverLabel.style.top = `${wheelY + 24}px`; // Positioned below steering wheel (smaller offset for smaller wheel)
         driverLabel.style.width = "55px";
         driverLabel.style.transform = "rotate(-90deg)"; // Rotate text for mobile view
         driverLabel.style.transformOrigin = "center center";
