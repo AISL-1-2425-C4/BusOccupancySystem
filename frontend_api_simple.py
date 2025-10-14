@@ -494,6 +494,15 @@ async def serve_seating_json():
                         }
                     }
                 
+                # Extract UUID from the most recent record (first in list since ordered by id desc)
+                latest_uuid = None
+                if rows and len(rows) > 0:
+                    latest_json_data = rows[0].get("json_data", {})
+                    # Try to get UUID from different possible locations
+                    latest_uuid = (latest_json_data.get("uuid") or 
+                                  (latest_json_data.get("data", {}).get("uuid")))
+                    logger.info(f"📋 Latest UUID: {latest_uuid}")
+                
                 # Process each record to extract seating layouts
                 from seating_processor import process_seating_layout
                 layouts = []
@@ -532,7 +541,14 @@ async def serve_seating_json():
                 last_updated = datetime.utcnow().isoformat()
                 
                 logger.info(f"✅ Serving merged layout with {len(merged_layout)} rows")
-                return merged_layout
+                
+                # Return layout with UUID and metadata
+                return {
+                    "layout": merged_layout,
+                    "uuid": latest_uuid,
+                    "last_updated": last_updated,
+                    "records_merged": len(layouts)
+                }
                 
         except Exception as e:
             logger.error(f"Error fetching from Supabase: {e}")

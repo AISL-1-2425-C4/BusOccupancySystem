@@ -444,7 +444,7 @@
           "Last Updated: " + now.toLocaleTimeString();
       }
 
-      async function loadDynamicSeats(uuid = null) {
+      async function loadDynamicSeats(uuidOverride = null) {
         try {
           const url = "row_seating_layout.json?nocache=" + Date.now();
           const response = await fetch(url);
@@ -453,7 +453,23 @@
             throw new Error(`HTTP ${response.status}: ${response.statusText}`);
           }
 
-          const newLayout = await response.json();
+          const data = await response.json();
+          console.log("📦 Received data from API:", data);
+          
+          // Extract layout and UUID from response
+          let newLayout, uuid;
+          
+          if (data && data.layout) {
+            // New format: { layout: {...}, uuid: "...", ... }
+            newLayout = data.layout;
+            uuid = data.uuid;
+            console.log("✅ Extracted from new format - UUID:", uuid);
+          } else {
+            // Old format: just the layout object (backward compatibility)
+            newLayout = data;
+            uuid = uuidOverride;
+            console.log("⚠️ Using old format (backward compatibility)");
+          }
 
           // ✅ Only update if layout is not empty AND different from current
           if (
@@ -467,7 +483,7 @@
             generateSeats(seatLayoutData);
             updateTimestamp();
             
-            // Update UUID display if provided
+            // Update UUID display
             if (uuid) {
               updateUUID(uuid);
             }
@@ -480,7 +496,7 @@
               generateSeats(seatLayoutData);
               updateTimestamp();
               
-              // Update UUID display if provided
+              // Update UUID display
               if (uuid) {
                 updateUUID(uuid);
               }
@@ -513,38 +529,7 @@
         updateTimestamp();
         setInterval(updateTimestamp, 5000);
         
-        // Fetch initial UUID from latest record
-        try {
-          const response = await fetch("https://wzxwavklbsdmiwwbousk.supabase.co/rest/v1/push_requests?select=json_data&order=id.desc&limit=1", {
-            headers: {
-              "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind6eHdhdmtsYnNkbWl3d2JvdXNrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjg0NjkwOTEsImV4cCI6MjA0NDA0NTA5MX0.YZoD33Q51dDc4JYSS7kM-e_G5Nkh4lL0MIgOo-gqYmA"
-            }
-          });
-          
-          if (response.ok) {
-            const data = await response.json();
-            console.log("📦 Fetched data:", data);
-            
-            if (data && data.length > 0 && data[0].json_data) {
-              console.log("📋 json_data structure:", data[0].json_data);
-              
-              const uuid = data[0].json_data.uuid || 
-                          (data[0].json_data.data && data[0].json_data.data.uuid);
-              
-              console.log("🔑 Extracted UUID:", uuid, "Type:", typeof uuid);
-              
-              if (uuid && typeof uuid === 'string') {
-                updateUUID(uuid);
-              } else {
-                console.warn("⚠️ Invalid or missing UUID in json_data");
-              }
-            }
-          }
-        } catch (error) {
-          console.error("❌ Error fetching initial UUID:", error);
-        }
-        
-        // Load seat layout
+        // Load seat layout (UUID will be included in the response now)
         loadDynamicSeats();
       });
       setInterval(loadDynamicSeats, 5000); // auto refresh every 5 seconds
