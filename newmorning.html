@@ -46,12 +46,9 @@
           padding: 10px;
           max-width: 98vw;
           min-height: 150px;
-          /* Rotate bus 90 degrees for vertical orientation on mobile */
-          transform: rotate(90deg) !important;
-          transform-origin: center center;
           /* Adjust margins to accommodate rotation */
-          margin-top: 50px;
-          margin-bottom: 50px;
+          margin-top: 80px;
+          margin-bottom: 80px;
         }
       }
 
@@ -428,6 +425,8 @@
         const isMobile = screenWidth < 768;
         const isTablet = screenWidth >= 768 && screenWidth < 1024;
         
+        console.log(`🔍 Screen width: ${screenWidth}px, isMobile: ${isMobile}, isTablet: ${isTablet}`);
+        
         // Scale factor based on screen size - BIGGER seats, LESS spacing on mobile
         let scaleFactor = 1;
         let seatSize, seatSpacing, aisleWidth, edgeMargin;
@@ -481,23 +480,28 @@
         busImage.style.width = `${containerWidth}px`;
         busImage.style.height = `${containerHeight}px`;
 
-        // Apply CSS transform scaling if container is still too wide for mobile
-        // But prefer to keep seats big rather than scaling down too much
-        const maxWidth = screenWidth * 0.98; // use 98% of screen width
-        
-        if (isMobile && containerWidth > maxWidth) {
-          const mobileScale = Math.max(0.85, maxWidth / containerWidth); // Don't scale below 85%
-          // Combine rotation with scaling for mobile
-          container.style.transform = `rotate(90deg) scale(${mobileScale})`;
+        // Apply rotation and scaling for mobile devices
+        if (isMobile) {
+          // Calculate if we need to scale based on container height (which becomes width after rotation)
+          const maxAvailableHeight = screenWidth * 0.95; // Use screen width as available height after rotation
+          const needsScaling = containerHeight > maxAvailableHeight;
+          
+          if (needsScaling) {
+            const mobileScale = Math.max(0.7, maxAvailableHeight / containerHeight);
+            // Rotate 90 degrees and scale to fit
+            container.style.transform = `rotate(90deg) scale(${mobileScale})`;
+            console.log(`📱 Mobile: Rotating and scaling by ${mobileScale.toFixed(2)}`);
+          } else {
+            // Just rotate 90 degrees on mobile
+            container.style.transform = 'rotate(90deg)';
+            console.log(`📱 Mobile: Rotating 90 degrees`);
+          }
           container.style.transformOrigin = 'center center';
-          container.style.margin = '50px auto';
-        } else if (isMobile) {
-          // Just rotate on mobile without additional scaling
-          container.style.transform = 'rotate(90deg)';
-          container.style.transformOrigin = 'center center';
-          container.style.margin = '50px auto';
+          container.style.margin = '80px auto';
         } else {
+          // Desktop: no rotation
           container.style.transform = 'none';
+          container.style.margin = '20px auto';
         }
 
         // Add aisle divider lines for visual appeal
