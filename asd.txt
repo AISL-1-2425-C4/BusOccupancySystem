@@ -1,0 +1,1981 @@
+2025-10-14T14:26:34.555Z [info] [Left Pairing] Paired (1782.1557006835938, 1155.1875610351562) and (1573.5581665039062, 1152.4990844726562) (y_diff=2.7, x_diff=208.6)
+2025-10-14T14:26:34.555Z [info] [Left Pairing] Paired (1638.00927734375, 1102.7606811523438) and (1811.157470703125, 1102.6067504882812) (y_diff=0.2, x_diff=173.1)
+2025-10-14T14:26:34.555Z [info] [Left Pairing] Paired (1687.5091552734375, 1065.1544189453125) and (1837.7167358398438, 1064.0761108398438) (y_diff=1.1, x_diff=150.2)
+2025-10-14T14:26:34.555Z [info] [Left Pairing] Paired (1718.53515625, 1035.2626953125) and (1860.5231323242188, 1030.3605346679688) (y_diff=4.9, x_diff=142.0)
+2025-10-14T14:26:34.555Z [info] [Left Pairing] Paired (1873.5836791992188, 1009.1376647949219) and (1776.0512084960938, 997.3556518554688) (y_diff=11.8, x_diff=97.5)
+2025-10-14T14:26:34.555Z [info] [Left Pairing] Paired (1886.364990234375, 990.8413391113281) and (1792.5050659179688, 978.8946228027344) (y_diff=11.9, x_diff=93.9)
+2025-10-14T14:26:34.555Z [info] Left side pairs: 11 (excluded 1 cross-aisle seats)
+2025-10-14T14:26:34.555Z [info] [Right Last Row Pairing] Paired (2208.0604248046875, 936.5774536132812) and (2127.769287109375, 928.3787536621094) (y_diff=8.2, x_diff=80.3)
+2025-10-14T14:26:34.555Z [info] [Right Pairing] Paired (2571.5728759765625, 2068.6162109375) and (3118.1279296875, 2056.5772094726562) (y_diff=12.0, x_diff=546.6)
+2025-10-14T14:26:34.555Z [info] [Right Pairing] Paired (2399.07470703125, 1493.0443725585938) and (2769.730712890625, 1491.6533813476562) (y_diff=1.4, x_diff=370.7)
+2025-10-14T14:26:34.555Z [info] [Right Pairing] Paired (2305.7001953125, 1314.7402954101562) and (2611.7880859375, 1310.0588989257812) (y_diff=4.7, x_diff=306.1)
+2025-10-14T14:26:34.555Z [info] [Right Pairing] Paired (2251.0694580078125, 1209.2083740234375) and (2483.8455810546875, 1208.2214965820312) (y_diff=1.0, x_diff=232.8)
+2025-10-14T14:26:34.555Z [info] [Right Pairing] Paired (2217.7581787109375, 1141.3135375976562) and (2407.53076171875, 1140.2271118164062) (y_diff=1.1, x_diff=189.8)
+2025-10-14T14:26:34.555Z [info] [Right Pairing] Paired (2193.1065673828125, 1095.6429443359375) and (2355.3563232421875, 1092.9420776367188) (y_diff=2.7, x_diff=162.2)
+2025-10-14T14:26:34.555Z [info] [Right Pairing] Paired (2170.099365234375, 1060.1004638671875) and (2298.9290771484375, 1057.5859985351562) (y_diff=2.5, x_diff=128.8)
+2025-10-14T14:26:34.555Z [info] [Right Pairing] Paired (2146.05615234375, 1027.5064697265625) and (2277.7548828125, 1023.5155944824219) (y_diff=4.0, x_diff=131.7)
+2025-10-14T14:26:34.555Z [info] [Right Pairing] Paired (2237.4559326171875, 1009.0206909179688) and (2129.7532958984375, 1006.407470703125) (y_diff=2.6, x_diff=107.7)
+2025-10-14T14:26:34.555Z [info] [Right Pairing] Paired (2124.1297607421875, 991.6498718261719) and (2227.27294921875, 988.7039489746094) (y_diff=2.9, x_diff=103.1)
+2025-10-14T14:26:34.555Z [info] Right side pairs: 11 (excluded 1 cross-aisle seats)
+2025-10-14T14:26:34.555Z [info] [Virtual Pairing] Paired (2118.7828369140625, 975.4259338378906) with generated dot (2168.7828369140625, 975.4259338378906) (side: left, offset: 50)
+2025-10-14T14:26:34.555Z [info] Left side pairs: 11, Right side pairs: 12
+2025-10-14T14:26:34.556Z [info] Cross-aisle pair groups: 11
+2025-10-14T14:26:34.556Z [info] Row 1: Left(0,0) Right(0,0)
+2025-10-14T14:26:34.556Z [info] Row 2: Left(1,0) Right(0,0)
+2025-10-14T14:26:34.556Z [info] Row 3: Left(0,0) Right(0,0)
+2025-10-14T14:26:34.556Z [info] Row 4: Left(0,0) Right(0,0)
+2025-10-14T14:26:34.557Z [error] INFO:frontend_api_simple:📊 Majority vote pool: 1 new + 4 old = 5 total layouts
+2025-10-14T14:26:34.557Z [error] INFO:frontend_api_simple:🗳️ Merging 5 layouts using majority voting
+2025-10-14T14:26:34.557Z [info] Row 5: Left(0,0) Right(0,0)
+2025-10-14T14:26:34.557Z [info] Row 6: Left(0,0) Right(0,0)
+2025-10-14T14:26:34.558Z [info] Row 7: Left(0,0) Right(0,0)
+2025-10-14T14:26:34.558Z [info] Row 8: Left(0,0) Right(0,0)
+2025-10-14T14:26:34.558Z [info] Row 9: Left(0,0) Right(0,0)
+2025-10-14T14:26:34.558Z [info] Row 10: Left(0,0) Right(0,0)
+2025-10-14T14:26:34.558Z [info] Last row: Left(0,0) Cross(0,0) Right(0,0)
+2025-10-14T14:26:34.558Z [info] ✅ Generated seating layout with 11 rows (including last row if present)
+2025-10-14T14:26:34.558Z [info] --- Seating Layout Output (row_json_data) ---
+2025-10-14T14:26:34.558Z [info] {
+  "row_1": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 757.347412109375,
+        "y": 2146.7152709960938
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1325.8311157226562,
+        "y": 2138.565185546875
+      }
+    },
+    "column_three": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2571.5728759765625,
+        "y": 2068.6162109375
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 3118.1279296875,
+        "y": 2056.5772094726562
+      }
+    }
+  },
+  "row_2": {
+    "column_one": {
+      "class_id": 1,
+      "coordinates": {
+        "x": 1108.8912658691406,
+        "y": 1553.2738647460938
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1515.598388671875,
+        "y": 1564.7145385742188
+      }
+    },
+    "column_three": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2399.07470703125,
+        "y": 1493.0443725585938
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2769.730712890625,
+        "y": 1491.6533813476562
+      }
+    }
+  },
+  "row_3": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1377.1217651367188,
+        "y": 1311.766845703125
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1666.0606689453125,
+        "y": 1346.4862060546875
+      }
+    },
+    "column_three": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2305.7001953125,
+        "y": 1314.7402954101562
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2611.7880859375,
+        "y": 1310.0588989257812
+      }
+    }
+  },
+  "row_4": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1490.5578002929688,
+        "y": 1225.1812744140625
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1727.7391357421875,
+        "y": 1225.4912719726562
+      }
+    },
+    "column_three": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2251.0694580078125,
+        "y": 1209.2083740234375
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2483.8455810546875,
+        "y": 1208.2214965820312
+      }
+    }
+  },
+  "row_5": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1573.5581665039062,
+        "y": 1152.4990844726562
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1782.1557006835938,
+        "y": 1155.1875610351562
+      }
+    },
+    "column_three": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2217.7581787109375,
+        "y": 1141.3135375976562
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2407.53076171875,
+        "y": 1140.2271118164062
+      }
+    }
+  },
+  "row_6": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1638.00927734375,
+        "y": 1102.7606811523438
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1811.157470703125,
+        "y": 1102.6067504882812
+      }
+    },
+    "column_three": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2193.1065673828125,
+        "y": 1095.6429443359375
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2355.3563232421875,
+        "y": 1092.9420776367188
+      }
+    }
+  },
+  "row_7": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1687.5091552734375,
+        "y": 1065.1544189453125
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1837.7167358398438,
+        "y": 1064.0761108398438
+      }
+    },
+    "column_three": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2170.099365234375,
+        "y": 1060.1004638671875
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2298.9290771484375,
+        "y": 1057.5859985351562
+      }
+    }
+  },
+  "row_8": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1718.53515625,
+        "y": 1035.2626953125
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1860.5231323242188,
+        "y": 1030.3605346679688
+      }
+    },
+    "column_three": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2146.05615234375,
+        "y": 1027.5064697265625
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2277.7548828125,
+        "y": 1023.5155944824219
+      }
+    }
+  },
+  "row_9": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1776.0512084960938,
+        "y": 997.3556518554688
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1873.5836791992188,
+        "y": 1009.1376647949219
+      }
+    },
+    "column_three": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2129.7532958984375,
+        "y": 1006.407470703125
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2237.4559326171875,
+        "y": 1009.0206909179688
+      }
+    }
+  },
+  "row_10": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1792.5050659179688,
+        "y": 978.8946228027344
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1886.364990234375,
+        "y": 990.8413391113281
+      }
+    },
+    "column_three": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2124.1297607421875,
+        "y": 991.6498718261719
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2227.27294921875,
+        "y": 988.7039489746094
+      }
+    }
+  },
+  "last_row": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1809.27685546875,
+        "y": 931.6064453125
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1890.2830810546875,
+        "y": 931.16748046875
+      }
+    },
+    "column_three": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1972.2738647460938,
+        "y": 978.9468383789062
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2041.0914306640625,
+        "y": 981.2637634277344
+      }
+    },
+    "column_five": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2127.769287109375,
+        "y": 928.3787536621094
+      }
+    },
+    "column_six": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2208.0604248046875,
+        "y": 936.5774536132812
+      }
+    }
+  }
+}
+2025-10-14T14:26:34.558Z [info] --- End of Seating Layout Output ---
+2025-10-14T14:26:34.558Z [error] INFO:frontend_api_simple:📈 Merged result: 46 seats total - Occupied: 42, Available: 4, Virtual: 0
+2025-10-14T14:26:34.587Z [error] INFO:frontend_api_simple:🔄 Fetching and merging last 5 seating layouts from Supabase...
+2025-10-14T14:26:33.643Z [info] 🚌 Processing 47 detections using full seating.py algorithm...
+2025-10-14T14:26:33.643Z [error] INFO:frontend_api_simple:📥 Webhook #2303: Processing 47 detections...
+2025-10-14T14:26:33.643Z [info] Total seats: 47, Target left side: 23
+2025-10-14T14:26:33.644Z [info] Optimal aisle position: 1980.4
+2025-10-14T14:26:33.644Z [info] Left side seats: 23, Right side seats: 24
+2025-10-14T14:26:33.644Z [info] Cross-aisle pair found: True
+2025-10-14T14:26:33.644Z [info] [Left Last Row Pairing] Paired (1809.27685546875, 931.6064453125) and (1890.2830810546875, 931.16748046875) (y_diff=0.4, x_diff=81.0)
+2025-10-14T14:26:33.644Z [info] [Left Pairing] Paired (757.347412109375, 2146.7152709960938) and (1325.8311157226562, 2138.565185546875) (y_diff=8.2, x_diff=568.5)
+2025-10-14T14:26:33.644Z [info] [Left Pairing] Paired (1515.598388671875, 1564.7145385742188) and (1108.8912658691406, 1553.2738647460938) (y_diff=11.4, x_diff=406.7)
+2025-10-14T14:26:33.644Z [info] [Left Pairing] Paired (1666.0606689453125, 1346.4862060546875) and (1377.1217651367188, 1311.766845703125) (y_diff=34.7, x_diff=288.9)
+2025-10-14T14:26:33.644Z [info] [Left Pairing] Paired (1727.7391357421875, 1225.4912719726562) and (1490.5578002929688, 1225.1812744140625) (y_diff=0.3, x_diff=237.2)
+2025-10-14T14:26:33.644Z [info] [Left Pairing] Paired (1782.1557006835938, 1155.1875610351562) and (1573.5581665039062, 1152.4990844726562) (y_diff=2.7, x_diff=208.6)
+2025-10-14T14:26:33.644Z [info] [Left Pairing] Paired (1638.00927734375, 1102.7606811523438) and (1811.157470703125, 1102.6067504882812) (y_diff=0.2, x_diff=173.1)
+2025-10-14T14:26:33.644Z [info] [Left Pairing] Paired (1687.5091552734375, 1065.1544189453125) and (1837.7167358398438, 1064.0761108398438) (y_diff=1.1, x_diff=150.2)
+2025-10-14T14:26:33.644Z [info] [Left Pairing] Paired (1718.53515625, 1035.2626953125) and (1860.5231323242188, 1030.3605346679688) (y_diff=4.9, x_diff=142.0)
+2025-10-14T14:26:33.644Z [info] [Left Pairing] Paired (1873.5836791992188, 1009.1376647949219) and (1776.0512084960938, 997.3556518554688) (y_diff=11.8, x_diff=97.5)
+2025-10-14T14:26:33.644Z [info] [Left Pairing] Paired (1886.364990234375, 990.8413391113281) and (1792.5050659179688, 978.8946228027344) (y_diff=11.9, x_diff=93.9)
+2025-10-14T14:26:33.644Z [info] Left side pairs: 11 (excluded 1 cross-aisle seats)
+2025-10-14T14:26:33.644Z [info] [Right Last Row Pairing] Paired (2208.0604248046875, 936.5774536132812) and (2127.769287109375, 928.3787536621094) (y_diff=8.2, x_diff=80.3)
+2025-10-14T14:26:33.644Z [info] [Right Pairing] Paired (2571.5728759765625, 2068.6162109375) and (3118.1279296875, 2056.5772094726562) (y_diff=12.0, x_diff=546.6)
+2025-10-14T14:26:33.644Z [info] [Right Pairing] Paired (2399.07470703125, 1493.0443725585938) and (2769.730712890625, 1491.6533813476562) (y_diff=1.4, x_diff=370.7)
+2025-10-14T14:26:33.644Z [info] [Right Pairing] Paired (2305.7001953125, 1314.7402954101562) and (2611.7880859375, 1310.0588989257812) (y_diff=4.7, x_diff=306.1)
+2025-10-14T14:26:33.644Z [info] [Right Pairing] Paired (2251.0694580078125, 1209.2083740234375) and (2483.8455810546875, 1208.2214965820312) (y_diff=1.0, x_diff=232.8)
+2025-10-14T14:26:33.644Z [info] [Right Pairing] Paired (2217.7581787109375, 1141.3135375976562) and (2407.53076171875, 1140.2271118164062) (y_diff=1.1, x_diff=189.8)
+2025-10-14T14:26:33.644Z [info] [Right Pairing] Paired (2193.1065673828125, 1095.6429443359375) and (2355.3563232421875, 1092.9420776367188) (y_diff=2.7, x_diff=162.2)
+2025-10-14T14:26:33.644Z [info] [Right Pairing] Paired (2170.099365234375, 1060.1004638671875) and (2298.9290771484375, 1057.5859985351562) (y_diff=2.5, x_diff=128.8)
+2025-10-14T14:26:33.644Z [info] [Right Pairing] Paired (2146.05615234375, 1027.5064697265625) and (2277.7548828125, 1023.5155944824219) (y_diff=4.0, x_diff=131.7)
+2025-10-14T14:26:33.644Z [info] [Right Pairing] Paired (2237.4559326171875, 1009.0206909179688) and (2129.7532958984375, 1006.407470703125) (y_diff=2.6, x_diff=107.7)
+2025-10-14T14:26:33.644Z [info] [Right Pairing] Paired (2124.1297607421875, 991.6498718261719) and (2227.27294921875, 988.7039489746094) (y_diff=2.9, x_diff=103.1)
+2025-10-14T14:26:33.644Z [info] Right side pairs: 11 (excluded 1 cross-aisle seats)
+2025-10-14T14:26:33.644Z [info] [Virtual Pairing] Paired (2118.7828369140625, 975.4259338378906) with generated dot (2168.7828369140625, 975.4259338378906) (side: left, offset: 50)
+2025-10-14T14:26:33.644Z [info] Left side pairs: 11, Right side pairs: 12
+2025-10-14T14:26:33.644Z [info] Cross-aisle pair groups: 11
+2025-10-14T14:26:33.644Z [info] Row 1: Left(0,0) Right(0,0)
+2025-10-14T14:26:33.644Z [info] Row 2: Left(1,0) Right(0,0)
+2025-10-14T14:26:33.644Z [info] Row 3: Left(0,0) Right(0,0)
+2025-10-14T14:26:33.644Z [info] Row 4: Left(0,0) Right(0,0)
+2025-10-14T14:26:33.644Z [info] Row 5: Left(0,0) Right(1,0)
+2025-10-14T14:26:33.645Z [info] Row 6: Left(0,0) Right(1,0)
+2025-10-14T14:26:33.645Z [info] Row 7: Left(0,0) Right(1,0)
+2025-10-14T14:26:33.645Z [info] Row 8: Left(0,0) Right(0,0)
+2025-10-14T14:26:33.645Z [info] Row 9: Left(0,0) Right(0,0)
+2025-10-14T14:26:33.645Z [info] Row 10: Left(0,0) Right(0,0)
+2025-10-14T14:26:33.645Z [info] Last row: Left(0,0) Cross(0,0) Right(0,0)
+2025-10-14T14:26:33.645Z [info] ✅ Generated seating layout with 11 rows (including last row if present)
+2025-10-14T14:26:33.645Z [info] --- Seating Layout Output (row_json_data) ---
+2025-10-14T14:26:33.646Z [info] {
+  "row_1": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 757.347412109375,
+        "y": 2146.7152709960938
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1325.8311157226562,
+        "y": 2138.565185546875
+      }
+    },
+    "column_three": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2571.5728759765625,
+        "y": 2068.6162109375
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 3118.1279296875,
+        "y": 2056.5772094726562
+      }
+    }
+  },
+  "row_2": {
+    "column_one": {
+      "class_id": 1,
+      "coordinates": {
+        "x": 1108.8912658691406,
+        "y": 1553.2738647460938
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1515.598388671875,
+        "y": 1564.7145385742188
+      }
+    },
+    "column_three": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2399.07470703125,
+        "y": 1493.0443725585938
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2769.730712890625,
+        "y": 1491.6533813476562
+      }
+    }
+  },
+  "row_3": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1377.1217651367188,
+        "y": 1311.766845703125
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1666.0606689453125,
+        "y": 1346.4862060546875
+      }
+    },
+    "column_three": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2305.7001953125,
+        "y": 1314.7402954101562
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2611.7880859375,
+        "y": 1310.0588989257812
+      }
+    }
+  },
+  "row_4": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1490.5578002929688,
+        "y": 1225.1812744140625
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1727.7391357421875,
+        "y": 1225.4912719726562
+      }
+    },
+    "column_three": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2251.0694580078125,
+        "y": 1209.2083740234375
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2483.8455810546875,
+        "y": 1208.2214965820312
+      }
+    }
+  },
+  "row_5": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1573.5581665039062,
+        "y": 1152.4990844726562
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1782.1557006835938,
+        "y": 1155.1875610351562
+      }
+    },
+    "column_three": {
+      "class_id": 1,
+      "coordinates": {
+        "x": 2217.7581787109375,
+        "y": 1141.3135375976562
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2407.53076171875,
+        "y": 1140.2271118164062
+      }
+    }
+  },
+  "row_6": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1638.00927734375,
+        "y": 1102.7606811523438
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1811.157470703125,
+        "y": 1102.6067504882812
+      }
+    },
+    "column_three": {
+      "class_id": 1,
+      "coordinates": {
+        "x": 2193.1065673828125,
+        "y": 1095.6429443359375
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2355.3563232421875,
+        "y": 1092.9420776367188
+      }
+    }
+  },
+  "row_7": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1687.5091552734375,
+        "y": 1065.1544189453125
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1837.7167358398438,
+        "y": 1064.0761108398438
+      }
+    },
+    "column_three": {
+      "class_id": 1,
+      "coordinates": {
+        "x": 2170.099365234375,
+        "y": 1060.1004638671875
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2298.9290771484375,
+        "y": 1057.5859985351562
+      }
+    }
+  },
+  "row_8": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1718.53515625,
+        "y": 1035.2626953125
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1860.5231323242188,
+        "y": 1030.3605346679688
+      }
+    },
+    "column_three": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2146.05615234375,
+        "y": 1027.5064697265625
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2277.7548828125,
+        "y": 1023.5155944824219
+      }
+    }
+  },
+  "row_9": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1776.0512084960938,
+        "y": 997.3556518554688
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1873.5836791992188,
+        "y": 1009.1376647949219
+      }
+    },
+    "column_three": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2129.7532958984375,
+        "y": 1006.407470703125
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2237.4559326171875,
+        "y": 1009.0206909179688
+      }
+    }
+  },
+  "row_10": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1792.5050659179688,
+        "y": 978.8946228027344
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1886.364990234375,
+        "y": 990.8413391113281
+      }
+    },
+    "column_three": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2124.1297607421875,
+        "y": 991.6498718261719
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2227.27294921875,
+        "y": 988.7039489746094
+      }
+    }
+  },
+  "last_row": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1809.27685546875,
+        "y": 931.6064453125
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1890.2830810546875,
+        "y": 931.16748046875
+      }
+    },
+    "column_three": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1972.2738647460938,
+        "y": 978.9468383789062
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2041.0914306640625,
+        "y": 981.2637634277344
+      }
+    },
+    "column_five": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2127.769287109375,
+        "y": 928.3787536621094
+      }
+    },
+    "column_six": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2208.0604248046875,
+        "y": 936.5774536132812
+      }
+    }
+  }
+}
+2025-10-14T14:26:33.646Z [info] --- End of Seating Layout Output ---
+2025-10-14T14:26:33.646Z [error] INFO:frontend_api_simple:Using UUID from webhook payload: 8f59c664db5b45f294f8bbd376015824
+2025-10-14T14:26:33.955Z [error] INFO:httpx:HTTP Request: POST https://wzxwavklbsdmiwwbousk.supabase.co/rest/v1/processed_layouts "HTTP/1.1 201 Created"
+2025-10-14T14:26:34.062Z [error] INFO:frontend_api_simple:🔄 Fetching and merging last 5 seating layouts from Supabase...
+2025-10-14T14:26:34.538Z [error] INFO:httpx:HTTP Request: GET https://wzxwavklbsdmiwwbousk.supabase.co/rest/v1/push_requests?select=id%2Ccreated_at%2Cjson_data&order=id.desc&limit=5 "HTTP/1.1 200 OK"
+2025-10-14T14:26:34.541Z [info] 🚌 Processing 47 detections using full seating.py algorithm...
+2025-10-14T14:26:34.541Z [info] Total seats: 47, Target left side: 23
+2025-10-14T14:26:34.542Z [info] Optimal aisle position: 1980.4
+2025-10-14T14:26:34.542Z [info] Left side seats: 23, Right side seats: 24
+2025-10-14T14:26:34.542Z [info] Cross-aisle pair found: True
+2025-10-14T14:26:34.542Z [info] [Left Last Row Pairing] Paired (1809.27685546875, 931.6064453125) and (1890.2830810546875, 931.16748046875) (y_diff=0.4, x_diff=81.0)
+2025-10-14T14:26:34.542Z [info] [Left Pairing] Paired (757.347412109375, 2146.7152709960938) and (1325.8311157226562, 2138.565185546875) (y_diff=8.2, x_diff=568.5)
+2025-10-14T14:26:34.542Z [info] [Left Pairing] Paired (1515.598388671875, 1564.7145385742188) and (1108.8912658691406, 1553.2738647460938) (y_diff=11.4, x_diff=406.7)
+2025-10-14T14:26:34.542Z [info] [Left Pairing] Paired (1666.0606689453125, 1346.4862060546875) and (1377.1217651367188, 1311.766845703125) (y_diff=34.7, x_diff=288.9)
+2025-10-14T14:26:34.542Z [info] [Left Pairing] Paired (1727.7391357421875, 1225.4912719726562) and (1490.5578002929688, 1225.1812744140625) (y_diff=0.3, x_diff=237.2)
+2025-10-14T14:26:34.542Z [info] [Left Pairing] Paired (1782.1557006835938, 1155.1875610351562) and (1573.5581665039062, 1152.4990844726562) (y_diff=2.7, x_diff=208.6)
+2025-10-14T14:26:34.542Z [info] [Left Pairing] Paired (1638.00927734375, 1102.7606811523438) and (1811.157470703125, 1102.6067504882812) (y_diff=0.2, x_diff=173.1)
+2025-10-14T14:26:34.542Z [info] [Left Pairing] Paired (1687.5091552734375, 1065.1544189453125) and (1837.7167358398438, 1064.0761108398438) (y_diff=1.1, x_diff=150.2)
+2025-10-14T14:26:34.542Z [info] [Left Pairing] Paired (1718.53515625, 1035.2626953125) and (1860.5231323242188, 1030.3605346679688) (y_diff=4.9, x_diff=142.0)
+2025-10-14T14:26:34.542Z [info] [Left Pairing] Paired (1873.5836791992188, 1009.1376647949219) and (1776.0512084960938, 997.3556518554688) (y_diff=11.8, x_diff=97.5)
+2025-10-14T14:26:34.542Z [info] [Left Pairing] Paired (1886.364990234375, 990.8413391113281) and (1792.5050659179688, 978.8946228027344) (y_diff=11.9, x_diff=93.9)
+2025-10-14T14:26:34.542Z [info] Left side pairs: 11 (excluded 1 cross-aisle seats)
+2025-10-14T14:26:34.542Z [info] [Right Last Row Pairing] Paired (2208.0604248046875, 936.5774536132812) and (2127.769287109375, 928.3787536621094) (y_diff=8.2, x_diff=80.3)
+2025-10-14T14:26:34.542Z [info] [Right Pairing] Paired (2571.5728759765625, 2068.6162109375) and (3118.1279296875, 2056.5772094726562) (y_diff=12.0, x_diff=546.6)
+2025-10-14T14:26:34.542Z [info] [Right Pairing] Paired (2399.07470703125, 1493.0443725585938) and (2769.730712890625, 1491.6533813476562) (y_diff=1.4, x_diff=370.7)
+2025-10-14T14:26:34.542Z [info] [Right Pairing] Paired (2305.7001953125, 1314.7402954101562) and (2611.7880859375, 1310.0588989257812) (y_diff=4.7, x_diff=306.1)
+2025-10-14T14:26:34.542Z [info] [Right Pairing] Paired (2251.0694580078125, 1209.2083740234375) and (2483.8455810546875, 1208.2214965820312) (y_diff=1.0, x_diff=232.8)
+2025-10-14T14:26:34.542Z [info] [Right Pairing] Paired (2217.7581787109375, 1141.3135375976562) and (2407.53076171875, 1140.2271118164062) (y_diff=1.1, x_diff=189.8)
+2025-10-14T14:26:34.542Z [info] [Right Pairing] Paired (2193.1065673828125, 1095.6429443359375) and (2355.3563232421875, 1092.9420776367188) (y_diff=2.7, x_diff=162.2)
+2025-10-14T14:26:34.543Z [info] [Right Pairing] Paired (2170.099365234375, 1060.1004638671875) and (2298.9290771484375, 1057.5859985351562) (y_diff=2.5, x_diff=128.8)
+2025-10-14T14:26:34.543Z [info] [Right Pairing] Paired (2146.05615234375, 1027.5064697265625) and (2277.7548828125, 1023.5155944824219) (y_diff=4.0, x_diff=131.7)
+2025-10-14T14:26:34.543Z [info] [Right Pairing] Paired (2237.4559326171875, 1009.0206909179688) and (2129.7532958984375, 1006.407470703125) (y_diff=2.6, x_diff=107.7)
+2025-10-14T14:26:34.543Z [info] [Right Pairing] Paired (2124.1297607421875, 991.6498718261719) and (2227.27294921875, 988.7039489746094) (y_diff=2.9, x_diff=103.1)
+2025-10-14T14:26:34.543Z [info] Right side pairs: 11 (excluded 1 cross-aisle seats)
+2025-10-14T14:26:34.543Z [info] [Virtual Pairing] Paired (2118.7828369140625, 975.4259338378906) with generated dot (2168.7828369140625, 975.4259338378906) (side: left, offset: 50)
+2025-10-14T14:26:34.543Z [info] Left side pairs: 11, Right side pairs: 12
+2025-10-14T14:26:34.543Z [info] Cross-aisle pair groups: 11
+2025-10-14T14:26:34.543Z [info] Row 1: Left(0,0) Right(0,0)
+2025-10-14T14:26:34.543Z [info] Row 2: Left(1,0) Right(0,0)
+2025-10-14T14:26:34.543Z [info] Row 3: Left(0,0) Right(0,0)
+2025-10-14T14:26:34.543Z [info] Row 4: Left(0,0) Right(0,0)
+2025-10-14T14:26:34.543Z [info] Row 5: Left(0,0) Right(1,0)
+2025-10-14T14:26:34.543Z [info] Row 6: Left(0,0) Right(1,0)
+2025-10-14T14:26:34.544Z [info] Row 7: Left(0,0) Right(1,0)
+2025-10-14T14:26:34.544Z [info] Row 8: Left(0,0) Right(0,0)
+2025-10-14T14:26:34.544Z [info] Row 9: Left(0,0) Right(0,0)
+2025-10-14T14:26:34.544Z [info] Row 10: Left(0,0) Right(0,0)
+2025-10-14T14:26:34.544Z [info] Last row: Left(0,0) Cross(0,0) Right(0,0)
+2025-10-14T14:26:34.544Z [info] ✅ Generated seating layout with 11 rows (including last row if present)
+2025-10-14T14:26:34.544Z [info] --- Seating Layout Output (row_json_data) ---
+2025-10-14T14:26:34.545Z [info] {
+  "row_1": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 757.347412109375,
+        "y": 2146.7152709960938
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1325.8311157226562,
+        "y": 2138.565185546875
+      }
+    },
+    "column_three": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2571.5728759765625,
+        "y": 2068.6162109375
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 3118.1279296875,
+        "y": 2056.5772094726562
+      }
+    }
+  },
+  "row_2": {
+    "column_one": {
+      "class_id": 1,
+      "coordinates": {
+        "x": 1108.8912658691406,
+        "y": 1553.2738647460938
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1515.598388671875,
+        "y": 1564.7145385742188
+      }
+    },
+    "column_three": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2399.07470703125,
+        "y": 1493.0443725585938
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2769.730712890625,
+        "y": 1491.6533813476562
+      }
+    }
+  },
+  "row_3": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1377.1217651367188,
+        "y": 1311.766845703125
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1666.0606689453125,
+        "y": 1346.4862060546875
+      }
+    },
+    "column_three": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2305.7001953125,
+        "y": 1314.7402954101562
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2611.7880859375,
+        "y": 1310.0588989257812
+      }
+    }
+  },
+  "row_4": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1490.5578002929688,
+        "y": 1225.1812744140625
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1727.7391357421875,
+        "y": 1225.4912719726562
+      }
+    },
+    "column_three": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2251.0694580078125,
+        "y": 1209.2083740234375
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2483.8455810546875,
+        "y": 1208.2214965820312
+      }
+    }
+  },
+  "row_5": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1573.5581665039062,
+        "y": 1152.4990844726562
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1782.1557006835938,
+        "y": 1155.1875610351562
+      }
+    },
+    "column_three": {
+      "class_id": 1,
+      "coordinates": {
+        "x": 2217.7581787109375,
+        "y": 1141.3135375976562
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2407.53076171875,
+        "y": 1140.2271118164062
+      }
+    }
+  },
+  "row_6": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1638.00927734375,
+        "y": 1102.7606811523438
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1811.157470703125,
+        "y": 1102.6067504882812
+      }
+    },
+    "column_three": {
+      "class_id": 1,
+      "coordinates": {
+        "x": 2193.1065673828125,
+        "y": 1095.6429443359375
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2355.3563232421875,
+        "y": 1092.9420776367188
+      }
+    }
+  },
+  "row_7": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1687.5091552734375,
+        "y": 1065.1544189453125
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1837.7167358398438,
+        "y": 1064.0761108398438
+      }
+    },
+    "column_three": {
+      "class_id": 1,
+      "coordinates": {
+        "x": 2170.099365234375,
+        "y": 1060.1004638671875
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2298.9290771484375,
+        "y": 1057.5859985351562
+      }
+    }
+  },
+  "row_8": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1718.53515625,
+        "y": 1035.2626953125
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1860.5231323242188,
+        "y": 1030.3605346679688
+      }
+    },
+    "column_three": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2146.05615234375,
+        "y": 1027.5064697265625
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2277.7548828125,
+        "y": 1023.5155944824219
+      }
+    }
+  },
+  "row_9": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1776.0512084960938,
+        "y": 997.3556518554688
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1873.5836791992188,
+        "y": 1009.1376647949219
+      }
+    },
+    "column_three": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2129.7532958984375,
+        "y": 1006.407470703125
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2237.4559326171875,
+        "y": 1009.0206909179688
+      }
+    }
+  },
+  "row_10": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1792.5050659179688,
+        "y": 978.8946228027344
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1886.364990234375,
+        "y": 990.8413391113281
+      }
+    },
+    "column_three": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2124.1297607421875,
+        "y": 991.6498718261719
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2227.27294921875,
+        "y": 988.7039489746094
+      }
+    }
+  },
+  "last_row": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1809.27685546875,
+        "y": 931.6064453125
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1890.2830810546875,
+        "y": 931.16748046875
+      }
+    },
+    "column_three": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1972.2738647460938,
+        "y": 978.9468383789062
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2041.0914306640625,
+        "y": 981.2637634277344
+      }
+    },
+    "column_five": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2127.769287109375,
+        "y": 928.3787536621094
+      }
+    },
+    "column_six": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2208.0604248046875,
+        "y": 936.5774536132812
+      }
+    }
+  }
+}
+2025-10-14T14:26:34.545Z [info] --- End of Seating Layout Output ---
+2025-10-14T14:26:34.545Z [info] 🚌 Processing 47 detections using full seating.py algorithm...
+2025-10-14T14:26:34.545Z [info] Total seats: 47, Target left side: 23
+2025-10-14T14:26:34.545Z [info] Optimal aisle position: 1980.4
+2025-10-14T14:26:34.546Z [info] Left side seats: 23, Right side seats: 24
+2025-10-14T14:26:34.546Z [info] Cross-aisle pair found: True
+2025-10-14T14:26:34.546Z [info] [Left Last Row Pairing] Paired (1809.27685546875, 931.6064453125) and (1890.2830810546875, 931.16748046875) (y_diff=0.4, x_diff=81.0)
+2025-10-14T14:26:34.546Z [info] [Left Pairing] Paired (757.347412109375, 2146.7152709960938) and (1325.8311157226562, 2138.565185546875) (y_diff=8.2, x_diff=568.5)
+2025-10-14T14:26:34.546Z [info] [Left Pairing] Paired (1515.598388671875, 1564.7145385742188) and (1108.8912658691406, 1553.2738647460938) (y_diff=11.4, x_diff=406.7)
+2025-10-14T14:26:34.546Z [info] [Left Pairing] Paired (1666.0606689453125, 1346.4862060546875) and (1377.1217651367188, 1311.766845703125) (y_diff=34.7, x_diff=288.9)
+2025-10-14T14:26:34.546Z [info] [Left Pairing] Paired (1727.7391357421875, 1225.4912719726562) and (1490.5578002929688, 1225.1812744140625) (y_diff=0.3, x_diff=237.2)
+2025-10-14T14:26:34.546Z [info] [Left Pairing] Paired (1782.1557006835938, 1155.1875610351562) and (1573.5581665039062, 1152.4990844726562) (y_diff=2.7, x_diff=208.6)
+2025-10-14T14:26:34.546Z [info] [Left Pairing] Paired (1638.00927734375, 1102.7606811523438) and (1811.157470703125, 1102.6067504882812) (y_diff=0.2, x_diff=173.1)
+2025-10-14T14:26:34.546Z [info] [Left Pairing] Paired (1687.5091552734375, 1065.1544189453125) and (1837.7167358398438, 1064.0761108398438) (y_diff=1.1, x_diff=150.2)
+2025-10-14T14:26:34.546Z [info] [Left Pairing] Paired (1718.53515625, 1035.2626953125) and (1860.5231323242188, 1030.3605346679688) (y_diff=4.9, x_diff=142.0)
+2025-10-14T14:26:34.546Z [info] [Left Pairing] Paired (1873.5836791992188, 1009.1376647949219) and (1776.0512084960938, 997.3556518554688) (y_diff=11.8, x_diff=97.5)
+2025-10-14T14:26:34.546Z [info] [Left Pairing] Paired (1886.364990234375, 990.8413391113281) and (1792.5050659179688, 978.8946228027344) (y_diff=11.9, x_diff=93.9)
+2025-10-14T14:26:34.546Z [info] Left side pairs: 11 (excluded 1 cross-aisle seats)
+2025-10-14T14:26:34.546Z [info] [Right Last Row Pairing] Paired (2208.0604248046875, 936.5774536132812) and (2127.769287109375, 928.3787536621094) (y_diff=8.2, x_diff=80.3)
+2025-10-14T14:26:34.546Z [info] [Right Pairing] Paired (2571.5728759765625, 2068.6162109375) and (3118.1279296875, 2056.5772094726562) (y_diff=12.0, x_diff=546.6)
+2025-10-14T14:26:34.546Z [info] [Right Pairing] Paired (2399.07470703125, 1493.0443725585938) and (2769.730712890625, 1491.6533813476562) (y_diff=1.4, x_diff=370.7)
+2025-10-14T14:26:34.546Z [info] [Right Pairing] Paired (2305.7001953125, 1314.7402954101562) and (2611.7880859375, 1310.0588989257812) (y_diff=4.7, x_diff=306.1)
+2025-10-14T14:26:34.546Z [info] [Right Pairing] Paired (2251.0694580078125, 1209.2083740234375) and (2483.8455810546875, 1208.2214965820312) (y_diff=1.0, x_diff=232.8)
+2025-10-14T14:26:34.546Z [info] [Right Pairing] Paired (2217.7581787109375, 1141.3135375976562) and (2407.53076171875, 1140.2271118164062) (y_diff=1.1, x_diff=189.8)
+2025-10-14T14:26:34.546Z [info] [Right Pairing] Paired (2193.1065673828125, 1095.6429443359375) and (2355.3563232421875, 1092.9420776367188) (y_diff=2.7, x_diff=162.2)
+2025-10-14T14:26:34.546Z [info] [Right Pairing] Paired (2170.099365234375, 1060.1004638671875) and (2298.9290771484375, 1057.5859985351562) (y_diff=2.5, x_diff=128.8)
+2025-10-14T14:26:34.546Z [info] [Right Pairing] Paired (2146.05615234375, 1027.5064697265625) and (2277.7548828125, 1023.5155944824219) (y_diff=4.0, x_diff=131.7)
+2025-10-14T14:26:34.547Z [info] [Right Pairing] Paired (2237.4559326171875, 1009.0206909179688) and (2129.7532958984375, 1006.407470703125) (y_diff=2.6, x_diff=107.7)
+2025-10-14T14:26:34.547Z [info] [Right Pairing] Paired (2124.1297607421875, 991.6498718261719) and (2227.27294921875, 988.7039489746094) (y_diff=2.9, x_diff=103.1)
+2025-10-14T14:26:34.547Z [info] Right side pairs: 11 (excluded 1 cross-aisle seats)
+2025-10-14T14:26:34.547Z [info] [Virtual Pairing] Paired (2118.7828369140625, 975.4259338378906) with generated dot (2168.7828369140625, 975.4259338378906) (side: left, offset: 50)
+2025-10-14T14:26:34.547Z [info] Left side pairs: 11, Right side pairs: 12
+2025-10-14T14:26:34.547Z [info] Cross-aisle pair groups: 11
+2025-10-14T14:26:34.547Z [info] Row 1: Left(0,0) Right(0,0)
+2025-10-14T14:26:34.547Z [info] Row 2: Left(1,0) Right(0,0)
+2025-10-14T14:26:34.547Z [info] Row 3: Left(0,0) Right(0,0)
+2025-10-14T14:26:34.547Z [info] Row 4: Left(0,0) Right(0,0)
+2025-10-14T14:26:34.547Z [info] Row 5: Left(0,0) Right(1,0)
+2025-10-14T14:26:34.547Z [info] Row 6: Left(0,0) Right(1,0)
+2025-10-14T14:26:34.547Z [info] Row 7: Left(0,0) Right(1,0)
+2025-10-14T14:26:34.549Z [info] Row 8: Left(0,0) Right(0,0)
+2025-10-14T14:26:34.549Z [info] Row 9: Left(0,0) Right(0,0)
+2025-10-14T14:26:34.549Z [info] Row 10: Left(0,0) Right(0,0)
+2025-10-14T14:26:34.549Z [info] Last row: Left(0,0) Cross(0,0) Right(0,0)
+2025-10-14T14:26:34.549Z [info] ✅ Generated seating layout with 11 rows (including last row if present)
+2025-10-14T14:26:34.549Z [info] --- Seating Layout Output (row_json_data) ---
+2025-10-14T14:26:34.550Z [info] {
+  "row_1": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 757.347412109375,
+        "y": 2146.7152709960938
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1325.8311157226562,
+        "y": 2138.565185546875
+      }
+    },
+    "column_three": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2571.5728759765625,
+        "y": 2068.6162109375
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 3118.1279296875,
+        "y": 2056.5772094726562
+      }
+    }
+  },
+  "row_2": {
+    "column_one": {
+      "class_id": 1,
+      "coordinates": {
+        "x": 1108.8912658691406,
+        "y": 1553.2738647460938
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1515.598388671875,
+        "y": 1564.7145385742188
+      }
+    },
+    "column_three": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2399.07470703125,
+        "y": 1493.0443725585938
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2769.730712890625,
+        "y": 1491.6533813476562
+      }
+    }
+  },
+  "row_3": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1377.1217651367188,
+        "y": 1311.766845703125
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1666.0606689453125,
+        "y": 1346.4862060546875
+      }
+    },
+    "column_three": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2305.7001953125,
+        "y": 1314.7402954101562
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2611.7880859375,
+        "y": 1310.0588989257812
+      }
+    }
+  },
+  "row_4": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1490.5578002929688,
+        "y": 1225.1812744140625
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1727.7391357421875,
+        "y": 1225.4912719726562
+      }
+    },
+    "column_three": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2251.0694580078125,
+        "y": 1209.2083740234375
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2483.8455810546875,
+        "y": 1208.2214965820312
+      }
+    }
+  },
+  "row_5": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1573.5581665039062,
+        "y": 1152.4990844726562
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1782.1557006835938,
+        "y": 1155.1875610351562
+      }
+    },
+    "column_three": {
+      "class_id": 1,
+      "coordinates": {
+        "x": 2217.7581787109375,
+        "y": 1141.3135375976562
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2407.53076171875,
+        "y": 1140.2271118164062
+      }
+    }
+  },
+  "row_6": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1638.00927734375,
+        "y": 1102.7606811523438
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1811.157470703125,
+        "y": 1102.6067504882812
+      }
+    },
+    "column_three": {
+      "class_id": 1,
+      "coordinates": {
+        "x": 2193.1065673828125,
+        "y": 1095.6429443359375
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2355.3563232421875,
+        "y": 1092.9420776367188
+      }
+    }
+  },
+  "row_7": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1687.5091552734375,
+        "y": 1065.1544189453125
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1837.7167358398438,
+        "y": 1064.0761108398438
+      }
+    },
+    "column_three": {
+      "class_id": 1,
+      "coordinates": {
+        "x": 2170.099365234375,
+        "y": 1060.1004638671875
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2298.9290771484375,
+        "y": 1057.5859985351562
+      }
+    }
+  },
+  "row_8": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1718.53515625,
+        "y": 1035.2626953125
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1860.5231323242188,
+        "y": 1030.3605346679688
+      }
+    },
+    "column_three": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2146.05615234375,
+        "y": 1027.5064697265625
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2277.7548828125,
+        "y": 1023.5155944824219
+      }
+    }
+  },
+  "row_9": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1776.0512084960938,
+        "y": 997.3556518554688
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1873.5836791992188,
+        "y": 1009.1376647949219
+      }
+    },
+    "column_three": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2129.7532958984375,
+        "y": 1006.407470703125
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2237.4559326171875,
+        "y": 1009.0206909179688
+      }
+    }
+  },
+  "row_10": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1792.5050659179688,
+        "y": 978.8946228027344
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1886.364990234375,
+        "y": 990.8413391113281
+      }
+    },
+    "column_three": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2124.1297607421875,
+        "y": 991.6498718261719
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2227.27294921875,
+        "y": 988.7039489746094
+      }
+    }
+  },
+  "last_row": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1809.27685546875,
+        "y": 931.6064453125
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1890.2830810546875,
+        "y": 931.16748046875
+      }
+    },
+    "column_three": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1972.2738647460938,
+        "y": 978.9468383789062
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2041.0914306640625,
+        "y": 981.2637634277344
+      }
+    },
+    "column_five": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2127.769287109375,
+        "y": 928.3787536621094
+      }
+    },
+    "column_six": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2208.0604248046875,
+        "y": 936.5774536132812
+      }
+    }
+  }
+}
+2025-10-14T14:26:34.550Z [info] --- End of Seating Layout Output ---
+2025-10-14T14:26:34.550Z [info] 🚌 Processing 47 detections using full seating.py algorithm...
+2025-10-14T14:26:34.550Z [info] Total seats: 47, Target left side: 23
+2025-10-14T14:26:34.551Z [info] Optimal aisle position: 1980.4
+2025-10-14T14:26:34.551Z [info] Left side seats: 23, Right side seats: 24
+2025-10-14T14:26:34.551Z [info] Cross-aisle pair found: True
+2025-10-14T14:26:34.551Z [info] [Left Last Row Pairing] Paired (1809.27685546875, 931.6064453125) and (1890.2830810546875, 931.16748046875) (y_diff=0.4, x_diff=81.0)
+2025-10-14T14:26:34.551Z [info] [Left Pairing] Paired (757.347412109375, 2146.7152709960938) and (1325.8311157226562, 2138.565185546875) (y_diff=8.2, x_diff=568.5)
+2025-10-14T14:26:34.551Z [info] [Left Pairing] Paired (1515.598388671875, 1564.7145385742188) and (1108.8912658691406, 1553.2738647460938) (y_diff=11.4, x_diff=406.7)
+2025-10-14T14:26:34.551Z [info] [Left Pairing] Paired (1666.0606689453125, 1346.4862060546875) and (1377.1217651367188, 1311.766845703125) (y_diff=34.7, x_diff=288.9)
+2025-10-14T14:26:34.551Z [info] [Left Pairing] Paired (1727.7391357421875, 1225.4912719726562) and (1490.5578002929688, 1225.1812744140625) (y_diff=0.3, x_diff=237.2)
+2025-10-14T14:26:34.551Z [info] [Left Pairing] Paired (1782.1557006835938, 1155.1875610351562) and (1573.5581665039062, 1152.4990844726562) (y_diff=2.7, x_diff=208.6)
+2025-10-14T14:26:34.551Z [info] [Left Pairing] Paired (1638.00927734375, 1102.7606811523438) and (1811.157470703125, 1102.6067504882812) (y_diff=0.2, x_diff=173.1)
+2025-10-14T14:26:34.551Z [info] [Left Pairing] Paired (1687.5091552734375, 1065.1544189453125) and (1837.7167358398438, 1064.0761108398438) (y_diff=1.1, x_diff=150.2)
+2025-10-14T14:26:34.551Z [info] [Left Pairing] Paired (1718.53515625, 1035.2626953125) and (1860.5231323242188, 1030.3605346679688) (y_diff=4.9, x_diff=142.0)
+2025-10-14T14:26:34.551Z [info] [Left Pairing] Paired (1873.5836791992188, 1009.1376647949219) and (1776.0512084960938, 997.3556518554688) (y_diff=11.8, x_diff=97.5)
+2025-10-14T14:26:34.551Z [info] [Left Pairing] Paired (1886.364990234375, 990.8413391113281) and (1792.5050659179688, 978.8946228027344) (y_diff=11.9, x_diff=93.9)
+2025-10-14T14:26:34.551Z [info] Left side pairs: 11 (excluded 1 cross-aisle seats)
+2025-10-14T14:26:34.551Z [info] [Right Last Row Pairing] Paired (2208.0604248046875, 936.5774536132812) and (2127.769287109375, 928.3787536621094) (y_diff=8.2, x_diff=80.3)
+2025-10-14T14:26:34.551Z [info] [Right Pairing] Paired (2571.5728759765625, 2068.6162109375) and (3118.1279296875, 2056.5772094726562) (y_diff=12.0, x_diff=546.6)
+2025-10-14T14:26:34.551Z [info] [Right Pairing] Paired (2399.07470703125, 1493.0443725585938) and (2769.730712890625, 1491.6533813476562) (y_diff=1.4, x_diff=370.7)
+2025-10-14T14:26:34.551Z [info] [Right Pairing] Paired (2305.7001953125, 1314.7402954101562) and (2611.7880859375, 1310.0588989257812) (y_diff=4.7, x_diff=306.1)
+2025-10-14T14:26:34.551Z [info] [Right Pairing] Paired (2251.0694580078125, 1209.2083740234375) and (2483.8455810546875, 1208.2214965820312) (y_diff=1.0, x_diff=232.8)
+2025-10-14T14:26:34.551Z [info] [Right Pairing] Paired (2217.7581787109375, 1141.3135375976562) and (2407.53076171875, 1140.2271118164062) (y_diff=1.1, x_diff=189.8)
+2025-10-14T14:26:34.551Z [info] [Right Pairing] Paired (2193.1065673828125, 1095.6429443359375) and (2355.3563232421875, 1092.9420776367188) (y_diff=2.7, x_diff=162.2)
+2025-10-14T14:26:34.552Z [info] [Right Pairing] Paired (2170.099365234375, 1060.1004638671875) and (2298.9290771484375, 1057.5859985351562) (y_diff=2.5, x_diff=128.8)
+2025-10-14T14:26:34.552Z [info] [Right Pairing] Paired (2146.05615234375, 1027.5064697265625) and (2277.7548828125, 1023.5155944824219) (y_diff=4.0, x_diff=131.7)
+2025-10-14T14:26:34.552Z [info] [Right Pairing] Paired (2237.4559326171875, 1009.0206909179688) and (2129.7532958984375, 1006.407470703125) (y_diff=2.6, x_diff=107.7)
+2025-10-14T14:26:34.552Z [info] [Right Pairing] Paired (2124.1297607421875, 991.6498718261719) and (2227.27294921875, 988.7039489746094) (y_diff=2.9, x_diff=103.1)
+2025-10-14T14:26:34.552Z [info] Right side pairs: 11 (excluded 1 cross-aisle seats)
+2025-10-14T14:26:34.552Z [info] [Virtual Pairing] Paired (2118.7828369140625, 975.4259338378906) with generated dot (2168.7828369140625, 975.4259338378906) (side: left, offset: 50)
+2025-10-14T14:26:34.552Z [info] Left side pairs: 11, Right side pairs: 12
+2025-10-14T14:26:34.552Z [info] Cross-aisle pair groups: 11
+2025-10-14T14:26:34.552Z [info] Row 1: Left(0,0) Right(0,0)
+2025-10-14T14:26:34.552Z [info] Row 2: Left(1,0) Right(0,0)
+2025-10-14T14:26:34.552Z [info] Row 3: Left(0,0) Right(0,0)
+2025-10-14T14:26:34.552Z [info] Row 4: Left(0,0) Right(0,0)
+2025-10-14T14:26:34.552Z [info] Row 5: Left(0,0) Right(0,0)
+2025-10-14T14:26:34.552Z [info] Row 6: Left(0,0) Right(0,0)
+2025-10-14T14:26:34.552Z [info] Row 7: Left(0,0) Right(0,0)
+2025-10-14T14:26:34.553Z [info] Row 8: Left(0,0) Right(0,0)
+2025-10-14T14:26:34.553Z [info] Row 9: Left(0,0) Right(0,0)
+2025-10-14T14:26:34.553Z [info] Row 10: Left(0,0) Right(0,0)
+2025-10-14T14:26:34.553Z [info] Last row: Left(0,0) Cross(0,0) Right(0,0)
+2025-10-14T14:26:34.553Z [info] ✅ Generated seating layout with 11 rows (including last row if present)
+2025-10-14T14:26:34.553Z [info] --- Seating Layout Output (row_json_data) ---
+2025-10-14T14:26:34.554Z [info] {
+  "row_1": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 757.347412109375,
+        "y": 2146.7152709960938
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1325.8311157226562,
+        "y": 2138.565185546875
+      }
+    },
+    "column_three": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2571.5728759765625,
+        "y": 2068.6162109375
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 3118.1279296875,
+        "y": 2056.5772094726562
+      }
+    }
+  },
+  "row_2": {
+    "column_one": {
+      "class_id": 1,
+      "coordinates": {
+        "x": 1108.8912658691406,
+        "y": 1553.2738647460938
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1515.598388671875,
+        "y": 1564.7145385742188
+      }
+    },
+    "column_three": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2399.07470703125,
+        "y": 1493.0443725585938
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2769.730712890625,
+        "y": 1491.6533813476562
+      }
+    }
+  },
+  "row_3": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1377.1217651367188,
+        "y": 1311.766845703125
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1666.0606689453125,
+        "y": 1346.4862060546875
+      }
+    },
+    "column_three": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2305.7001953125,
+        "y": 1314.7402954101562
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2611.7880859375,
+        "y": 1310.0588989257812
+      }
+    }
+  },
+  "row_4": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1490.5578002929688,
+        "y": 1225.1812744140625
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1727.7391357421875,
+        "y": 1225.4912719726562
+      }
+    },
+    "column_three": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2251.0694580078125,
+        "y": 1209.2083740234375
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2483.8455810546875,
+        "y": 1208.2214965820312
+      }
+    }
+  },
+  "row_5": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1573.5581665039062,
+        "y": 1152.4990844726562
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1782.1557006835938,
+        "y": 1155.1875610351562
+      }
+    },
+    "column_three": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2217.7581787109375,
+        "y": 1141.3135375976562
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2407.53076171875,
+        "y": 1140.2271118164062
+      }
+    }
+  },
+  "row_6": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1638.00927734375,
+        "y": 1102.7606811523438
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1811.157470703125,
+        "y": 1102.6067504882812
+      }
+    },
+    "column_three": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2193.1065673828125,
+        "y": 1095.6429443359375
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2355.3563232421875,
+        "y": 1092.9420776367188
+      }
+    }
+  },
+  "row_7": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1687.5091552734375,
+        "y": 1065.1544189453125
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1837.7167358398438,
+        "y": 1064.0761108398438
+      }
+    },
+    "column_three": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2170.099365234375,
+        "y": 1060.1004638671875
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2298.9290771484375,
+        "y": 1057.5859985351562
+      }
+    }
+  },
+  "row_8": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1718.53515625,
+        "y": 1035.2626953125
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1860.5231323242188,
+        "y": 1030.3605346679688
+      }
+    },
+    "column_three": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2146.05615234375,
+        "y": 1027.5064697265625
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2277.7548828125,
+        "y": 1023.5155944824219
+      }
+    }
+  },
+  "row_9": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1776.0512084960938,
+        "y": 997.3556518554688
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1873.5836791992188,
+        "y": 1009.1376647949219
+      }
+    },
+    "column_three": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2129.7532958984375,
+        "y": 1006.407470703125
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2237.4559326171875,
+        "y": 1009.0206909179688
+      }
+    }
+  },
+  "row_10": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1792.5050659179688,
+        "y": 978.8946228027344
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1886.364990234375,
+        "y": 990.8413391113281
+      }
+    },
+    "column_three": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2124.1297607421875,
+        "y": 991.6498718261719
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2227.27294921875,
+        "y": 988.7039489746094
+      }
+    }
+  },
+  "last_row": {
+    "column_one": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1809.27685546875,
+        "y": 931.6064453125
+      }
+    },
+    "column_two": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1890.2830810546875,
+        "y": 931.16748046875
+      }
+    },
+    "column_three": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 1972.2738647460938,
+        "y": 978.9468383789062
+      }
+    },
+    "column_four": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2041.0914306640625,
+        "y": 981.2637634277344
+      }
+    },
+    "column_five": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2127.769287109375,
+        "y": 928.3787536621094
+      }
+    },
+    "column_six": {
+      "class_id": 0,
+      "coordinates": {
+        "x": 2208.0604248046875,
+        "y": 936.5774536132812
+      }
+    }
+  }
+}
+2025-10-14T14:26:34.554Z [info] --- End of Seating Layout Output ---
+2025-10-14T14:26:34.554Z [info] 🚌 Processing 47 detections using full seating.py algorithm...
+2025-10-14T14:26:34.554Z [info] Total seats: 47, Target left side: 23
+2025-10-14T14:26:34.554Z [info] Optimal aisle position: 1980.4
+2025-10-14T14:26:34.554Z [info] Left side seats: 23, Right side seats: 24
+2025-10-14T14:26:34.555Z [info] Cross-aisle pair found: True
+2025-10-14T14:26:34.555Z [info] [Left Last Row Pairing] Paired (1809.27685546875, 931.6064453125) and (1890.2830810546875, 931.16748046875) (y_diff=0.4, x_diff=81.0)
+2025-10-14T14:26:34.555Z [info] [Left Pairing] Paired (757.347412109375, 2146.7152709960938) and (1325.8311157226562, 2138.565185546875) (y_diff=8.2, x_diff=568.5)
+2025-10-14T14:26:34.555Z [info] [Left Pairing] Paired (1515.598388671875, 1564.7145385742188) and (1108.8912658691406, 1553.2738647460938) (y_diff=11.4, x_diff=406.7)
+2025-10-14T14:26:34.555Z [info] [Left Pairing] Paired (1666.0606689453125, 1346.4862060546875) and (1377.1217651367188, 1311.766845703125) (y_diff=34.7, x_diff=288.9)
+2025-10-14T14:26:34.555Z [info] [Left Pairing] Paired (1727.7391357421875, 1225.4912719726562) and (1490.5578002929688, 1225.1812744140625) (y_diff=0.3, x_diff=237.2)
+2025-10-14T14:26:34.649Z [error] INFO:httpx:HTTP Request: GET https://wzxwavklbsdmiwwbousk.supabase.co/rest/v1/push_requests?select=id%2Ccreated_at%2Cjson_data&order=id.desc&limit=5 "HTTP/1.1 200 OK"
+2025-10-14T14:26:34.655Z [error] INFO:frontend_api_simple:✅ Processed record 2303 - 11 rows
+2025-10-14T14:26:34.667Z [error] INFO:frontend_api_simple:✅ Processed record 2302 - 11 rows
+2025-10-14T14:26:34.671Z [error] INFO:frontend_api_simple:✅ Processed record 2301 - 11 rows
+2025-10-14T14:26:34.675Z [error] INFO:frontend_api_simple:✅ Processed record 2300 - 11 rows
+2025-10-14T14:26:34.679Z [error] INFO:frontend_api_simple:✅ Processed record 2299 - 11 rows
+2025-10-14T14:26:34.679Z [error] INFO:frontend_api_simple:🗳️ Performing majority vote on 5 layouts
+2025-10-14T14:26:34.679Z [error] INFO:frontend_api_simple:📈 Merged result: 46 seats total - Occupied: 42, Available: 4, Virtual: 0
+2025-10-14T14:26:34.679Z [error] INFO:frontend_api_simple:✅ Serving merged layout with 11 rows
+2025-10-14T14:26:35.126Z [error] INFO:httpx:HTTP Request: GET https://wzxwavklbsdmiwwbousk.supabase.co/rest/v1/push_requests?select=id%2Ccreated_at%2Cjson_data&order=id.desc&limit=5 "HTTP/1.1 200 OK"
+2025-10-14T14:26:35.131Z [error] INFO:frontend_api_simple:✅ Processed record 2303 - 11 rows
+2025-10-14T14:26:35.133Z [error] INFO:httpx:HTTP Request: GET https://wzxwavklbsdmiwwbousk.supabase.co/rest/v1/push_requests?select=id%2Ccreated_at%2Cjson_data&order=id.desc&limit=5 "HTTP/1.1 200 OK"

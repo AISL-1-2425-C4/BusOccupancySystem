@@ -325,12 +325,27 @@ def process_seating_layout(detections_input):
                 for vdot in find_side_pairs.generated_virtual_dots:
                     if abs(vdot[0] - x) < 1e-3 and abs(vdot[1] - y) < 1e-3:
                         return 2  # Unknown / generated
+            
+            # Find the CLOSEST detection within tolerance (not just the first one)
+            closest_detection = None
+            min_distance = float('inf')
+            
             for detection in detections:
                 det_x_center = (detection["x_min"] + detection["x_max"]) / 2
                 det_y_center = (detection["y_min"] + detection["y_max"]) / 2
-                if abs(det_x_center - x) < tolerance and abs(det_y_center - y) < tolerance:
-                    return detection["class_id"]
-            return 2  # 👈 instead of None or 1
+                
+                # Calculate Euclidean distance
+                distance = ((det_x_center - x) ** 2 + (det_y_center - y) ** 2) ** 0.5
+                
+                # Check if within tolerance and closer than previous matches
+                if distance < tolerance and distance < min_distance:
+                    min_distance = distance
+                    closest_detection = detection
+            
+            # Return class_id of closest detection, or 2 if no match found
+            if closest_detection:
+                return closest_detection["class_id"]
+            return 2  # Unknown / no match within tolerance
 
 
         # --- Begin: seating.py-mimic last row (6-seat group) logic ---
