@@ -42,17 +42,21 @@
         body {
           padding: 0 !important;
           margin: 0 !important;
+          text-align: center !important; /* Center all content */
         }
         
         h1 {
           font-size: 1.3rem;
-          margin: 3px 0 !important;
+          margin: 3px auto !important;
           padding: 0 !important;
+          text-align: center !important;
         }
         
         .legend {
-          margin: 3px auto 5px auto !important;
+          margin: 3px auto 10px auto !important;
           padding: 0 !important;
+          text-align: center !important;
+          justify-content: center !important;
         }
         
         #loading {
@@ -65,15 +69,24 @@
           padding: 5px !important;
         }
         
-        /* Redefine container for mobile - fixed position, no movement */
+        /* Redefine container for mobile - centered below legend */
         .image-container {
           position: relative !important;
-          display: inline-block !important;
-          margin: 15px auto 0 auto !important; /* Add top margin to push below legend */
+          display: block !important; /* Change to block for better centering */
+          margin: 20px auto 0 auto !important; /* Center horizontally with auto margins */
           padding: 8px !important;
+          width: fit-content !important; /* Only as wide as content */
           max-width: none !important;
           overflow: visible !important;
-          /* Container will be rotated by JS, positioned below legend */
+          left: 0 !important;
+          right: 0 !important;
+          /* Container will be rotated by JS, centered below legend */
+        }
+        
+        /* Center the bus container wrapper */
+        #busContainer {
+          display: block !important;
+          margin: 0 auto !important;
         }
         
         /* Hide bottom section on mobile to maximize bus view */
