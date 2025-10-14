@@ -74,11 +74,12 @@
           position: relative !important;
           display: inline-block !important; /* inline-block for proper sizing */
           margin: 20px auto 0 auto !important; /* Center horizontally with auto margins */
-          padding: 18px !important; /* Adequate padding for larger seats */
+          padding: 20px 25px !important; /* More generous padding: vertical 20px, horizontal 25px */
           width: auto !important; /* Auto width to fit content */
           height: auto !important; /* Auto height to fit content */
           max-width: none !important;
-          overflow: visible !important;
+          overflow: hidden !important; /* Hide overflow instead of visible */
+          box-sizing: border-box !important;
           /* Container will be rotated by JS, centered below legend */
         }
         
@@ -588,18 +589,13 @@
             console.log(`📱 Mobile: Calculated container scale ONCE: ${containerScale.toFixed(2)}`);
           }
           
-          // Apply rotation with cached scale - ensure proper positioning
+          // Apply rotation with cached scale
           const scale = cachedMobileSizes.containerScale;
           container.style.transform = `rotate(90deg) scale(${scale})`;
           container.style.transformOrigin = 'center center';
           
-          // Ensure container dimensions account for all content with extra buffer
-          const bufferSpace = 30; // Extra space to ensure all seats are covered
-          container.style.minWidth = `${containerWidth + bufferSpace}px`;
-          container.style.minHeight = `${containerHeight + bufferSpace}px`;
-          
-          // Force container to respect dimensions
-          container.style.boxSizing = 'border-box';
+          // Let container size naturally, just ensure it respects content
+          // Don't force dimensions - let CSS handle it
           
           console.log(`📱 Mobile: Rotating 90° with scale ${scale.toFixed(2)}, Container: ${containerWidth}×${containerHeight}px`);
         } else {
