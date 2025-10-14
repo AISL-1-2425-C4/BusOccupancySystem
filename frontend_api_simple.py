@@ -337,15 +337,15 @@ async def serve_morning():
             return FileResponse(html_file)
     raise HTTPException(status_code=404, detail="Morning page not found")
 
-@app.get("/newafternoon.html")
-@app.get("/afternoon")
-async def serve_afternoon():
-    """Serve afternoon HTML page"""
-    html_files = ["newafternoon.html", "afternoon.html"]
-    for html_file in html_files:
-        if os.path.exists(html_file):
-            return FileResponse(html_file)
-    raise HTTPException(status_code=404, detail="Afternoon page not found")
+# @app.get("/newafternoon.html")
+# @app.get("/afternoon")
+# async def serve_afternoon():
+#     """Serve afternoon HTML page"""
+#     html_files = ["newafternoon.html", "afternoon.html"]
+#     for html_file in html_files:
+#         if os.path.exists(html_file):
+#             return FileResponse(html_file)
+#     raise HTTPException(status_code=404, detail="Afternoon page not found")
 
 @app.get("/aboutus.html")
 async def serve_about():
