@@ -15,12 +15,32 @@
       body {
         background-color: white;
         text-align: center;
+        margin: 0;
+        padding: 0;
+      }
+      
+      /* Wrapper for centering content */
+      @media (max-width: 768px) {
+        body {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+        
+        .topnav {
+          width: 100%;
+          align-self: stretch;
+        }
+        
+        h1, .legend {
+          align-self: center;
+        }
       }
 
       .image-container {
         position: relative;
         display: inline-block;
-        margin: 10px auto;
+        margin: 10px auto; /* Center with auto margins */
         background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
         border: 2px solid #e9ecef;
         border-radius: 12px;
@@ -69,7 +89,7 @@
           padding: 5px !important;
         }
         
-        /* Redefine container for mobile - horizontal layout */
+        /* Redefine container for mobile - dynamic like desktop */
         .image-container {
           position: relative !important;
           display: inline-block !important;
@@ -77,11 +97,10 @@
           padding: 25px !important;
           width: auto !important;
           height: auto !important;
-          max-width: 95vw !important;
+          max-width: 98vw !important;
           overflow: visible !important;
           box-sizing: border-box !important;
-          left: 50% !important;
-          transform: translateX(-50%) !important; /* Center horizontally */
+          /* Container size determined by JS - same as desktop */
         }
       
         /* Center the bus container wrapper */
@@ -89,12 +108,6 @@
           display: inline-block !important;
           margin: 0 auto !important;
           position: relative !important;
-          text-align: center !important;
-        }
-        
-        /* Ensure body centers the content properly */
-        body > * {
-          text-align: center !important;
         }
         
         /* Hide bottom section on mobile to maximize bus view */
@@ -606,8 +619,12 @@
         console.log(`📦 Container dimensions set: ${containerWidth}×${containerHeight}px`);
 
         // No rotation needed - seats are positioned differently for mobile
-        // Container just needs to fit the content
+        // Container dynamically fits the content
         console.log(`📦 Container: ${containerWidth}×${containerHeight}px, Mobile: ${isMobile}`);
+        
+        // Ensure container fully covers all seats
+        container.style.minWidth = `${containerWidth}px`;
+        container.style.minHeight = `${containerHeight}px`;
 
         // Add aisle divider lines for visual appeal
         addAisleDividers(container, containerHeight, has4SeatRows, seatSize, seatSpacing, edgeMargin);
@@ -785,9 +802,12 @@
           const isMobile = screenWidth < 768;
           
           if (isMobile) {
-            // MOBILE: Horizontal dividers (aisle runs left-right)
+            // MOBILE: Vertical dividers for horizontal bus layout
+            // Get actual container width to calculate center
+            const containerWidth = parseFloat(container.style.width) || 0;
             const driverAreaWidth = 65;
             
+            // Calculate based on actual seat positions
             // Left divider (after first 2 columns)
             const leftDividerX =
               edgeMargin + driverAreaWidth + 2 * (seatSize + seatSpacing) - seatSpacing / 2;
@@ -795,12 +815,12 @@
             leftDivider.className = "aisle-divider-mobile left";
             leftDivider.style.position = "absolute";
             leftDivider.style.left = `${leftDividerX}px`;
-            leftDivider.style.top = `${edgeMargin}px`;
-            leftDivider.style.bottom = `${edgeMargin}px`;
+            leftDivider.style.top = "0";
             leftDivider.style.width = "2px";
-            leftDivider.style.height = `calc(100% - ${edgeMargin * 2}px)`;
+            leftDivider.style.height = "100%";
             leftDivider.style.background = "linear-gradient(180deg, transparent 0%, #dee2e6 20%, #dee2e6 80%, transparent 100%)";
             leftDivider.style.zIndex = "1";
+            leftDivider.style.borderRadius = "1px";
             container.appendChild(leftDivider);
 
             // Right divider (before last 2 columns)
@@ -810,16 +830,16 @@
             rightDivider.className = "aisle-divider-mobile right";
             rightDivider.style.position = "absolute";
             rightDivider.style.left = `${rightDividerX}px`;
-            rightDivider.style.top = `${edgeMargin}px`;
-            rightDivider.style.bottom = `${edgeMargin}px`;
+            rightDivider.style.top = "0";
             rightDivider.style.width = "2px";
-            rightDivider.style.height = `calc(100% - ${edgeMargin * 2}px)`;
+            rightDivider.style.height = "100%";
             rightDivider.style.background = "linear-gradient(180deg, transparent 0%, #dee2e6 20%, #dee2e6 80%, transparent 100%)";
             rightDivider.style.zIndex = "1";
+            rightDivider.style.borderRadius = "1px";
             container.appendChild(rightDivider);
 
             console.log(
-              `Added mobile aisle dividers at X positions: ${leftDividerX}, ${rightDividerX}`
+              `Added mobile aisle dividers at X positions: ${leftDividerX}, ${rightDividerX}, containerWidth: ${containerWidth}`
             );
           } else {
             // DESKTOP: Vertical dividers (aisle runs top-bottom)
