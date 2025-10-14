@@ -444,12 +444,6 @@
           "Last Updated: " + now.toLocaleTimeString();
       }
 
-      // Call it once on page load
-      document.addEventListener("DOMContentLoaded", () => {
-        updateTimestamp();
-        setInterval(updateTimestamp, 5000);
-      });
-
       async function loadDynamicSeats(uuid = null) {
         try {
           const url = "row_seating_layout.json?nocache=" + Date.now();
@@ -503,13 +497,22 @@
       
       function updateUUID(uuid) {
         const uuidDisplay = document.getElementById("uuidDisplay");
-        if (uuidDisplay && uuid) {
+        if (uuidDisplay && uuid && typeof uuid === 'string') {
           uuidDisplay.textContent = `UUID: ${uuid}`;
+          console.log("✅ UUID updated:", uuid);
+        } else {
+          console.warn("⚠️ Invalid UUID:", uuid, "Type:", typeof uuid);
         }
       }
 
-      // 👇 make sure you have this once after DOMContentLoaded
+      // 👇 Initialize on page load
       document.addEventListener("DOMContentLoaded", async () => {
+        console.log("🚀 Page loaded, initializing...");
+        
+        // Start timestamp updates
+        updateTimestamp();
+        setInterval(updateTimestamp, 5000);
+        
         // Fetch initial UUID from latest record
         try {
           const response = await fetch("https://wzxwavklbsdmiwwbousk.supabase.co/rest/v1/push_requests?select=json_data&order=id.desc&limit=1", {
@@ -520,18 +523,28 @@
           
           if (response.ok) {
             const data = await response.json();
+            console.log("📦 Fetched data:", data);
+            
             if (data && data.length > 0 && data[0].json_data) {
+              console.log("📋 json_data structure:", data[0].json_data);
+              
               const uuid = data[0].json_data.uuid || 
                           (data[0].json_data.data && data[0].json_data.data.uuid);
-              if (uuid) {
+              
+              console.log("🔑 Extracted UUID:", uuid, "Type:", typeof uuid);
+              
+              if (uuid && typeof uuid === 'string') {
                 updateUUID(uuid);
+              } else {
+                console.warn("⚠️ Invalid or missing UUID in json_data");
               }
             }
           }
         } catch (error) {
-          console.error("Error fetching initial UUID:", error);
+          console.error("❌ Error fetching initial UUID:", error);
         }
         
+        // Load seat layout
         loadDynamicSeats();
       });
       setInterval(loadDynamicSeats, 5000); // auto refresh every 5 seconds
