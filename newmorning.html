@@ -20,7 +20,7 @@
       .image-container {
         position: relative;
         display: inline-block;
-        margin: 20px auto;
+        margin: 10px auto;
         background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
         border: 2px solid #e9ecef;
         border-radius: 12px;
@@ -40,14 +40,25 @@
       /* Mobile responsiveness */
       @media (max-width: 768px) {
         .image-container {
-          margin: 10px auto;
+          margin: 5px auto !important; /* Static margin - no dynamic changes */
           padding: 8px;
           max-width: 100vw;
           min-height: 150px;
           overflow: visible; /* No scrolling on mobile */
-          /* Adjust margins to accommodate rotation */
-          margin-top: 10px;
-          margin-bottom: 10px;
+        }
+        
+        body {
+          padding-top: 0;
+          margin-top: 0;
+        }
+        
+        h1 {
+          margin-top: 5px !important;
+          margin-bottom: 5px !important;
+        }
+        
+        .legend {
+          margin: 5px 0 !important;
         }
       }
 
@@ -138,17 +149,34 @@
       /* Mobile heading adjustments */
       @media (max-width: 768px) {
         h1 {
-          font-size: 1.5rem;
-          margin: 10px 0;
+          font-size: 1.4rem;
+          margin: 5px 0 !important;
+          padding: 0;
         }
         
         h2 {
-          font-size: 1.2rem;
-          margin: 8px 0;
+          font-size: 1.1rem;
+          margin: 3px 0 !important;
+          padding: 0;
         }
         
         #lastUpdated {
-          font-size: 12px !important;
+          font-size: 11px !important;
+          margin: 2px 0 !important;
+          padding: 0;
+        }
+        
+        .topnav {
+          margin-bottom: 0 !important;
+        }
+        
+        /* Hide bottom section on mobile to maximize bus view */
+        h2 {
+          display: none;
+        }
+        
+        #lastUpdated {
+          display: none;
         }
       }
 
@@ -183,12 +211,12 @@
 
       .loading {
         text-align: center;
-        padding: 20px;
-        font-size: 18px;
+        padding: 15px;
+        font-size: 16px;
         color: #666;
         background: #f0f0f0;
         border-radius: 8px;
-        margin: 20px auto;
+        margin: 5px auto;
         max-width: 90%;
       }
       
@@ -205,21 +233,22 @@
 
       .error {
         text-align: center;
-        padding: 20px;
+        padding: 15px;
         font-size: 16px;
         color: #d32f2f;
         background-color: #ffebee;
         border: 2px solid #ef5350;
         border-radius: 8px;
-        margin: 20px auto;
+        margin: 5px auto;
         max-width: 90%;
         font-weight: 500;
       }
       
       @media (max-width: 768px) {
         .loading, .error {
-          font-size: 14px;
-          padding: 15px;
+          font-size: 13px;
+          padding: 10px;
+          margin: 3px auto;
         }
       }
 
@@ -434,16 +463,17 @@
         if (isMobile) {
           // Mobile: Much bigger seats, optimized spacing
           // Calculate to fit the screen height (which becomes width after rotation)
-          const availableHeight = window.innerHeight - 250; // Account for header, legend, footer
-          const baseHeight = maxColumnsInAnyRow * 45; // Base calculation for all seats
-          scaleFactor = Math.max(1.0, Math.min(2.5, availableHeight / baseHeight)); // Scale up to 2.5x!
+          // With hidden h2 and lastUpdated, we have more space: just nav (50px) + h1 (40px) + legend (50px) + padding (30px) = ~170px
+          const availableHeight = window.innerHeight - 170; 
+          const baseHeight = maxColumnsInAnyRow * 50; // Base calculation for all seats
+          scaleFactor = Math.max(1.2, Math.min(2.8, availableHeight / baseHeight)); // Scale up to 2.8x!
           
-          seatSize = Math.max(45, 50 * scaleFactor); // Much BIGGER seats (min 45px)
-          seatSpacing = Math.max(12, 18 * scaleFactor); // Moderate spacing
+          seatSize = Math.max(50, 55 * scaleFactor); // Much BIGGER seats (min 50px)
+          seatSpacing = Math.max(14, 20 * scaleFactor); // Moderate spacing
           aisleWidth = seatSpacing * 1.2;
-          edgeMargin = Math.max(12, 18 * scaleFactor);
+          edgeMargin = Math.max(14, 20 * scaleFactor);
           
-          console.log(`📏 Mobile sizing: seatSize=${seatSize.toFixed(1)}px, spacing=${seatSpacing.toFixed(1)}px, scale=${scaleFactor.toFixed(2)}`);
+          console.log(`📏 Mobile sizing: seatSize=${seatSize.toFixed(1)}px, spacing=${seatSpacing.toFixed(1)}px, scale=${scaleFactor.toFixed(2)}, availableHeight=${availableHeight}px`);
         } else if (isTablet) {
           scaleFactor = 1.0;
           seatSize = 35;
@@ -453,7 +483,7 @@
         } else {
           // Desktop
           scaleFactor = 1.0;
-          seatSize = 35;
+          seatSize = 30;
           seatSpacing = 28;
           aisleWidth = seatSpacing;
           edgeMargin = 28;
@@ -487,7 +517,7 @@
         if (isMobile) {
           // After rotation, containerWidth becomes visual height, containerHeight becomes visual width
           const availableWidth = screenWidth * 0.98; // 98% of screen width
-          const availableHeight = window.innerHeight - 200; // Account for header/legend/footer
+          const availableHeight = window.innerHeight - 170; // Account for header/legend (reduced space)
           
           // Calculate scale to fit both dimensions after rotation
           const scaleForWidth = availableWidth / containerHeight; // height becomes width after rotation
@@ -503,13 +533,12 @@
           }
           
           container.style.transformOrigin = 'center center';
-          container.style.margin = '20px auto';
+          // Static margin - don't override CSS
           
           console.log(`📐 Container: ${containerWidth}×${containerHeight}px, After rotation fits in: ${availableWidth}×${availableHeight}px`);
         } else {
           // Desktop: no rotation
           container.style.transform = 'none';
-          container.style.margin = '20px auto';
         }
 
         // Add aisle divider lines for visual appeal
