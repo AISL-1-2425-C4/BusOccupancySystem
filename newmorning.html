@@ -69,11 +69,11 @@
         .image-container {
           position: relative !important;
           display: inline-block !important;
-          margin: 0 auto !important;
+          margin: 15px auto 0 auto !important; /* Add top margin to push below legend */
           padding: 8px !important;
           max-width: none !important;
           overflow: visible !important;
-          /* Container will be rotated by JS, positioned at top */
+          /* Container will be rotated by JS, positioned below legend */
         }
         
         /* Hide bottom section on mobile to maximize bus view */
@@ -119,9 +119,9 @@
       /* Driver's steering wheel */
       .steering-wheel {
         position: absolute;
-        width: 45px;
-        height: 45px;
-        border: 4px solid #495057;
+        width: 30px;
+        height: 30px;
+        border: 3px solid #495057;
         border-radius: 50%;
         background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
         display: flex;
@@ -135,8 +135,8 @@
 
       .steering-wheel::before {
         content: "";
-        width: 10px;
-        height: 10px;
+        width: 6px;
+        height: 6px;
         background: #343a40;
         border-radius: 50%;
         box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
@@ -145,11 +145,11 @@
       .steering-wheel::after {
         content: "";
         position: absolute;
-        width: 26px;
-        height: 3px;
+        width: 18px;
+        height: 2px;
         background: #495057;
         border-radius: 1px;
-        box-shadow: 0 10px 0 #495057, 10px 0 0 #495057, -10px 0 0 #495057;
+        box-shadow: 0 7px 0 #495057, 7px 0 0 #495057, -7px 0 0 #495057;
       }
 
       /* Driver area label */
@@ -500,11 +500,11 @@
             ({ seatSize, seatSpacing, aisleWidth, edgeMargin, scaleFactor } = cachedMobileSizes);
             console.log(`📱 Using cached mobile sizes: seatSize=${seatSize.toFixed(1)}px`);
           } else {
-            // Mobile: Use fixed smaller sizes to fit screen
-            seatSize = 25; // Fixed small seat size
-            seatSpacing = 8; // Tight spacing
-            aisleWidth = 9;
-            edgeMargin = 8;
+            // Mobile: Use fixed sizes to fit screen
+            seatSize = 32; // Increased seat size for better visibility
+            seatSpacing = 10; // Moderate spacing
+            aisleWidth = 11;
+            edgeMargin = 10;
             scaleFactor = 1.0;
             
             // Cache these values for future use
@@ -761,7 +761,7 @@
         const containerHeight = parseFloat(container.style.height) || 400;
 
         // Position steering wheel on the left side, centered vertically
-        const wheelX = edgeMargin + driverAreaWidth / 2 - 22.5; // Left side in driver area (45px wheel / 2)
+        const wheelX = edgeMargin + driverAreaWidth / 2 - 15; // Left side in driver area (30px wheel / 2)
         const wheelY = containerHeight / 2; // Center vertically
 
         // Create steering wheel
@@ -777,7 +777,7 @@
         driverLabel.className = "driver-label";
         driverLabel.textContent = "Driver";
         driverLabel.style.left = `${wheelX - 10}px`;
-        driverLabel.style.top = `${wheelY + 35}px`; // Positioned below steering wheel
+        driverLabel.style.top = `${wheelY + 28}px`; // Positioned below steering wheel (smaller offset)
         driverLabel.style.width = "55px";
         driverLabel.style.transform = "rotate(-90deg)"; // Rotate text for mobile view
         driverLabel.style.transformOrigin = "center center";
