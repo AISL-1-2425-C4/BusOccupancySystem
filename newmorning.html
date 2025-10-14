@@ -500,30 +500,17 @@
             ({ seatSize, seatSpacing, aisleWidth, edgeMargin, scaleFactor } = cachedMobileSizes);
             console.log(`📱 Using cached mobile sizes: seatSize=${seatSize.toFixed(1)}px`);
           } else {
-            // Mobile: Calculate sizing ONCE to fit screen perfectly
-            const availableWidth = screenWidth * 0.95; // Available width after rotation
-            const availableHeight = window.innerHeight - 140; // Available height
-            
-            // Calculate how much space we have for all rows (becomes height after rotation)
-            const totalRowsWidth = totalRows * 50; // Rough estimate
-            const rowScale = availableHeight / totalRowsWidth;
-            
-            // Calculate how much space we have for columns (becomes width after rotation)
-            const totalColsHeight = maxColumnsInAnyRow * 40; // Rough estimate
-            const colScale = availableWidth / totalColsHeight;
-            
-            // Use the smaller scale to ensure everything fits
-            scaleFactor = Math.min(rowScale, colScale, 1.0);
-            
-            seatSize = Math.max(22, 28 * scaleFactor); // Smaller seats (min 22px)
-            seatSpacing = Math.max(8, 10 * scaleFactor); // Tight spacing
-            aisleWidth = seatSpacing * 1.1;
-            edgeMargin = Math.max(8, 10 * scaleFactor);
+            // Mobile: Use fixed smaller sizes to fit screen
+            seatSize = 25; // Fixed small seat size
+            seatSpacing = 8; // Tight spacing
+            aisleWidth = 9;
+            edgeMargin = 8;
+            scaleFactor = 1.0;
             
             // Cache these values for future use
             cachedMobileSizes = { seatSize, seatSpacing, aisleWidth, edgeMargin, scaleFactor };
             
-            console.log(`📏 Mobile sizing (CALCULATED ONCE): seatSize=${seatSize.toFixed(1)}px, spacing=${seatSpacing.toFixed(1)}px, scale=${scaleFactor.toFixed(2)}, screen=${screenWidth}×${window.innerHeight}`);
+            console.log(`📏 Mobile sizing (FIXED ONCE): seatSize=${seatSize}px, spacing=${seatSpacing}px`);
           }
         } else if (isTablet) {
           scaleFactor = 1.0;
@@ -566,12 +553,28 @@
 
         // Apply rotation and scaling for mobile devices
         if (isMobile) {
-          // Simply rotate - CSS handles positioning
-          container.style.transform = 'rotate(90deg)';
-          container.style.transformOrigin = 'center center';
-          // Don't set any margins - let CSS handle it
+          // Calculate container scale to fit screen (ONCE)
+          if (!cachedMobileSizes.containerScale) {
+            const availableWidth = screenWidth * 0.95; // 95% of screen width
+            const availableHeight = window.innerHeight - 140; // Minus header/legend
+            
+            // After rotation: containerWidth becomes visual height, containerHeight becomes visual width
+            const scaleForWidth = availableWidth / containerHeight; // height becomes width after rotation
+            const scaleForHeight = availableHeight / containerWidth; // width becomes height after rotation
+            const containerScale = Math.min(scaleForWidth, scaleForHeight, 1.0);
+            
+            // Cache the container scale
+            cachedMobileSizes.containerScale = containerScale;
+            
+            console.log(`📱 Mobile: Calculated container scale ONCE: ${containerScale.toFixed(2)}`);
+          }
           
-          console.log(`📱 Mobile: Rotating 90°, Container: ${containerWidth}×${containerHeight}px`);
+          // Apply rotation with cached scale
+          const scale = cachedMobileSizes.containerScale;
+          container.style.transform = `rotate(90deg) scale(${scale})`;
+          container.style.transformOrigin = 'center center';
+          
+          console.log(`📱 Mobile: Rotating 90° with scale ${scale.toFixed(2)}, Container: ${containerWidth}×${containerHeight}px`);
         } else {
           // Desktop: no rotation
           container.style.transform = 'none';
