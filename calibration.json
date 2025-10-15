@@ -40,7 +40,7 @@
         "x_min": 2289.916259765625,
         "y_max": 2556.612060546875,
         "y_min": 1604.9749755859375,
-        "class_id": 1,
+        "class_id": 0,
         "class_name": "occupied",
         "confidence": 0.9142459034919739,
         "assignee number": 3
@@ -212,14 +212,14 @@
       },
       {
         "image": "tiles/20251013_175218-31dae5f4bfee44748a1b730e851e0f93_right.jpg",
-        "x_max": 2260.02294921875,
-        "x_min": 2101.092041015625,
-        "y_max": 1126.177490234375,
-        "y_min": 1080.7987060546875,
+        "x_max": 2294.0205078125,
+        "x_min": 2113.976318359375,
+        "y_max": 1177.229248046875,
+        "y_min": 1120.5963134765625,
         "class_id": 0,
         "class_name": "unoccupied",
-        "confidence": 0.8834950923919678,
-        "assignee number": 192328
+        "confidence": 0.8626675605773926,
+        "assignee number": 19
       },
       {
         "image": "tiles/20251013_175218-31dae5f4bfee44748a1b730e851e0f93_right.jpg",
@@ -241,7 +241,7 @@
         "class_id": 0,
         "class_name": "occupied",
         "confidence": 0.8321032524108887,
-        "assignee number": 2125
+        "assignee number": 21
       },
       {
         "image": "tiles/20251013_175218-31dae5f4bfee44748a1b730e851e0f93_left.jpg",
@@ -252,7 +252,18 @@
         "class_id": 0,
         "class_name": "occupied",
         "confidence": 0.8092952370643616,
-        "assignee number": 2226
+        "assignee number": 22
+      },
+      {
+        "image": "tiles/20251013_175218-31dae5f4bfee44748a1b730e851e0f93_right.jpg",
+        "x_max": 2260.02294921875,
+        "x_min": 2101.092041015625,
+        "y_max": 1126.177490234375,
+        "y_min": 1080.7987060546875,
+        "class_id": 0,
+        "class_name": "unoccupied",
+        "confidence": 0.8834950923919678,
+        "assignee number": 23
       },
       {
         "image": "tiles/20251013_175218-31dae5f4bfee44748a1b730e851e0f93_right.jpg",
@@ -267,6 +278,50 @@
       },
       {
         "image": "tiles/20251013_175218-31dae5f4bfee44748a1b730e851e0f93_left.jpg",
+        "x_max": 1732.3927001953125,
+        "x_min": 1605.3017578125,
+        "y_max": 1096.144287109375,
+        "y_min": 1056.7752685546875,
+        "class_id": 0,
+        "class_name": "unoccupied",
+        "confidence": 0.6897602677345276,
+        "assignee number": 25
+      },
+      {
+        "image": "tiles/20251013_175218-31dae5f4bfee44748a1b730e851e0f93_left.jpg",
+        "x_max": 1892.2547607421875,
+        "x_min": 1750.744873046875,
+        "y_max": 1091.72802734375,
+        "y_min": 1052.993896484375,
+        "class_id": 0,
+        "class_name": "occupied",
+        "confidence": 0.6132347583770752,
+        "assignee number": 26
+      },
+      {
+        "image": "tiles/20251013_175218-31dae5f4bfee44748a1b730e851e0f93_right.jpg",
+        "x_max": 2163.990234375,
+        "x_min": 2067.67041015625,
+        "y_max": 1028.3831787109375,
+        "y_min": 1006.5421752929688,
+        "class_id": 0,
+        "class_name": "unoccupied",
+        "confidence": 0.7723140716552734,
+        "assignee number": 27
+      },
+      {
+        "image": "tiles/20251013_175218-31dae5f4bfee44748a1b730e851e0f93_right.jpg",
+        "x_max": 2229.05126953125,
+        "x_min": 2091.589599609375,
+        "y_max": 1085.4189453125,
+        "y_min": 1049.650146484375,
+        "class_id": 0,
+        "class_name": "unoccupied",
+        "confidence": 0.8161646723747253,
+        "assignee number": 28
+      },
+      {
+        "image": "tiles/20251013_175218-31dae5f4bfee44748a1b730e851e0f93_left.jpg",
         "x_max": 1761.144775390625,
         "x_min": 1631.6915283203125,
         "y_max": 1059.3165283203125,
@@ -274,7 +329,7 @@
         "class_id": 0,
         "class_name": "occupied",
         "confidence": 0.8041244149208069,
-        "assignee number": 2933
+        "assignee number": 29
       },
       {
         "image": "tiles/20251013_175218-31dae5f4bfee44748a1b730e851e0f93_left.jpg",
@@ -285,7 +340,18 @@
         "class_id": 0,
         "class_name": "unoccupied",
         "confidence": 0.7943558692932129,
-        "assignee number": 303438
+        "assignee number": 30
+      },
+      {
+        "image": "tiles/20251013_175218-31dae5f4bfee44748a1b730e851e0f93_right.jpg",
+        "x_max": 2188.28466796875,
+        "x_min": 2072.366943359375,
+        "y_max": 1052.7177734375,
+        "y_min": 1026.2984619140625,
+        "class_id": 0,
+        "class_name": "occupied",
+        "confidence": 0.721649706363678,
+        "assignee number": 31
       },
       {
         "image": "tiles/20251013_175218-31dae5f4bfee44748a1b730e851e0f93_right.jpg",
@@ -296,7 +362,51 @@
         "class_id": 0,
         "class_name": "occupied",
         "confidence": 0.6565210819244385,
-        "assignee number": 3236
+        "assignee number": 32
+      },
+      {
+        "image": "tiles/20251013_175218-31dae5f4bfee44748a1b730e851e0f93_left.jpg",
+        "x_max": 1787.0380859375,
+        "x_min": 1704.4244384765625,
+        "y_max": 1034.458740234375,
+        "y_min": 1010.2029418945312,
+        "class_id": 0,
+        "class_name": "unoccupied",
+        "confidence": 0.5926963090896606,
+        "assignee number": 33
+      },
+      {
+        "image": "tiles/20251013_175218-31dae5f4bfee44748a1b730e851e0f93_left.jpg",
+        "x_max": 1912.993408203125,
+        "x_min": 1808.2093505859375,
+        "y_max": 1031.387939453125,
+        "y_min": 1008.1820678710938,
+        "class_id": 0,
+        "class_name": "unoccupied",
+        "confidence": 0.7355262041091919,
+        "assignee number": 34
+      },
+      {
+        "image": "tiles/20251013_175218-31dae5f4bfee44748a1b730e851e0f93_right.jpg",
+        "x_max": 2162.19873046875,
+        "x_min": 2061.10693359375,
+        "y_max": 1012.772216796875,
+        "y_min": 992.4476928710938,
+        "class_id": 0,
+        "class_name": "unoccupied",
+        "confidence": 0.828251302242279,
+        "assignee number": 35
+      },
+      {
+        "image": "tiles/20251013_175218-31dae5f4bfee44748a1b730e851e0f93_right.jpg",
+        "x_max": 2259.68603515625,
+        "x_min": 2171.310546875,
+        "y_max": 1009.8228759765625,
+        "y_min": 991.1649169921875,
+        "class_id": 0,
+        "class_name": "occupied",
+        "confidence": 0.5878180861473083,
+        "assignee number": 36
       },
       {
         "image": "tiles/20251013_175218-31dae5f4bfee44748a1b730e851e0f93_left.jpg",
@@ -310,6 +420,17 @@
         "assignee number": 37
       },
       {
+        "image": "tiles/20251013_175218-31dae5f4bfee44748a1b730e851e0f93_left.jpg",
+        "x_max": 1924.030029296875,
+        "x_min": 1823.273681640625,
+        "y_max": 1012.8243408203125,
+        "y_min": 989.71728515625,
+        "class_id": 0,
+        "class_name": "unoccupied",
+        "confidence": 0.7881842851638794,
+        "assignee number": 38
+      },
+      {
         "image": "tiles/20251013_175218-31dae5f4bfee44748a1b730e851e0f93_right.jpg",
         "x_max": 2058.49609375,
         "x_min": 2009,
@@ -319,6 +440,17 @@
         "class_name": "occupied",
         "confidence": 0.34128573536872864,
         "assignee number": 39
+      },
+      {
+        "image": "tiles/20251013_175218-31dae5f4bfee44748a1b730e851e0f93_right.jpg",
+        "x_max": 2152.67578125,
+        "x_min": 2056.525390625,
+        "y_max": 995.3463745117188,
+        "y_min": 976.7938842773438,
+        "class_id": 0,
+        "class_name": "occupied",
+        "confidence": 0.5566985011100769,
+        "assignee number": 40
       },
       {
         "image": "tiles/20251013_175218-31dae5f4bfee44748a1b730e851e0f93_left.jpg",
@@ -340,7 +472,18 @@
         "class_id": 0,
         "class_name": "occupied",
         "confidence": 0.7949597835540771,
-        "assignee number": 4243
+        "assignee number": 42
+      },
+      {
+        "image": "tiles/20251013_175218-31dae5f4bfee44748a1b730e851e0f93_left.jpg",
+        "x_max": 1928.595458984375,
+        "x_min": 1834.8116455078125,
+        "y_max": 996.9391479492188,
+        "y_min": 977.1835327148438,
+        "class_id": 0,
+        "class_name": "unoccupied",
+        "confidence": 0.6936138272285461,
+        "assignee number": 43
       },
       {
         "image": "tiles/20251013_175218-31dae5f4bfee44748a1b730e851e0f93_left.jpg",
@@ -374,149 +517,6 @@
         "class_name": "unoccupied",
         "confidence": 0.8394507169723511,
         "assignee number": 46
-      },
-      {
-        "image": "tiles/20251013_175218-31dae5f4bfee44748a1b730e851e0f93_right.jpg",
-        "x_max": 2294.0205078125,
-        "x_min": 2113.976318359375,
-        "y_max": 1177.229248046875,
-        "y_min": 1120.5963134765625,
-        "class_id": 0,
-        "class_name": "unoccupied",
-        "confidence": 0.8626675605773926,
-        "assignee number": 0
-      },
-      {
-        "image": "tiles/20251013_175218-31dae5f4bfee44748a1b730e851e0f93_right.jpg",
-        "x_max": 2162.19873046875,
-        "x_min": 2061.10693359375,
-        "y_max": 1012.772216796875,
-        "y_min": 992.4476928710938,
-        "class_id": 0,
-        "class_name": "unoccupied",
-        "confidence": 0.828251302242279,
-        "assignee number": 0
-      },
-      {
-        "image": "tiles/20251013_175218-31dae5f4bfee44748a1b730e851e0f93_right.jpg",
-        "x_max": 2229.05126953125,
-        "x_min": 2091.589599609375,
-        "y_max": 1085.4189453125,
-        "y_min": 1049.650146484375,
-        "class_id": 0,
-        "class_name": "unoccupied",
-        "confidence": 0.8161646723747253,
-        "assignee number": 0
-      },
-      {
-        "image": "tiles/20251013_175218-31dae5f4bfee44748a1b730e851e0f93_left.jpg",
-        "x_max": 1924.030029296875,
-        "x_min": 1823.273681640625,
-        "y_max": 1012.8243408203125,
-        "y_min": 989.71728515625,
-        "class_id": 0,
-        "class_name": "unoccupied",
-        "confidence": 0.7881842851638794,
-        "assignee number": 0
-      },
-      {
-        "image": "tiles/20251013_175218-31dae5f4bfee44748a1b730e851e0f93_right.jpg",
-        "x_max": 2163.990234375,
-        "x_min": 2067.67041015625,
-        "y_max": 1028.3831787109375,
-        "y_min": 1006.5421752929688,
-        "class_id": 0,
-        "class_name": "unoccupied",
-        "confidence": 0.7723140716552734,
-        "assignee number": 0
-      },
-      {
-        "image": "tiles/20251013_175218-31dae5f4bfee44748a1b730e851e0f93_left.jpg",
-        "x_max": 1912.993408203125,
-        "x_min": 1808.2093505859375,
-        "y_max": 1031.387939453125,
-        "y_min": 1008.1820678710938,
-        "class_id": 0,
-        "class_name": "unoccupied",
-        "confidence": 0.7355262041091919,
-        "assignee number": 0
-      },
-      {
-        "image": "tiles/20251013_175218-31dae5f4bfee44748a1b730e851e0f93_right.jpg",
-        "x_max": 2188.28466796875,
-        "x_min": 2072.366943359375,
-        "y_max": 1052.7177734375,
-        "y_min": 1026.2984619140625,
-        "class_id": 0,
-        "class_name": "occupied",
-        "confidence": 0.721649706363678,
-        "assignee number": 0
-      },
-      {
-        "image": "tiles/20251013_175218-31dae5f4bfee44748a1b730e851e0f93_left.jpg",
-        "x_max": 1928.595458984375,
-        "x_min": 1834.8116455078125,
-        "y_max": 996.9391479492188,
-        "y_min": 977.1835327148438,
-        "class_id": 0,
-        "class_name": "unoccupied",
-        "confidence": 0.6936138272285461,
-        "assignee number": 0
-      },
-      {
-        "image": "tiles/20251013_175218-31dae5f4bfee44748a1b730e851e0f93_left.jpg",
-        "x_max": 1732.3927001953125,
-        "x_min": 1605.3017578125,
-        "y_max": 1096.144287109375,
-        "y_min": 1056.7752685546875,
-        "class_id": 0,
-        "class_name": "unoccupied",
-        "confidence": 0.6897602677345276,
-        "assignee number": 0
-      },
-      {
-        "image": "tiles/20251013_175218-31dae5f4bfee44748a1b730e851e0f93_left.jpg",
-        "x_max": 1892.2547607421875,
-        "x_min": 1750.744873046875,
-        "y_max": 1091.72802734375,
-        "y_min": 1052.993896484375,
-        "class_id": 0,
-        "class_name": "occupied",
-        "confidence": 0.6132347583770752,
-        "assignee number": 0
-      },
-      {
-        "image": "tiles/20251013_175218-31dae5f4bfee44748a1b730e851e0f93_left.jpg",
-        "x_max": 1787.0380859375,
-        "x_min": 1704.4244384765625,
-        "y_max": 1034.458740234375,
-        "y_min": 1010.2029418945312,
-        "class_id": 0,
-        "class_name": "unoccupied",
-        "confidence": 0.5926963090896606,
-        "assignee number": 0
-      },
-      {
-        "image": "tiles/20251013_175218-31dae5f4bfee44748a1b730e851e0f93_right.jpg",
-        "x_max": 2259.68603515625,
-        "x_min": 2171.310546875,
-        "y_max": 1009.8228759765625,
-        "y_min": 991.1649169921875,
-        "class_id": 0,
-        "class_name": "occupied",
-        "confidence": 0.5878180861473083,
-        "assignee number": 0
-      },
-      {
-        "image": "tiles/20251013_175218-31dae5f4bfee44748a1b730e851e0f93_right.jpg",
-        "x_max": 2152.67578125,
-        "x_min": 2056.525390625,
-        "y_max": 995.3463745117188,
-        "y_min": 976.7938842773438,
-        "class_id": 0,
-        "class_name": "occupied",
-        "confidence": 0.5566985011100769,
-        "assignee number": 0
       }
     ],
     "inference_time_sec": 0.8527798652648926
