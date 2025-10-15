@@ -537,14 +537,15 @@ async def serve_seating_json():
                 merged_layout = merge_seating_layouts(layouts)
                 
                 # Update cache
-                latest_seating_layout = merged_layout
+                # latest_seating_layout = merged_layout
                 last_updated = datetime.utcnow().isoformat()
                 
                 logger.info(f"✅ Serving merged layout with {len(merged_layout)} rows")
                 
                 # Return layout with UUID and metadata
                 return {
-                    "layout": merged_layout,
+                    # "layout": merged_layout,
+                    "layout": latest_seating_layout,
                     "uuid": latest_uuid,
                     "last_updated": last_updated,
                     "records_merged": len(layouts)
