@@ -136,7 +136,17 @@ Detection Model → JSON_Data/detection_results3.json → seating.py → row_sea
 - **Scalability**: Linear O(n) with seat count
 - **Browser Support**: All modern browsers (ES6+)
 
+## Model Training, Validation, and Export
+
+### Core Files
+- **`model_export.py`** - Exports to onnx with 640 image size
+- **`model_training.py`** - Training the model with changed hyperparameters
+- **`model_validation.py`** - Evaluate best.pt in validation and test split
+- **`move.py`** - Move files to create 70/15/15 and 80/10/10 splits
+- **`plot_losses.py`** - Combine training and validation losses in one plot per type of loss
+- **`tile_all_splits.py`** - Tiling/splitting images into left and right halves for training
+
 ---
 
-*Last Updated: September 2025*
+*Last Updated: October 2025*
 *System Status: Production Ready*
