@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>N Dela Rosa Line - Seat Availability</title>
+    <title>Seat Availability</title>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -35,39 +35,59 @@
         <span class="cs-topper">Our Schedules</span>
         <h2 class="cs-title">Check the Availability</h2>
         <p class="cs-text">
-          Click the button below to check the availability of the bus.
+          Select a <b>Route</b>, then choose an <b>Operator</b> to check seats.
         </p>
       </div>
 
-      <ul class="schedule-cards">
-        <li class="schedule-card">
+      <!-- Step 1: Choose Route -->
+      <div class="cs-content" style="margin-top: 1rem">
+        <h3 class="cs-title" style="font-size: 1.25rem">
+          Step 1 — Choose Route
+        </h3>
+      </div>
+      <ul class="schedule-cards" id="routeCards">
+        <!-- Example route card (more can be added via JS or static HTML) -->
+        <li class="schedule-card route-card" data-route-id="dlsu-alabang">
           <div class="card-bg">
-            <img src="images/bus2.jpg" alt="Afternoon Bus" />
+            <img src="images/bus2.jpg" alt="DLSU to Alabang" />
           </div>
           <div class="card-content">
-            <span class="card-tag">N Dela Rosa Line</span>
-
-            <a href="newmorning.html" class="btn">Check Seats</a>
+            <span class="card-tag">Route</span>
+            <h2 class="card-title">DLSU → Alabang</h2>
+            <button class="btn select-route">Select Route</button>
           </div>
         </li>
 
-        <!-- <li class="schedule-card">
+        <!-- You can add more static route cards here if you want placeholders:
+        <li class="schedule-card disabled">
           <div class="card-bg">
-            <img src="images/bus1.jpg" alt="Afternoon Bus" />
+            <img src="images/bus1.jpg" alt="Coming Soon" />
           </div>
           <div class="card-content">
-            <span class="card-tag">N Dela Rosa Line</span>
-            <h2 class="card-title">Afternoon</h2>
-
-            <div class="occupancy-indicator">
-              <span class="occupancy-dot high-availability"></span>
-              <span>High Availability</span>
-            </div>
-
-            <a href="newafternoon.html" class="btn">Check Seats</a>
+            <span class="card-tag">Route</span>
+            <h2 class="card-title">PITX → DLSU (Coming Soon)</h2>
+            <button class="btn" disabled>Coming Soon</button>
           </div>
-        </li> -->
+        </li>
+        -->
       </ul>
+
+      <!-- Step 2: Choose Operator (populated after route selection) -->
+      <div
+        class="cs-content"
+        id="operatorHeader"
+        style="display: none; margin-top: 2rem"
+      >
+        <h3 class="cs-title" style="font-size: 1.25rem">
+          Step 2 — Choose Operator
+        </h3>
+        <p
+          class="cs-text"
+          id="chosenRouteLabel"
+          style="margin-top: 0.25rem"
+        ></p>
+      </div>
+      <ul class="schedule-cards" id="operatorCards" style="display: none"></ul>
     </section>
 
     <!-- Footer -->
@@ -100,10 +120,6 @@
             <p><i class="fas fa-phone"></i> 0933 810 7427</p>
           </div>
         </div>
-
-        <!-- <div class="copyright">
-          <p>&copy; 2023 N Dela Rosa Line. All rights reserved.</p>
-        </div> -->
       </div>
     </footer>
 
@@ -116,6 +132,112 @@
           x.className = "topnav";
         }
       }
+
+      // --- SCALABLE DATA MODEL ---
+      // Add more routes/operators here as you expand.
+      const routesData = {
+        "dlsu-alabang": {
+          label: "DLSU → Alabang",
+          operators: [
+            {
+              id: "n-dela-rosa",
+              name: "N Dela Rosa Line",
+              img: "images/bus2.jpg",
+              // Link your final “check seats” page here:
+              href: "newmorning.html",
+            },
+          ],
+        },
+
+        // Example structure for future additions:
+        // ,"pitx-dlsu": {
+        //   label: "PITX → DLSU",
+        //   operators: [
+        //     { id: "operator-a", name: "Operator A", img: "images/bus1.jpg", href: "operatorA-morning.html" },
+        //     { id: "operator-b", name: "Operator B", img: "images/bus2.jpg", href: "operatorB-morning.html" }
+        //   ]
+        // }
+      };
+
+      const routeCardsEl = document.getElementById("routeCards");
+      const operatorHeaderEl = document.getElementById("operatorHeader");
+      const chosenRouteLabelEl = document.getElementById("chosenRouteLabel");
+      const operatorCardsEl = document.getElementById("operatorCards");
+
+      // Handle clicks on any "Select Route" buttons
+      routeCardsEl.addEventListener("click", (e) => {
+        const btn = e.target.closest(".select-route");
+        if (!btn) return;
+
+        const card = e.target.closest(".route-card");
+        const routeId = card?.getAttribute("data-route-id");
+        if (!routeId || !routesData[routeId]) return;
+
+        // Visual: mark selected route card (optional basic highlight)
+        document
+          .querySelectorAll(".route-card")
+          .forEach((c) => c.classList.remove("selected"));
+        card.classList.add("selected");
+
+        // Show operator section
+        populateOperators(routeId);
+      });
+
+      function populateOperators(routeId) {
+        const route = routesData[routeId];
+        chosenRouteLabelEl.textContent = "Selected Route: " + route.label;
+
+        // Build operator cards
+        operatorCardsEl.innerHTML = route.operators
+          .map((op) => {
+            return `
+              <li class="schedule-card">
+                <div class="card-bg">
+                  <img src="${op.img}" alt="${op.name}" />
+                </div>
+                <div class="card-content">
+                  <span class="card-tag">${op.name}</span>
+                  <a href="${op.href}" class="btn">Check Seats</a>
+                </div>
+              </li>
+            `;
+          })
+          .join("");
+
+        operatorHeaderEl.style.display = "block";
+        operatorCardsEl.style.display = "grid";
+      }
+
+      // Optional: support deep-linking via hash, e.g. availability.html#route=dlsu-alabang
+      (function initFromHash() {
+        const hash = new URLSearchParams(location.hash.replace(/^#/, ""));
+        const routeId = hash.get("route");
+        if (routeId && routesData[routeId]) {
+          const card = document.querySelector(
+            `.route-card[data-route-id="${routeId}"]`
+          );
+          if (card) {
+            card.classList.add("selected");
+            populateOperators(routeId);
+            card.scrollIntoView({ behavior: "smooth", block: "center" });
+          }
+        }
+      })();
     </script>
+
+    <style>
+      /* Tiny optional helpers to improve step visuals without touching your main CSS */
+      .route-card.selected .card-content {
+        outline: 2px solid rgba(0, 0, 0, 0.15);
+        border-radius: 8px;
+      }
+      .schedule-card.disabled {
+        opacity: 0.5;
+        pointer-events: none;
+      }
+      .schedule-card .btn {
+        cursor: pointer;
+      }
+    </style>
   </body>
 </html>
