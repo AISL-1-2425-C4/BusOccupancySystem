@@ -62,6 +62,17 @@ async def health():
     """Health check"""
     return {"status": "healthy", "timestamp": datetime.utcnow().isoformat()}
 
+@app.get("/debug/config")
+async def debug_config():
+    """Debug endpoint to check environment variables"""
+    return {
+        "supabase_url": SUPABASE_URL if SUPABASE_URL else "NOT SET",
+        "supabase_key": "SET" if SUPABASE_KEY else "NOT SET",
+        "webhook_secret": "SET" if os.getenv("WEBHOOK_SECRET") else "NOT SET",
+        "latest_layout_exists": latest_seating_layout is not None,
+        "last_updated": last_updated
+    }
+
 async def get_last_five_excluding_latest():
     async with httpx.AsyncClient() as client:
         resp = await client.get(
@@ -102,16 +113,20 @@ async def webhook_new_data(payload: WebhookPayload):
     """
     Webhook endpoint to receive notifications about new detection data
     """
+    logger.info(f"🚨 WEBHOOK CALLED! Event: {payload.event}, Record ID: {payload.record_id}")
     response = {}
 
     try:
         # Verify webhook secret
         expected_secret = os.getenv("WEBHOOK_SECRET", "your-secure-webhook-secret-123")
+        logger.info(f"🔐 Webhook secret check: expected={expected_secret[:10]}..., received={payload.secret[:10] if payload.secret else 'None'}...")
+        
         if payload.secret != expected_secret:
-            logger.warning("Invalid webhook secret received")
+            logger.warning("❌ Invalid webhook secret received")
             raise HTTPException(status_code=401, detail="Invalid webhook secret")
         
-        logger.info(f"📥 Webhook #{payload.record_id}: Processing {len(payload.data.get('detection_results', []))} detections...")
+        logger.info(f"✅ Webhook secret verified")
+        logger.info(f"📥 Webhook #{payload.record_id}: Processing {len(payload.data.get('detection_results', []) if payload.data else [])} detections...")
 
         seating_layout = None
 
@@ -136,10 +151,18 @@ async def webhook_new_data(payload: WebhookPayload):
                 # Fallback to simple processing
                 seating_layout = process_detection_results_simple(detection_results)
 
-            if seating_layout:
-                global latest_seating_layout, last_updated, previous_processed_layouts
-                latest_seating_layout = seating_layout
-                last_updated = datetime.utcnow().isoformat()
+            logger.info(f"🎯 Seating layout result: type={type(seating_layout)}, is_none={seating_layout is None}, bool={bool(seating_layout)}")
+            if isinstance(seating_layout, dict):
+                logger.info(f"📊 Layout has {len(seating_layout)} keys: {list(seating_layout.keys())[:5]}")
+            
+            # Update global layout (for website display)
+            global latest_seating_layout, last_updated, previous_processed_layouts
+            latest_seating_layout = seating_layout
+            last_updated = datetime.utcnow().isoformat()
+            
+            # Save to database (even if empty, for tracking)
+            if seating_layout is not None:
+                logger.info(f"💾 Starting Supabase insert process...")
                 # === Save processed layout to Supabase ===
                 try:
                     # Use UUID from webhook payload if available, otherwise generate new one
@@ -190,29 +213,28 @@ async def webhook_new_data(payload: WebhookPayload):
                     logger.error(f"🔥 Error saving processed layout to Supabase: {e}")
                     import traceback
                     logger.error(f"Traceback: {traceback.format_exc()}")
+            else:
+                logger.warning(f"⚠️ Seating layout is None, skipping database insert")
 
+            # TESTING MODE: Skip majority merging, return only the new webhook data
+            logger.info("🧪 TEST MODE: Skipping majority merging, returning only new webhook data")
+            
+            # Skip fetching old layouts
+            previous_processed_layouts = []
 
+            # Use the latest_seating_layout directly without merging
+            final_layout = latest_seating_layout
 
-
-                # TESTING MODE: Skip majority merging, return only the new webhook data
-                logger.info("🧪 TEST MODE: Skipping majority merging, returning only new webhook data")
-                
-                # Skip fetching old layouts
-                previous_processed_layouts = []
-
-                # Use the latest_seating_layout directly without merging
-                final_layout = latest_seating_layout
-
-                response = {
-                    "success": True,
-                    "message": "Detection data processed (NO MAJORITY VOTE - TEST MODE)",
-                    "record_id": payload.record_id,
-                    "uuid": unique_id,  # 👈 Include the UUID in response
-                    "rows_processed": len(final_layout),
-                    "updated_at": last_updated,
-                    "latest_layout": final_layout,                    # 👈 single layout (no merging)
-                    "previous_layouts": [],   # 👈 empty in test mode
-                }
+            response = {
+                "success": True,
+                "message": "Detection data processed (NO MAJORITY VOTE - TEST MODE)",
+                "record_id": payload.record_id,
+                "uuid": payload.data.get("uuid") if payload.data else None,
+                "rows_processed": len(final_layout) if final_layout else 0,
+                "updated_at": last_updated,
+                "latest_layout": final_layout,
+                "previous_layouts": []
+            }
                 
                 # # Fetch the last 4 raw layouts from Supabase
                 # try:
@@ -272,14 +294,6 @@ async def webhook_new_data(payload: WebhookPayload):
                 #     "previous_layouts": previous_processed_layouts,   # 👈 still keep raw 4 older ones
                 # }
 
-
-
-            else:
-                response = {
-                    "success": False,
-                    "message": "Failed to process seating layout",
-                    "record_id": payload.record_id
-                }
         else:
             logger.info("No detection_results in webhook payload")
             logger.info(f"Payload data structure: {payload.data}")
