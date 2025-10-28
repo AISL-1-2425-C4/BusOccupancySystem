@@ -18,7 +18,7 @@
         margin: 0;
         padding: 0;
       }
-      
+
       /* Wrapper for centering content */
       @media (max-width: 768px) {
         body {
@@ -26,13 +26,14 @@
           flex-direction: column;
           align-items: center;
         }
-        
+
         .topnav {
           width: 100%;
           align-self: stretch;
         }
-        
-        h1, .legend {
+
+        h1,
+        .legend {
           align-self: center;
         }
       }
@@ -51,12 +52,12 @@
         overflow: visible; /* Show everything */
         min-height: 200px; /* Ensure container has minimum height */
       }
-      
+
       /* Make sure container is visible when populated */
       .image-container:not([style*="display: none"]) {
         display: inline-block !important;
       }
-      
+
       /* Mobile responsiveness */
       @media (max-width: 768px) {
         body {
@@ -64,31 +65,31 @@
           margin: 0 !important;
           text-align: center !important; /* Center all content */
         }
-        
+
         h1 {
           font-size: 1.3rem;
           margin: 3px auto !important;
           padding: 0 !important;
           text-align: center !important;
         }
-        
+
         .legend {
           margin: 3px auto 10px auto !important;
           padding: 0 !important;
           text-align: center !important;
           justify-content: center !important;
         }
-        
+
         #loading {
           margin: 0 auto !important;
           padding: 5px !important;
         }
-        
+
         #error {
           margin: 0 auto !important;
           padding: 5px !important;
         }
-        
+
         /* Redefine container for mobile - dynamic like desktop */
         .image-container {
           position: relative !important;
@@ -102,23 +103,23 @@
           box-sizing: border-box !important;
           /* Container size determined by JS - same as desktop */
         }
-      
+
         /* Center the bus container wrapper */
         #busContainer {
           display: inline-block !important;
           margin: 0 auto !important;
           position: relative !important;
         }
-        
+
         /* Hide bottom section on mobile to maximize bus view */
         h2 {
           display: none !important;
         }
-        
+
         #lastUpdated {
           display: none !important;
         }
-        
+
         #uuidDisplay {
           display: none !important;
         }
@@ -169,7 +170,7 @@
           inset 0 1px 2px rgba(255, 255, 255, 0.2);
         z-index: 10;
       }
-      
+
       /* Rotate steering wheel on desktop only */
       @media (min-width: 769px) {
         .steering-wheel {
@@ -213,7 +214,7 @@
         font-family: "Karla", sans-serif;
         color: var(--headerColor);
       }
-      
+
       /* Mobile heading adjustments */
       @media (max-width: 768px) {
         h1 {
@@ -221,28 +222,28 @@
           margin: 5px 0 !important;
           padding: 0;
         }
-        
+
         h2 {
           font-size: 1.1rem;
           margin: 3px 0 !important;
           padding: 0;
         }
-        
+
         #lastUpdated {
           font-size: 11px !important;
           margin: 2px 0 !important;
           padding: 0;
         }
-        
+
         .topnav {
           margin-bottom: 0 !important;
         }
-        
+
         /* Hide bottom section on mobile to maximize bus view */
         h2 {
           display: none;
         }
-        
+
         #lastUpdated {
           display: none;
         }
@@ -254,13 +255,18 @@
         width: 25px;
         cursor: pointer;
         transition: transform 0.2s ease;
-        -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1); /* Mobile tap feedback */
+        -webkit-tap-highlight-color: rgba(
+          0,
+          0,
+          0,
+          0.1
+        ); /* Mobile tap feedback */
       }
 
       .dynamic-seat:hover {
         transform: scale(1.1);
       }
-      
+
       /* Mobile touch improvements */
       @media (max-width: 768px) {
         .dynamic-seat {
@@ -268,11 +274,11 @@
           padding: 10px;
           margin: -10px; /* Negative margin to maintain visual size */
         }
-        
+
         .dynamic-seat:hover {
           transform: rotate(90deg) scale(1.1);
         }
-        
+
         /* Active state for mobile tap feedback */
         .dynamic-seat:active {
           transform: rotate(90deg) scale(0.95);
@@ -290,16 +296,24 @@
         margin: 5px auto;
         max-width: 90%;
       }
-      
+
       .loading::after {
         content: "...";
         animation: dots 1.5s steps(4, end) infinite;
       }
-      
+
       @keyframes dots {
-        0%, 20% { content: "."; }
-        40% { content: ".."; }
-        60%, 100% { content: "..."; }
+        0%,
+        20% {
+          content: ".";
+        }
+        40% {
+          content: "..";
+        }
+        60%,
+        100% {
+          content: "...";
+        }
       }
 
       .error {
@@ -314,9 +328,10 @@
         max-width: 90%;
         font-weight: 500;
       }
-      
+
       @media (max-width: 768px) {
-        .loading, .error {
+        .loading,
+        .error {
           font-size: 13px;
           padding: 10px;
           margin: 3px auto;
@@ -347,19 +362,19 @@
         border-radius: 3px;
         flex-shrink: 0; /* Prevent shrinking */
       }
-      
+
       /* Mobile legend adjustments */
       @media (max-width: 768px) {
         .legend {
           gap: 10px;
           margin: 10px 0;
         }
-        
+
         .legend-item {
           font-size: 12px;
           gap: 3px;
         }
-        
+
         .legend-color {
           width: 16px;
           height: 16px;
@@ -433,9 +448,14 @@
     </p>
     <p
       id="uuidDisplay"
-      style="text-align: center; margin-top: 5px; font-size: 12px; color: #888; font-family: monospace"
-    >
-    </p>
+      style="
+        text-align: center;
+        margin-top: 5px;
+        font-size: 12px;
+        color: #888;
+        font-family: monospace;
+      "
+    ></p>
 
     <script>
       function updateTimestamp() {
@@ -448,17 +468,17 @@
         try {
           const url = "row_seating_layout.json?nocache=" + Date.now();
           const response = await fetch(url);
-          
+
           if (!response.ok) {
             throw new Error(`HTTP ${response.status}: ${response.statusText}`);
           }
 
           const data = await response.json();
           console.log("📦 Received data from API:", data);
-          
+
           // Extract layout and UUID from response
           let newLayout, uuid;
-          
+
           if (data && data.layout) {
             // New format: { layout: {...}, uuid: "...", ... }
             newLayout = data.layout;
@@ -478,11 +498,12 @@
           ) {
             seatLayoutData = newLayout;
             document.getElementById("loading").style.display = "none";
-            document.getElementById("busContainer").style.display = "inline-block";
+            document.getElementById("busContainer").style.display =
+              "inline-block";
 
             generateSeats(seatLayoutData);
             updateTimestamp();
-            
+
             // Update UUID display
             if (uuid) {
               updateUUID(uuid);
@@ -492,10 +513,11 @@
             if (!seatLayoutData && newLayout) {
               seatLayoutData = newLayout;
               document.getElementById("loading").style.display = "none";
-              document.getElementById("busContainer").style.display = "inline-block";
+              document.getElementById("busContainer").style.display =
+                "inline-block";
               generateSeats(seatLayoutData);
               updateTimestamp();
-              
+
               // Update UUID display
               if (uuid) {
                 updateUUID(uuid);
@@ -510,10 +532,10 @@
           errorDiv.textContent = `Error loading seat layout: ${error.message}`;
         }
       }
-      
+
       function updateUUID(uuid) {
         const uuidDisplay = document.getElementById("uuidDisplay");
-        if (uuidDisplay && uuid && typeof uuid === 'string') {
+        if (uuidDisplay && uuid && typeof uuid === "string") {
           uuidDisplay.textContent = `UUID: ${uuid}`;
           console.log("✅ UUID updated:", uuid);
         } else {
@@ -524,22 +546,22 @@
       // 👇 Initialize on page load
       document.addEventListener("DOMContentLoaded", async () => {
         console.log("🚀 Page loaded, initializing...");
-        
+
         // Start timestamp updates
         updateTimestamp();
-        setInterval(updateTimestamp, 5000);
-        
+        setInterval(updateTimestamp, 1000);
+
         // Load seat layout (UUID will be included in the response now)
         loadDynamicSeats();
       });
-      setInterval(loadDynamicSeats, 5000); // auto refresh every 5 seconds
+      setInterval(loadDynamicSeats, 1000); // auto refresh every 5 seconds
 
       let seatLayoutData = null;
       let mobileLayoutCalculated = false; // Flag to track if mobile layout was calculated once
       let cachedMobileSizes = null; // Store calculated sizes for mobile (calculate once)
-      
+
       // Clear cache on page load to ensure fresh render
-      console.log('🔄 Initializing fresh - cache cleared');
+      console.log("🔄 Initializing fresh - cache cleared");
 
       // Generate seat elements dynamically with grid layout and aisle separation
       // Make this function globally accessible for auto-refresh
@@ -573,26 +595,33 @@
         const screenWidth = window.innerWidth;
         const isMobile = screenWidth < 768;
         const isTablet = screenWidth >= 768 && screenWidth < 1024;
-        
+
         // On mobile, if layout was already calculated, skip recalculation
         if (isMobile && mobileLayoutCalculated) {
-          console.log(`📱 Mobile layout already calculated - skipping size recalculation`);
+          console.log(
+            `📱 Mobile layout already calculated - skipping size recalculation`
+          );
           // Just update seat colors without regenerating entire layout
           // This will be handled by the existing seat update logic
         }
-        
-        console.log(`🔍 Screen width: ${screenWidth}px, isMobile: ${isMobile}, isTablet: ${isTablet}`);
-        
+
+        console.log(
+          `🔍 Screen width: ${screenWidth}px, isMobile: ${isMobile}, isTablet: ${isTablet}`
+        );
+
         // Scale factor based on screen size - BIGGER seats, LESS spacing on mobile
         let scaleFactor = 1;
         let seatSize, seatSpacing, aisleWidth, edgeMargin;
-        
+
         if (isMobile) {
           // Check if we already calculated sizes for mobile
           if (cachedMobileSizes) {
             // Use cached values - don't recalculate
-            ({ seatSize, seatSpacing, aisleWidth, edgeMargin, scaleFactor } = cachedMobileSizes);
-            console.log(`📱 Using cached mobile sizes: seatSize=${seatSize.toFixed(1)}px`);
+            ({ seatSize, seatSpacing, aisleWidth, edgeMargin, scaleFactor } =
+              cachedMobileSizes);
+            console.log(
+              `📱 Using cached mobile sizes: seatSize=${seatSize.toFixed(1)}px`
+            );
           } else {
             // Mobile: Use fixed sizes to fit screen
             seatSize = 38; // Larger seat size for better visibility
@@ -600,11 +629,19 @@
             aisleWidth = 13;
             edgeMargin = 12;
             scaleFactor = 1.0;
-            
+
             // Cache these values for future use
-            cachedMobileSizes = { seatSize, seatSpacing, aisleWidth, edgeMargin, scaleFactor };
-            
-            console.log(`📏 Mobile sizing (FIXED ONCE): seatSize=${seatSize}px, spacing=${seatSpacing}px`);
+            cachedMobileSizes = {
+              seatSize,
+              seatSpacing,
+              aisleWidth,
+              edgeMargin,
+              scaleFactor,
+            };
+
+            console.log(
+              `📏 Mobile sizing (FIXED ONCE): seatSize=${seatSize}px, spacing=${seatSpacing}px`
+            );
           }
         } else if (isTablet) {
           scaleFactor = 1.0;
@@ -623,15 +660,15 @@
 
         // Calculate dynamic container dimensions with driver area
         const driverAreaWidth = Math.max(45, 65 * scaleFactor); // Scaled driver area
-        
+
         // Check if we have any 4-seat rows that need aisle gap
         const has4SeatRows = rowKeys.some(
           (rowKey) => Object.keys(layoutData[rowKey]).length <= 4
         );
-        
+
         // Calculate container dimensions - different for mobile vs desktop
         let containerWidth, containerHeight;
-        
+
         if (isMobile) {
           // MOBILE: width is based on columns (vertical), height is based on rows (horizontal)
           containerWidth =
@@ -639,10 +676,9 @@
             (has4SeatRows ? aisleWidth : 0) +
             edgeMargin * 2 +
             driverAreaWidth;
-          
+
           containerHeight =
-            totalRows * (seatSize + seatSpacing) +
-            edgeMargin * 2;
+            totalRows * (seatSize + seatSpacing) + edgeMargin * 2;
         } else {
           // DESKTOP: width is based on rows (horizontal), height is based on columns (vertical)
           containerWidth =
@@ -660,22 +696,33 @@
         // Set container dimensions explicitly
         container.style.width = `${containerWidth}px`;
         container.style.height = `${containerHeight}px`;
-        container.style.position = 'relative';
+        container.style.position = "relative";
         busImage.style.width = `${containerWidth}px`;
         busImage.style.height = `${containerHeight}px`;
-        
-        console.log(`📦 Container dimensions set: ${containerWidth}×${containerHeight}px`);
+
+        console.log(
+          `📦 Container dimensions set: ${containerWidth}×${containerHeight}px`
+        );
 
         // No rotation needed - seats are positioned differently for mobile
         // Container dynamically fits the content
-        console.log(`📦 Container: ${containerWidth}×${containerHeight}px, Mobile: ${isMobile}`);
-        
+        console.log(
+          `📦 Container: ${containerWidth}×${containerHeight}px, Mobile: ${isMobile}`
+        );
+
         // Ensure container fully covers all seats
         container.style.minWidth = `${containerWidth}px`;
         container.style.minHeight = `${containerHeight}px`;
 
         // Add aisle divider lines for visual appeal
-        addAisleDividers(container, containerHeight, has4SeatRows, seatSize, seatSpacing, edgeMargin);
+        addAisleDividers(
+          container,
+          containerHeight,
+          has4SeatRows,
+          seatSize,
+          seatSpacing,
+          edgeMargin
+        );
 
         // Add driver's steering wheel to indicate front of bus
         addSteeringWheel(container);
@@ -747,26 +794,35 @@
 
               // Calculate grid position - different logic for mobile vs desktop
               let gridX, gridY;
-              
+
               if (isMobile) {
                 // MOBILE: columns are up-down (vertical), rows are left-right (horizontal)
                 // Y position becomes the row progression (left to right)
                 gridY = edgeMargin + rowIndex * (seatSize + seatSpacing);
-                
+
                 // X position becomes the column progression (top to bottom)
                 if (currentRowColumns.length <= 4) {
                   // Regular 4-seat rows: align with 6-seat row positions
                   if (columnIndex < 2) {
                     // Left side (column_one, column_two) - align with positions 0,1
-                    gridX = edgeMargin + driverAreaWidth + columnIndex * (seatSize + seatSpacing);
+                    gridX =
+                      edgeMargin +
+                      driverAreaWidth +
+                      columnIndex * (seatSize + seatSpacing);
                   } else {
                     // Right side (column_three, column_four) - align with positions 4,5
                     const alignedIndex = columnIndex + 2;
-                    gridX = edgeMargin + driverAreaWidth + alignedIndex * (seatSize + seatSpacing);
+                    gridX =
+                      edgeMargin +
+                      driverAreaWidth +
+                      alignedIndex * (seatSize + seatSpacing);
                   }
                 } else {
                   // 6-seat row: all seats together
-                  gridX = edgeMargin + driverAreaWidth + columnIndex * (seatSize + seatSpacing);
+                  gridX =
+                    edgeMargin +
+                    driverAreaWidth +
+                    columnIndex * (seatSize + seatSpacing);
                 }
               } else {
                 // DESKTOP: rows are left-right (horizontal), columns are top-bottom (vertical)
@@ -785,7 +841,8 @@
                   } else {
                     // Bottom side (column_three, column_four) - align with positions 4,5 of 6-seat row
                     const alignedIndex = columnIndex + 2; // Skip positions 2,3 to align with 4,5
-                    gridY = edgeMargin + alignedIndex * (seatSize + seatSpacing);
+                    gridY =
+                      edgeMargin + alignedIndex * (seatSize + seatSpacing);
                   }
                 } else {
                   // 6-seat row: all seats together, no gaps
@@ -797,14 +854,14 @@
               seatImg.style.position = "absolute";
               seatImg.style.left = `${gridX}px`;
               seatImg.style.top = `${gridY}px`;
-              
+
               // Rotate seats 90 degrees clockwise on mobile
               if (isMobile) {
                 seatImg.style.transform = "rotate(90deg)";
               } else {
                 seatImg.style.transform = "none";
               }
-              
+
               seatImg.style.zIndex = "5"; // Ensure seats are visible
 
               // Add click event for seat info
@@ -828,7 +885,7 @@
           container.style.visibility = "visible";
           container.style.opacity = "1";
           console.log(`✅ Generated ${seatCounter} seats in ${totalRows} rows`);
-          
+
           // Mark mobile layout as calculated (so it won't recalculate on updates)
           if (isMobile && !mobileLayoutCalculated) {
             mobileLayoutCalculated = true;
@@ -840,7 +897,14 @@
       };
 
       // Add aisle divider lines
-      function addAisleDividers(container, containerHeight, has4SeatRows, seatSize, seatSpacing, edgeMargin) {
+      function addAisleDividers(
+        container,
+        containerHeight,
+        has4SeatRows,
+        seatSize,
+        seatSpacing,
+        edgeMargin
+      ) {
         // Remove existing dividers
         const existingDividers = container.querySelectorAll(".aisle-divider");
         existingDividers.forEach((el) => el.remove());
@@ -848,17 +912,20 @@
         if (has4SeatRows) {
           const screenWidth = window.innerWidth;
           const isMobile = screenWidth < 768;
-          
+
           if (isMobile) {
             // MOBILE: Vertical dividers for horizontal bus layout
             // Get actual container width to calculate center
             const containerWidth = parseFloat(container.style.width) || 0;
             const driverAreaWidth = 65;
-            
+
             // Calculate based on actual seat positions
             // Left divider (after first 2 columns)
             const leftDividerX =
-              edgeMargin + driverAreaWidth + 2 * (seatSize + seatSpacing) - seatSpacing / 2;
+              edgeMargin +
+              driverAreaWidth +
+              2 * (seatSize + seatSpacing) -
+              seatSpacing / 2;
             const leftDivider = document.createElement("div");
             leftDivider.className = "aisle-divider-mobile left";
             leftDivider.style.position = "absolute";
@@ -866,14 +933,18 @@
             leftDivider.style.top = "0";
             leftDivider.style.width = "2px";
             leftDivider.style.height = "100%";
-            leftDivider.style.background = "linear-gradient(180deg, transparent 0%, #dee2e6 20%, #dee2e6 80%, transparent 100%)";
+            leftDivider.style.background =
+              "linear-gradient(180deg, transparent 0%, #dee2e6 20%, #dee2e6 80%, transparent 100%)";
             leftDivider.style.zIndex = "1";
             leftDivider.style.borderRadius = "1px";
             container.appendChild(leftDivider);
 
             // Right divider (before last 2 columns)
             const rightDividerX =
-              edgeMargin + driverAreaWidth + 4 * (seatSize + seatSpacing) - seatSpacing / 2;
+              edgeMargin +
+              driverAreaWidth +
+              4 * (seatSize + seatSpacing) -
+              seatSpacing / 2;
             const rightDivider = document.createElement("div");
             rightDivider.className = "aisle-divider-mobile right";
             rightDivider.style.position = "absolute";
@@ -881,7 +952,8 @@
             rightDivider.style.top = "0";
             rightDivider.style.width = "2px";
             rightDivider.style.height = "100%";
-            rightDivider.style.background = "linear-gradient(180deg, transparent 0%, #dee2e6 20%, #dee2e6 80%, transparent 100%)";
+            rightDivider.style.background =
+              "linear-gradient(180deg, transparent 0%, #dee2e6 20%, #dee2e6 80%, transparent 100%)";
             rightDivider.style.zIndex = "1";
             rightDivider.style.borderRadius = "1px";
             container.appendChild(rightDivider);
@@ -929,13 +1001,13 @@
         const driverAreaWidth = 60;
         const screenWidth = window.innerWidth;
         const isMobile = screenWidth < 768;
-        
+
         // Get container dimensions
         const containerWidth = parseFloat(container.style.width) || 400;
         const containerHeight = parseFloat(container.style.height) || 400;
 
         let wheelX, wheelY;
-        
+
         if (isMobile) {
           // MOBILE: steering wheel at top-left
           wheelX = edgeMargin + driverAreaWidth / 3 - 12.5;
@@ -960,13 +1032,13 @@
         driverLabel.style.left = `${wheelX - 10}px`;
         driverLabel.style.top = `${wheelY + 24}px`; // Positioned below steering wheel
         driverLabel.style.width = "55px";
-        
+
         // Only rotate text on desktop
         if (!isMobile) {
           driverLabel.style.transform = "rotate(-90deg)";
           driverLabel.style.transformOrigin = "center center";
         }
-        
+
         container.appendChild(driverLabel);
 
         console.log(
@@ -999,24 +1071,26 @@
 
       // Load seats when page loads
       document.addEventListener("DOMContentLoaded", loadDynamicSeats);
-      
+
       // Handle window resize ONLY on desktop (not mobile - mobile calculates once)
       const isMobileDevice = window.innerWidth < 768;
-      
+
       if (!isMobileDevice) {
         let resizeTimer;
-        window.addEventListener('resize', function() {
+        window.addEventListener("resize", function () {
           clearTimeout(resizeTimer);
-          resizeTimer = setTimeout(function() {
-            console.log('🔄 Window resized, regenerating seat layout...');
+          resizeTimer = setTimeout(function () {
+            console.log("🔄 Window resized, regenerating seat layout...");
             if (seatLayoutData) {
               generateSeats(seatLayoutData);
             }
           }, 250); // Debounce resize events
         });
-        console.log('✅ Resize listener enabled for desktop');
+        console.log("✅ Resize listener enabled for desktop");
       } else {
-        console.log('📱 Mobile detected - resize listener disabled (calculate once)');
+        console.log(
+          "📱 Mobile detected - resize listener disabled (calculate once)"
+        );
       }
     </script>
 
@@ -1037,17 +1111,18 @@
           { event: "*", schema: "public", table: "push_requests" },
           (payload) => {
             console.log("🔔 New detection data detected:", payload);
-            
+
             // Extract UUID from the payload
             let uuid = null;
             if (payload && payload.new && payload.new.json_data) {
               // UUID might be in json_data.uuid or json_data.data.uuid
-              uuid = payload.new.json_data.uuid || 
-                     (payload.new.json_data.data && payload.new.json_data.data.uuid);
+              uuid =
+                payload.new.json_data.uuid ||
+                (payload.new.json_data.data && payload.new.json_data.data.uuid);
             }
-            
+
             console.log("📋 Extracted UUID:", uuid);
-            
+
             // Reload seats whenever there's an insert/update/delete
             // This will trigger the majority voting endpoint
             loadDynamicSeats(uuid);
