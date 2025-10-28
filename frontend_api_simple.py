@@ -216,83 +216,78 @@ async def webhook_new_data(payload: WebhookPayload):
             else:
                 logger.warning(f"⚠️ Seating layout is None, skipping database insert")
 
-            # TESTING MODE: Skip majority merging, return only the new webhook data
-            logger.info("🧪 TEST MODE: Skipping majority merging, returning only new webhook data")
+            # Check if majority voting is enabled
+            ENABLE_MAJORITY_VOTE = os.getenv("ENABLE_MAJORITY_VOTE", "true").lower() == "true"
             
-            # Skip fetching old layouts
+            if ENABLE_MAJORITY_VOTE:
+                # MAJORITY VOTING: Fetch the last 4 raw layouts from Supabase and merge
+                logger.info("🗳️ MAJORITY VOTE MODE: Fetching previous layouts for merging")
+            else:
+                logger.info("📋 MAJORITY VOTE DISABLED: Using only the latest layout")
+            
+            # Fetch the last 4 raw layouts from Supabase
             previous_processed_layouts = []
+            if ENABLE_MAJORITY_VOTE:
+                try:
+                    last_four_raw = await get_last_five_excluding_latest()
 
-            # Use the latest_seating_layout directly without merging
-            final_layout = latest_seating_layout
+                    # Process them before returning
+                    for r in last_four_raw:
+                        record_id = r["id"]
+                        json_data = r.get("json_data", {})
+                        
+                        # Try to get detection_results from nested structure (data.detection_results)
+                        # OR from direct structure (detection_results)
+                        detections = json_data.get("data", {}).get("detection_results", [])
+                        if not detections:
+                            # Fallback: try direct detection_results
+                            detections = json_data.get("detection_results", [])
+                        
+                        if not detections:
+                            logger.warning(f"⚠️ Record {record_id} has no detection_results, skipping")
+                            continue
+                            
+                        # Silently process old records (reduce log spam)
+                        try:
+                            from seating_processor import process_seating_layout
+                            processed = process_seating_layout(detections)
+                        except:
+                            processed = process_detection_results_simple(detections)
+                        
+                        if processed:
+                            previous_processed_layouts.append({
+                                "record_id": record_id,
+                                "layout": processed
+                            })
+
+                    logger.info(f"📊 Majority vote pool: 1 new + {len(previous_processed_layouts)} old = {1 + len(previous_processed_layouts)} total layouts")
+
+                except Exception as e:
+                    logger.error(f"Error fetching/processing last four layouts: {e}")
+                    previous_processed_layouts = []
+
+            # Combine latest + previous 4 into one majority-voted layout
+            if ENABLE_MAJORITY_VOTE and previous_processed_layouts and latest_seating_layout:
+                all_layouts = [latest_seating_layout] + [p["layout"] for p in previous_processed_layouts]
+                logger.info(f"🗳️ Merging {len(all_layouts)} layouts using majority voting")
+                final_layout = merge_seating_layouts(all_layouts)
+            else:
+                logger.info("📋 Using only the latest layout (no merging)")
+                final_layout = latest_seating_layout
+
+            # Save the final merged layout into cache
+            latest_seating_layout = final_layout
 
             response = {
                 "success": True,
-                "message": "Detection data processed (NO MAJORITY VOTE - TEST MODE)",
+                "message": "Detection data processed" + (" and merged (majority vote)" if ENABLE_MAJORITY_VOTE and previous_processed_layouts else ""),
                 "record_id": payload.record_id,
                 "uuid": payload.data.get("uuid") if payload.data else None,
                 "rows_processed": len(final_layout) if final_layout else 0,
                 "updated_at": last_updated,
                 "latest_layout": final_layout,
-                "previous_layouts": []
+                "previous_layouts": previous_processed_layouts if ENABLE_MAJORITY_VOTE else []
             }
-                
-                # # Fetch the last 4 raw layouts from Supabase
-                # try:
-                #     last_four_raw = await get_last_five_excluding_latest()
-
-                #     # Process them before returning
-                #     previous_processed_layouts = []
-                #     for r in last_four_raw:
-                #         record_id = r["id"]
-                #         json_data = r.get("json_data", {})
-                        
-                #         # Try to get detection_results from nested structure (data.detection_results)
-                #         # OR from direct structure (detection_results)
-                #         detections = json_data.get("data", {}).get("detection_results", [])
-                #         if not detections:
-                #             # Fallback: try direct detection_results
-                #             detections = json_data.get("detection_results", [])
-                        
-                #         if not detections:
-                #             logger.warning(f"⚠️ Record {record_id} has no detection_results, skipping")
-                #             continue
-                            
-                #         # Silently process old records (reduce log spam)
-                #         processed = process_seating_layout(detections)
-                        
-                #         if processed:
-                #             previous_processed_layouts.append({
-                #                 "record_id": record_id,
-                #                 "layout": processed
-                #             })
-
-
-                #     logger.info(f"📊 Majority vote pool: 1 new + {len(previous_processed_layouts)} old = {1 + len(previous_processed_layouts)} total layouts")
-                #     response["previous_layouts"] = previous_processed_layouts
-
-                # except Exception as e:
-                #     logger.error(f"Error fetching/processing last four layouts: {e}")
-                #     response["previous_layouts"] = []
-                #     previous_processed_layouts = []  # reset if failed
-
-                # # Combine latest + previous 4 into one majority-voted layout
-                # all_layouts = [latest_seating_layout] + [p["layout"] for p in previous_processed_layouts]
-                # logger.info(f"🗳️ Merging {len(all_layouts)} layouts using majority voting")
-                # final_layout = merge_seating_layouts(all_layouts)
-
-                # # Save the final merged layout into cache
-                # latest_seating_layout = final_layout
-
-                # response = {
-                #     "success": True,
-                #     "message": "Detection data processed and merged (majority vote)",
-                #     "record_id": payload.record_id,
-                #     "uuid": unique_id,  # 👈 Include the UUID in response
-                #     "rows_processed": len(final_layout),
-                #     "updated_at": last_updated,
-                #     "latest_layout": final_layout,                    # 👈 merged layout (frontend will use this)
-                #     "previous_layouts": previous_processed_layouts,   # 👈 still keep raw 4 older ones
-                # }
 
         else:
             logger.info("No detection_results in webhook payload")
