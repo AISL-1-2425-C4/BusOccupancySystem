@@ -165,6 +165,11 @@ async def webhook_new_data(payload: WebhookPayload):
                 logger.info(f"💾 Starting Supabase insert process...")
                 # === Save processed layout to Supabase ===
                 try:
+                    # Check if Supabase credentials are available
+                    if not SUPABASE_URL or not SUPABASE_KEY:
+                        logger.error(f"❌ SUPABASE credentials not set! URL: {SUPABASE_URL}, KEY: {'SET' if SUPABASE_KEY else 'NOT SET'}")
+                        raise Exception("Supabase credentials not configured")
+                    
                     # Use UUID from webhook payload if available, otherwise generate new one
                     unique_id = payload.data.get("uuid") if payload.data else None
                     if not unique_id:
@@ -188,6 +193,7 @@ async def webhook_new_data(payload: WebhookPayload):
                     SUPABASE_PROCESSED_TABLE = os.getenv("SUPABASE_PROCESSED_TABLE", "processed_layouts")
                     
                     logger.info(f"🔵 Attempting to insert into '{SUPABASE_PROCESSED_TABLE}' for UUID {unique_id}")
+                    logger.info(f"🔑 Using Supabase URL: {SUPABASE_URL}")
 
                     async with httpx.AsyncClient() as client:
                         resp = await client.post(
@@ -526,8 +532,8 @@ async def serve_seating_json():
                         }
                     }
                 
-                # TESTING MODE: Process only the latest (first) record
-                logger.info("🧪 TEST MODE: Processing only the latest record (no majority vote)")
+                # MAJORITY VOTING: Process all 5 records and merge
+                logger.info("🗳️ MAJORITY VOTE MODE: Processing and merging last 5 records")
                 
                 # Extract UUID from the most recent record (first in list since ordered by id desc)
                 latest_uuid = None
@@ -537,45 +543,55 @@ async def serve_seating_json():
                               (latest_json_data.get("data", {}).get("uuid")))
                 logger.info(f"📋 Latest UUID: {latest_uuid}")
                 
-                # Process ONLY the latest record
+                # Process ALL records for majority voting
                 from seating_processor import process_seating_layout
                 
-                record_id = rows[0]["id"]
-                json_data = rows[0].get("json_data", {})
+                all_layouts = []
+                for row in rows:
+                    record_id = row["id"]
+                    json_data = row.get("json_data", {})
+                    
+                    # Try to get detection_results from nested structure
+                    detections = json_data.get("data", {}).get("detection_results", [])
+                    if not detections:
+                        detections = json_data.get("detection_results", [])
+                    
+                    if not detections:
+                        logger.warning(f"⚠️ Record {record_id} has no detection_results, skipping")
+                        continue
+                    
+                    # Process detections into layout
+                    try:
+                        processed_layout = process_seating_layout(detections)
+                        if processed_layout:
+                            all_layouts.append(processed_layout)
+                            logger.info(f"✅ Processed record {record_id} - {len(processed_layout)} rows")
+                    except Exception as e:
+                        logger.error(f"❌ Failed to process record {record_id}: {e}")
+                        continue
                 
-                # Try to get detection_results from nested structure
-                detections = json_data.get("data", {}).get("detection_results", [])
-                if not detections:
-                    detections = json_data.get("detection_results", [])
-                
-                if not detections:
-                    logger.error(f"❌ Latest record {record_id} has no detection_results")
+                if not all_layouts:
+                    logger.error("❌ No valid layouts to process")
                     if latest_seating_layout:
                         return latest_seating_layout
                     raise HTTPException(status_code=500, detail="No valid detection data available")
                 
-                # Process detections into layout
-                processed_layout = process_seating_layout(detections)
-                if not processed_layout:
-                    logger.error("❌ Failed to process latest layout")
-                    if latest_seating_layout:
-                        return latest_seating_layout
-                    raise HTTPException(status_code=500, detail="Failed to process layout")
-                
-                logger.info(f"✅ Processed latest record {record_id} - {len(processed_layout)} rows")
+                # Merge all layouts using majority voting
+                logger.info(f"🗳️ Merging {len(all_layouts)} layouts using majority voting")
+                merged_layout = merge_seating_layouts(all_layouts)
                 
                 # Update cache
-                latest_seating_layout = processed_layout
+                latest_seating_layout = merged_layout
                 last_updated = datetime.utcnow().isoformat()
                 
-                logger.info(f"✅ Serving single layout (no merging) with {len(processed_layout)} rows")
+                logger.info(f"✅ Serving merged layout with {len(merged_layout)} rows")
                 
                 # Return layout with UUID and metadata
                 return {
-                    "layout": processed_layout,
+                    "layout": merged_layout,
                     "uuid": latest_uuid,
                     "last_updated": last_updated,
-                    "records_merged": 1  # Only 1 record in test mode
+                    "records_merged": len(all_layouts)
                 }
                 
                 # # Original code (commented out for testing)
