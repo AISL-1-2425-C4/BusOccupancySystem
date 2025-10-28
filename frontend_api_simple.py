@@ -69,8 +69,19 @@ async def debug_config():
         "supabase_url": SUPABASE_URL if SUPABASE_URL else "NOT SET",
         "supabase_key": "SET" if SUPABASE_KEY else "NOT SET",
         "webhook_secret": "SET" if os.getenv("WEBHOOK_SECRET") else "NOT SET",
+        "webhook_secret_value": os.getenv("WEBHOOK_SECRET", "NOT SET")[:20] + "..." if os.getenv("WEBHOOK_SECRET") else "NOT SET",
         "latest_layout_exists": latest_seating_layout is not None,
         "last_updated": last_updated
+    }
+
+@app.get("/api/webhook/test")
+async def test_webhook():
+    """Test endpoint to verify webhook URL is reachable"""
+    return {
+        "status": "webhook endpoint is reachable",
+        "timestamp": datetime.utcnow().isoformat(),
+        "endpoint": "/api/webhook/new-data",
+        "method": "POST"
     }
 
 async def get_last_five_excluding_latest():
@@ -113,16 +124,19 @@ async def webhook_new_data(payload: WebhookPayload):
     """
     Webhook endpoint to receive notifications about new detection data
     """
-    logger.info(f"🚨 WEBHOOK CALLED! Event: {payload.event}, Record ID: {payload.record_id}")
+    logger.info("=" * 80)
+    logger.info(f"🚨 WEBHOOK ENDPOINT HIT! Timestamp: {datetime.utcnow().isoformat()}")
+    logger.info(f"📥 Event: {payload.event}, Record ID: {payload.record_id}")
+    logger.info("=" * 80)
     response = {}
 
     try:
         # Verify webhook secret
         expected_secret = os.getenv("WEBHOOK_SECRET", "your-secure-webhook-secret-123")
-        logger.info(f"🔐 Webhook secret check: expected={expected_secret[:10]}..., received={payload.secret[:10] if payload.secret else 'None'}...")
+        logger.info(f"🔐 Webhook secret check: expected={expected_secret[:10] if expected_secret else 'NONE'}..., received={payload.secret[:10] if payload.secret else 'NONE'}...")
         
         if payload.secret != expected_secret:
-            logger.warning("❌ Invalid webhook secret received")
+            logger.error(f"❌ WEBHOOK AUTH FAILED! Expected: {expected_secret}, Received: {payload.secret}")
             raise HTTPException(status_code=401, detail="Invalid webhook secret")
         
         logger.info(f"✅ Webhook secret verified")
