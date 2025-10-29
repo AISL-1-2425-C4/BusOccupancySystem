@@ -549,12 +549,12 @@
 
         // Start timestamp updates
         updateTimestamp();
-        setInterval(updateTimestamp, 1000);
+        setInterval(updateTimestamp, 500);
 
         // Load seat layout (UUID will be included in the response now)
         loadDynamicSeats();
       });
-      setInterval(loadDynamicSeats, 1000); // auto refresh every 5 seconds
+      setInterval(loadDynamicSeats, 500); // auto refresh every 5 seconds
 
       let seatLayoutData = null;
       let mobileLayoutCalculated = false; // Flag to track if mobile layout was calculated once
