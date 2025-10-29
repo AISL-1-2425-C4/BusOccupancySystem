@@ -543,32 +543,48 @@
 
       // Log UUID display to Supabase for monitoring
       async function logUUIDDisplay(uuid, timestamp) {
+        console.log("🔵 logUUIDDisplay called with UUID:", uuid);
+        
         try {
           // Check if Supabase is initialized
           if (!supabase) {
-            console.warn("⚠️ Supabase not yet initialized, skipping UUID log");
+            console.error("❌ Supabase not initialized!");
+            console.log("Debug - supabaseUrl:", supabaseUrl);
+            console.log("Debug - supabaseKey:", supabaseKey ? "SET" : "NOT SET");
             return;
           }
 
+          console.log("✅ Supabase is initialized, attempting insert...");
+          
+          const recordToInsert = {
+            uuid: uuid,
+            displayed_at: new Date().toISOString(),
+            client_timestamp: timestamp,
+            user_agent: navigator.userAgent,
+            source: 'newmorning_html'
+          };
+          
+          console.log("📦 Inserting record:", recordToInsert);
+
           const { data, error } = await supabase
             .from('uuid_display_logs')
-            .insert([
-              {
-                uuid: uuid,
-                displayed_at: new Date().toISOString(),
-                client_timestamp: timestamp,
-                user_agent: navigator.userAgent,
-                source: 'newmorning_html'
-              }
-            ]);
+            .insert([recordToInsert]);
 
           if (error) {
             console.error("❌ Failed to log UUID display:", error);
+            console.error("Error details:", {
+              message: error.message,
+              details: error.details,
+              hint: error.hint,
+              code: error.code
+            });
           } else {
-            console.log("✅ UUID display logged to database:", uuid);
+            console.log("✅ UUID display logged to database successfully!");
+            console.log("Response data:", data);
           }
         } catch (err) {
-          console.error("❌ Error logging UUID display:", err);
+          console.error("❌ Exception logging UUID display:", err);
+          console.error("Full error:", err);
         }
       }
 
