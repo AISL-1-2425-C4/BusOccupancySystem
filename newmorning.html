@@ -591,7 +591,8 @@
       function updateUUID(uuid) {
         const uuidDisplay = document.getElementById("uuidDisplay");
         if (uuidDisplay && uuid && typeof uuid === "string") {
-          const timestamp = new Date().toLocaleString();
+          const now = new Date();
+          const timestamp = now.toLocaleString('en-US', { hour12: false }) + '.' + now.getMilliseconds().toString().padStart(3, '0');
           uuidDisplay.textContent = `UUID: ${uuid} | Updated: ${timestamp}`;
           console.log("✅ UUID updated:", uuid, "at", timestamp);
           
