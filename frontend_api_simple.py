@@ -110,7 +110,7 @@ console.log("✅ Supabase config loaded from server");
         }
     )
 
-async def get_last_five_excluding_latest():
+async def get_last_three_excluding_latest():
     async with httpx.AsyncClient() as client:
         resp = await client.get(
             f"{SUPABASE_URL}/rest/v1/push_requests",
@@ -121,7 +121,7 @@ async def get_last_five_excluding_latest():
             params={
                 "select": "id,created_at,json_data",
                 "order": "id.desc",
-                "limit": 5  # latest + 5 before it
+                "limit": 3  # reduced from 5 for performance
             }
         )
 
@@ -262,16 +262,16 @@ async def webhook_new_data(payload: WebhookPayload):
             else:
                 logger.warning(f"⚠️ Seating layout is None, skipping database insert")
 
-            # MAJORITY VOTING: Fetch the last 4 raw layouts from Supabase and merge
+            # MAJORITY VOTING: Fetch the last 2 raw layouts from Supabase and merge (reduced from 4 for performance)
             logger.info("🗳️ MAJORITY VOTE MODE: Fetching previous layouts for merging")
             
-            # Fetch the last 4 raw layouts from Supabase
+            # Fetch the last 2 raw layouts from Supabase (reduced from 4 for performance)
             previous_processed_layouts = []
             try:
-                last_four_raw = await get_last_five_excluding_latest()
+                last_two_raw = await get_last_three_excluding_latest()
 
                 # Process them before returning
-                for r in last_four_raw:
+                for r in last_two_raw:
                     record_id = r["id"]
                     json_data = r.get("json_data", {})
                     
@@ -530,13 +530,13 @@ def merge_seating_layouts(layouts: list[dict]) -> dict:
 # Serve JSON files for backward compatibility
 @app.get("/row_seating_layout.json")
 async def serve_seating_json():
-    """Serve seating layout JSON with live majority voting from last 5 records"""
+    """Serve seating layout JSON with live majority voting from last 3 records"""
     try:
         global latest_seating_layout, last_updated
         
-        logger.info("🔄 Fetching and merging last 5 seating layouts from Supabase...")
+        logger.info("🔄 Fetching and merging last 3 seating layouts from Supabase...")
         
-        # Fetch the last 5 records from Supabase
+        # Fetch the last 3 records from Supabase (reduced from 5 for performance)
         try:
             async with httpx.AsyncClient() as client:
                 resp = await client.get(
@@ -548,7 +548,7 @@ async def serve_seating_json():
                     params={
                         "select": "id,created_at,json_data",
                         "order": "id.desc",
-                        "limit": 5
+                        "limit": 3
                     }
                 )
 
@@ -572,8 +572,8 @@ async def serve_seating_json():
                         }
                     }
                 
-                # MAJORITY VOTING: Process all 5 records and merge
-                logger.info("🗳️ MAJORITY VOTE MODE: Processing and merging last 5 records")
+                # MAJORITY VOTING: Process all 3 records and merge (reduced from 5 for performance)
+                logger.info("🗳️ MAJORITY VOTE MODE: Processing and merging last 3 records")
                 
                 # Extract UUID from the most recent record (first in list since ordered by id desc)
                 latest_uuid = None
