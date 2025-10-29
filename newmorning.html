@@ -457,7 +457,15 @@
       "
     ></p>
 
+    <!-- Load Supabase config from server -->
+    <script src="config.js"></script>
+    
     <script>
+      // Supabase credentials will be loaded from config.js (server-side)
+      let supabaseUrl = null;
+      let supabaseKey = null;
+      let supabase = null; // Will be initialized when Supabase library loads
+
       function updateTimestamp() {
         const now = new Date();
         document.getElementById("lastUpdated").textContent =
@@ -533,11 +541,63 @@
         }
       }
 
+      // Log UUID display to Supabase for monitoring
+      async function logUUIDDisplay(uuid, timestamp) {
+        console.log("🔵 logUUIDDisplay called with UUID:", uuid);
+        
+        try {
+          // Check if Supabase is initialized
+          if (!supabase) {
+            console.error("❌ Supabase not initialized!");
+            console.log("Debug - supabaseUrl:", supabaseUrl);
+            console.log("Debug - supabaseKey:", supabaseKey ? "SET" : "NOT SET");
+            return;
+          }
+
+          console.log("✅ Supabase is initialized, attempting insert...");
+          
+          const recordToInsert = {
+            uuid: uuid,
+            displayed_at: new Date().toISOString(),
+            client_timestamp: timestamp,
+            user_agent: navigator.userAgent,
+            source: 'newmorning_html'
+          };
+          
+          console.log("📦 Inserting record:", recordToInsert);
+
+          const { data, error } = await supabase
+            .from('uuid_display_logs')
+            .insert([recordToInsert]);
+
+          if (error) {
+            console.error("❌ Failed to log UUID display:", error);
+            console.error("Error details:", {
+              message: error.message,
+              details: error.details,
+              hint: error.hint,
+              code: error.code
+            });
+          } else {
+            console.log("✅ UUID display logged to database successfully!");
+            console.log("Response data:", data);
+          }
+        } catch (err) {
+          console.error("❌ Exception logging UUID display:", err);
+          console.error("Full error:", err);
+        }
+      }
+
       function updateUUID(uuid) {
         const uuidDisplay = document.getElementById("uuidDisplay");
         if (uuidDisplay && uuid && typeof uuid === "string") {
-          uuidDisplay.textContent = `UUID: ${uuid}`;
-          console.log("✅ UUID updated:", uuid);
+          const now = new Date();
+          const timestamp = now.toLocaleString('en-US', { hour12: false }) + '.' + now.getMilliseconds().toString().padStart(3, '0');
+          uuidDisplay.textContent = `UUID: ${uuid} | Updated: ${timestamp}`;
+          console.log("✅ UUID updated:", uuid, "at", timestamp);
+          
+          // Log to Supabase database
+          logUUIDDisplay(uuid, timestamp);
         } else {
           console.warn("⚠️ Invalid UUID:", uuid, "Type:", typeof uuid);
         }
@@ -1097,15 +1157,16 @@
     <!-- Auto-refresh removed per user request -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-      // Initialize Supabase
-      const supabaseUrl = "https://wzxwavklbsdmiwwbousk.supabase.co"; // replace with your Supabase project URL
-      const supabaseKey =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind6eHdhdmtsYnNkbWl3d2JvdXNrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5ODY2NzgsImV4cCI6MjA3MzU2MjY3OH0.AvlTu4TIfvZW-mPz26rTwhITrbN5BBhWFqy_Dz22pO4"; // replace with your anon/public key
-      const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
-
-      // Subscribe to changes in the "push_requests" table (where new detection data is stored)
-      supabase
-        .channel("push_requests_changes")
+      // Initialize Supabase client using config from server
+      if (window.SUPABASE_CONFIG) {
+        supabaseUrl = window.SUPABASE_CONFIG.url;
+        supabaseKey = window.SUPABASE_CONFIG.anonKey;
+        supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+        console.log("✅ Supabase client initialized with server config");
+        
+        // Subscribe to changes in the "push_requests" table (where new detection data is stored)
+        supabase
+          .channel("push_requests_changes")
         .on(
           "postgres_changes",
           { event: "*", schema: "public", table: "push_requests" },
@@ -1129,6 +1190,9 @@
           }
         )
         .subscribe();
+      } else {
+        console.error("❌ Failed to load Supabase config from server");
+      }
     </script>
   </body>
 </html>

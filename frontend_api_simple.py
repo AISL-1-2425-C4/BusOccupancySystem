@@ -84,6 +84,32 @@ async def test_webhook():
         "method": "POST"
     }
 
+@app.get("/config.js")
+async def serve_config():
+    """Serve Supabase configuration as JavaScript for client-side use"""
+    # Use SUPABASE_ANON_KEY if available, otherwise fall back to SUPABASE_KEY
+    anon_key = os.getenv("SUPABASE_ANON_KEY", SUPABASE_KEY)
+    
+    js_config = f"""
+// Supabase configuration loaded from server environment
+window.SUPABASE_CONFIG = {{
+  url: "{SUPABASE_URL or ''}",
+  anonKey: "{anon_key or ''}"
+}};
+console.log("✅ Supabase config loaded from server");
+"""
+    
+    from fastapi.responses import Response
+    return Response(
+        content=js_config,
+        media_type="application/javascript",
+        headers={
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+            "Pragma": "no-cache",
+            "Expires": "0"
+        }
+    )
+
 async def get_last_five_excluding_latest():
     async with httpx.AsyncClient() as client:
         resp = await client.get(
