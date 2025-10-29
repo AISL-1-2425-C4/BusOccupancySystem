@@ -459,7 +459,7 @@
 
     <!-- Load Supabase config from server -->
     <script src="config.js"></script>
-    
+
     <script>
       // Supabase credentials will be loaded from config.js (server-side)
       let supabaseUrl = null;
@@ -544,30 +544,33 @@
       // Log UUID display to Supabase for monitoring
       async function logUUIDDisplay(uuid, timestamp) {
         console.log("🔵 logUUIDDisplay called with UUID:", uuid);
-        
+
         try {
           // Check if Supabase is initialized
           if (!supabase) {
             console.error("❌ Supabase not initialized!");
             console.log("Debug - supabaseUrl:", supabaseUrl);
-            console.log("Debug - supabaseKey:", supabaseKey ? "SET" : "NOT SET");
+            console.log(
+              "Debug - supabaseKey:",
+              supabaseKey ? "SET" : "NOT SET"
+            );
             return;
           }
 
           console.log("✅ Supabase is initialized, attempting insert...");
-          
+
           const recordToInsert = {
             uuid: uuid,
             displayed_at: new Date().toISOString(),
             client_timestamp: timestamp,
             user_agent: navigator.userAgent,
-            source: 'newmorning_html'
+            source: "newmorning_html",
           };
-          
+
           console.log("📦 Inserting record:", recordToInsert);
 
           const { data, error } = await supabase
-            .from('uuid_display_logs')
+            .from("uuid_display_logs")
             .insert([recordToInsert]);
 
           if (error) {
@@ -576,7 +579,7 @@
               message: error.message,
               details: error.details,
               hint: error.hint,
-              code: error.code
+              code: error.code,
             });
           } else {
             console.log("✅ UUID display logged to database successfully!");
@@ -592,10 +595,13 @@
         const uuidDisplay = document.getElementById("uuidDisplay");
         if (uuidDisplay && uuid && typeof uuid === "string") {
           const now = new Date();
-          const timestamp = now.toLocaleString('en-US', { hour12: false }) + '.' + now.getMilliseconds().toString().padStart(3, '0');
+          const timestamp =
+            now.toLocaleString("en-US", { hour12: false }) +
+            "." +
+            now.getMilliseconds().toString().padStart(3, "0");
           uuidDisplay.textContent = `UUID: ${uuid} | Updated: ${timestamp}`;
           console.log("✅ UUID updated:", uuid, "at", timestamp);
-          
+
           // Log to Supabase database
           logUUIDDisplay(uuid, timestamp);
         } else {
@@ -1163,33 +1169,34 @@
         supabaseKey = window.SUPABASE_CONFIG.anonKey;
         supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
         console.log("✅ Supabase client initialized with server config");
-        
+
         // Subscribe to changes in the "push_requests" table (where new detection data is stored)
         supabase
           .channel("push_requests_changes")
-        .on(
-          "postgres_changes",
-          { event: "*", schema: "public", table: "push_requests" },
-          (payload) => {
-            console.log("🔔 New detection data detected:", payload);
+          .on(
+            "postgres_changes",
+            { event: "*", schema: "public", table: "push_requests" },
+            (payload) => {
+              console.log("🔔 New detection data detected:", payload);
 
-            // Extract UUID from the payload
-            let uuid = null;
-            if (payload && payload.new && payload.new.json_data) {
-              // UUID might be in json_data.uuid or json_data.data.uuid
-              uuid =
-                payload.new.json_data.uuid ||
-                (payload.new.json_data.data && payload.new.json_data.data.uuid);
+              // Extract UUID from the payload
+              let uuid = null;
+              if (payload && payload.new && payload.new.json_data) {
+                // UUID might be in json_data.uuid or json_data.data.uuid
+                uuid =
+                  payload.new.json_data.uuid ||
+                  (payload.new.json_data.data &&
+                    payload.new.json_data.data.uuid);
+              }
+
+              console.log("📋 Extracted UUID:", uuid);
+
+              // Reload seats whenever there's an insert/update/delete
+              // This will trigger the majority voting endpoint
+              loadDynamicSeats(uuid);
             }
-
-            console.log("📋 Extracted UUID:", uuid);
-
-            // Reload seats whenever there's an insert/update/delete
-            // This will trigger the majority voting endpoint
-            loadDynamicSeats(uuid);
-          }
-        )
-        .subscribe();
+          )
+          .subscribe();
       } else {
         console.error("❌ Failed to load Supabase config from server");
       }
