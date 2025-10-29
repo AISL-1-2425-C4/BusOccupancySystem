@@ -129,8 +129,8 @@ async def get_last_three_excluding_latest():
             raise HTTPException(status_code=500, detail=f"Supabase error: {resp.text}")
 
         rows = resp.json()
-        # skip latest, return next 5, and include json_data in the output
-        last_five = rows[1:]
+        # skip latest, return next 2, and include json_data in the output
+        last_two = rows[1:]
         # Return id, created_at, and json_data for each
         return [
             {
@@ -138,7 +138,7 @@ async def get_last_three_excluding_latest():
                 "created_at": r.get("created_at"),
                 "json_data": r.get("json_data")
             }
-            for r in last_five
+            for r in last_two
         ]
 
 #obtain 5 data entries from db
@@ -338,13 +338,13 @@ async def webhook_new_data(payload: WebhookPayload):
                 "payload_data": payload.data
             }
 
-        # ✅ Add last 5 records from DB (excluding latest)
+        # ✅ Add last 3 records from DB (excluding latest)
         try:
-            last_five = await get_last_five_excluding_latest()
-            response["last_five_records"] = last_five
+            last_three = await get_last_three_excluding_latest()
+            response["last_three_records"] = last_three
         except Exception as e:
-            logger.error(f"Error fetching last five records: {e}")
-            response["last_five_records"] = []
+            logger.error(f"Error fetching last three records: {e}")
+            response["last_three_records"] = []
 
 
     except Exception as e:
