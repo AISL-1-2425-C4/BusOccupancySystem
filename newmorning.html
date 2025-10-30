@@ -1107,8 +1107,17 @@
         );
 
         // Position steering wheel: left area, vertically centered
-        const wheelX = edgeMargin + driverAreaWidth / 2;
-        const wheelY = containerHeight / 2;
+        let wheelX, wheelY;
+
+        if (isMobile) {
+          // MOBILE: front = top; steering wheel near top edge
+          wheelX = edgeMargin + driverAreaWidth / 2;
+          wheelY = edgeMargin + seatSize * 0.8; // adjust multiplier for vertical offset
+        } else {
+          // DESKTOP: front = left; centered vertically
+          wheelX = edgeMargin + driverAreaWidth / 2;
+          wheelY = containerHeight / 2;
+        }
 
         // Create steering wheel
         const steeringWheel = document.createElement("div");
