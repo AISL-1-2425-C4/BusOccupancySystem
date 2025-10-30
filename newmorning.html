@@ -156,6 +156,7 @@
       }
 
       /* Driver's steering wheel */
+      /* === Driver’s Steering Wheel and Label === */
       .steering-wheel {
         position: absolute;
         width: 25px;
@@ -169,6 +170,27 @@
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15),
           inset 0 1px 2px rgba(255, 255, 255, 0.2);
         z-index: 10;
+        /* Center the wheel around its (left, top) anchor */
+        transform: translate(-50%, -50%);
+      }
+
+      @media (min-width: 769px) {
+        .steering-wheel {
+          transform: translate(-50%, -50%) rotate(-90deg);
+        }
+      }
+
+      .driver-label {
+        position: absolute;
+        font-size: 13px;
+        color: #495057;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        z-index: 10;
+        text-align: center;
+        /* Center the label under the wheel on mobile */
+        transform: translateX(-50%);
       }
 
       /* Rotate steering wheel on desktop only */
@@ -757,6 +779,15 @@
             (has4SeatRows ? aisleWidth : 0) +
             edgeMargin * 2;
         }
+        layoutMetrics = {
+          seatSize,
+          seatSpacing,
+          edgeMargin,
+          driverAreaWidth,
+          containerWidth,
+          containerHeight,
+          isMobile,
+        };
 
         // Update container and bus image size
         // Set container dimensions explicitly
@@ -1054,62 +1085,56 @@
 
       // Add driver's steering wheel
       function addSteeringWheel(container) {
-        // Remove existing steering wheel
+        // Remove existing steering wheel and label if any
         const existingWheel = container.querySelector(".steering-wheel");
         const existingLabel = container.querySelector(".driver-label");
         if (existingWheel) existingWheel.remove();
         if (existingLabel) existingLabel.remove();
 
-        // Calculate position based on device
-        const seatSize = 30;
-        const seatSpacing = 25;
-        const edgeMargin = 25;
-        const driverAreaWidth = 60;
-        const screenWidth = window.innerWidth;
-        const isMobile = screenWidth < 768;
+        // Use the same layout as the seat grid
+        const {
+          seatSize,
+          edgeMargin,
+          driverAreaWidth,
+          containerHeight,
+          isMobile,
+        } = layoutMetrics;
 
-        // Get container dimensions
-        const containerWidth = parseFloat(container.style.width) || 400;
-        const containerHeight = parseFloat(container.style.height) || 400;
+        // Dynamically scale steering wheel
+        const wheelSize = Math.max(
+          22,
+          Math.min(28, Math.round(seatSize * 0.8))
+        );
 
-        let wheelX, wheelY;
-
-        if (isMobile) {
-          // MOBILE: steering wheel at top-left
-          wheelX = edgeMargin + driverAreaWidth / 3 - 12.5;
-          wheelY = edgeMargin + 15; // Near the top
-        } else {
-          // DESKTOP: steering wheel on the left side, centered vertically
-          wheelX = edgeMargin + driverAreaWidth / 3 - 12.5;
-          wheelY = containerHeight / 2; // Center vertically
-        }
+        // Position steering wheel: left area, vertically centered
+        const wheelX = edgeMargin + driverAreaWidth / 2;
+        const wheelY = containerHeight / 2;
 
         // Create steering wheel
         const steeringWheel = document.createElement("div");
         steeringWheel.className = "steering-wheel";
         steeringWheel.title = "Driver Area - Front of Bus";
+        steeringWheel.style.width = `${wheelSize}px`;
+        steeringWheel.style.height = `${wheelSize}px`;
         steeringWheel.style.left = `${wheelX}px`;
         steeringWheel.style.top = `${wheelY}px`;
+        steeringWheel.style.transform =
+          "translate(-50%, -50%)" + (isMobile ? "" : " rotate(-90deg)");
         container.appendChild(steeringWheel);
 
-        // Create driver label - positioned next to steering wheel
+        // Create driver label
         const driverLabel = document.createElement("div");
         driverLabel.className = "driver-label";
-        driverLabel.style.left = `${wheelX - 10}px`;
-        driverLabel.style.top = `${wheelY + 24}px`; // Positioned below steering wheel
-        driverLabel.style.width = "55px";
-
-        // Only rotate text on desktop
-        if (!isMobile) {
-          driverLabel.style.transform = "rotate(-90deg)";
-          driverLabel.style.transformOrigin = "center center";
-        }
-
+        driverLabel.style.left = `${wheelX}px`;
+        driverLabel.style.top = `${wheelY + wheelSize * 0.9}px`;
+        driverLabel.style.width = "60px";
+        driverLabel.style.transform = isMobile
+          ? "translateX(-50%)"
+          : "translate(-50%, 0) rotate(-90deg)";
+        driverLabel.textContent = ""; // Add text like 'Driver' if you want
         container.appendChild(driverLabel);
 
-        console.log(
-          `Added steering wheel at (${wheelX}, ${wheelY}) and driver label`
-        );
+        console.log(`Added steering wheel at (${wheelX}, ${wheelY})`);
       }
 
       // Show detailed seat information
@@ -1200,6 +1225,20 @@
       } else {
         console.error("❌ Failed to load Supabase config from server");
       }
+    </script>
+    <script>
+      // put this near the top with your other global variables
+      let layoutMetrics = {
+        seatSize: 0,
+        seatSpacing: 0,
+        edgeMargin: 0,
+        driverAreaWidth: 0,
+        containerWidth: 0,
+        containerHeight: 0,
+        isMobile: false,
+      };
+
+      // ... your existing functions follow ...
     </script>
   </body>
 </html>

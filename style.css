@@ -491,3 +491,33 @@ footer {
     grid-template-columns: 1fr;
   }
 }
+
+/* === Steering Wheel and Driver Label === */
+.steering-wheel {
+  position: absolute;
+  border: 3px solid #222; /* wheel outline */
+  border-radius: 50%; /* make it a circle */
+  background: radial-gradient(circle, #444 40%, #222 90%); /* shading */
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
+  transform: translate(-50%, -50%); /* center it around its position */
+  z-index: 5; /* above seat circles */
+}
+
+.driver-label {
+  position: absolute;
+  text-align: center;
+  font-size: 12px;
+  color: #333;
+  transform: translateX(-50%);
+  z-index: 5;
+}
+
+/* Optional: desktop rotation handled here for better consistency */
+@media (min-width: 769px) {
+  .steering-wheel {
+    transform: translate(-50%, -50%) rotate(-90deg);
+  }
+  .driver-label {
+    transform: translate(-50%, 0) rotate(-90deg);
+  }
+}
